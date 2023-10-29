@@ -1,18 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#3772E7">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="15dp"
+            android:paddingTop="15dp"
+            android:paddingEnd="15dp">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="360dp"
+                android:layout_height="55dp"
+                android:gravity="top"
+                android:text="@string/playlist_maker"
+                android:textColor="#ffffff"
+                android:textSize="22sp">
+            </TextView>
+
+            <Button
+                android:id="@+id/button_search"
+                style="@style/main_menu_buttons"
+                android:layout_height="200dp"
+                android:layout_marginTop="70dp"
+                android:text="@string/button_search"
+                app:icon="@drawable/search"
+                tools:ignore="VisualLintButtonSize">
+            </Button>
+
+            <Button
+                android:id="@+id/button_media_lib"
+                style="@style/main_menu_buttons"
+                android:layout_height="200dp"
+                android:layout_marginTop="276dp"
+                android:text="@string/button_media_lib"
+                app:icon="@drawable/library"
+                tools:ignore="VisualLintButtonSize">
+            </Button>
+
+            <Button
+                android:id="@+id/button_settings"
+                style="@style/main_menu_buttons"
+                android:layout_height="200dp"
+                android:layout_marginTop="482dp"
+                android:text="@string/button_settings"
+                app:icon="@drawable/settings"
+                tools:ignore="VisualLintButtonSize" />
+
+        </FrameLayout>
+
+    </FrameLayout>
+</LinearLayout>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button_back0"
+            style="@style/settings_menu_buttons"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:text="@string/button_back"
+            android:textSize="26sp"
+            app:icon="@drawable/back"
+            app:iconGravity="textStart"
+            tools:ignore="VisualLintButtonSize">
+        </Button>
+
+        <Button
+            android:id="@+id/button_settings02"
+            style="@style/settings_menu_buttons"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:text="@string/dark_mod"
+            app:icon="@drawable/control"
+            tools:ignore="VisualLintButtonSize">
+
+        </Button>
+
+        <Button
+            android:id="@+id/button_settings03"
+            style="@style/settings_menu_buttons"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:text="@string/share_the_app"
+            app:icon="@drawable/share"
+            tools:ignore="VisualLintButtonSize" />
+
+        <Button
+            android:id="@+id/button_settings04"
+            style="@style/settings_menu_buttons"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:text="@string/write_to_support"
+            app:icon="@drawable/support"
+            tools:ignore="VisualLintButtonSize" />
+
+        <Button
+            android:id="@+id/button_settings05"
+            style="@style/settings_menu_buttons"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:text="@string/user_agreement"
+            app:icon="@drawable/arrow_forward"
+            tools:ignore="VisualLintButtonSize" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
