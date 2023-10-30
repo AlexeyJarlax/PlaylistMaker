@@ -5,36 +5,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="#3772E7">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingStart="15dp"
-            android:paddingTop="15dp"
-            android:paddingEnd="15dp">
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:background="@color/background"
+    android:paddingStart="@dimen/padding_for_linear_layout"
+    android:paddingTop="@dimen/padding_for_linear_layout"
+    android:paddingBottom="@dimen/padding_for_linear_layout"
+    android:paddingEnd="@dimen/padding_for_linear_layout">
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="360dp"
-                android:layout_height="55dp"
-                android:gravity="top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_for_linear_layout"
+                android:gravity="center_vertical"
                 android:text="@string/playlist_maker"
-                android:textColor="#ffffff"
-                android:textSize="22sp">
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_large">
             </TextView>
 
             <Button
                 android:id="@+id/button_search"
                 style="@style/main_menu_buttons"
-                android:layout_height="200dp"
-                android:layout_marginTop="70dp"
                 android:text="@string/button_search"
                 app:icon="@drawable/search"
                 tools:ignore="VisualLintButtonSize">
@@ -43,8 +35,6 @@
             <Button
                 android:id="@+id/button_media_lib"
                 style="@style/main_menu_buttons"
-                android:layout_height="200dp"
-                android:layout_marginTop="276dp"
                 android:text="@string/button_media_lib"
                 app:icon="@drawable/library"
                 tools:ignore="VisualLintButtonSize">
@@ -53,13 +43,7 @@
             <Button
                 android:id="@+id/button_settings"
                 style="@style/main_menu_buttons"
-                android:layout_height="200dp"
-                android:layout_marginTop="482dp"
                 android:text="@string/button_settings"
                 app:icon="@drawable/settings"
                 tools:ignore="VisualLintButtonSize" />
-
-        </FrameLayout>
-
-    </FrameLayout>
 </LinearLayout>
