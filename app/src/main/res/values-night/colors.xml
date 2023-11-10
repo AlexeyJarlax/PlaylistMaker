@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- НАБОР ЦВЕТОВ ИЗ figma -->
+    <color name="yp_blue_light">#9FBBF3</color>              <!-- ╔╗╔╗ ╔══╗ ╔╗╔╗ ╔╗    -->
+    <color name="yp_blue">#3772E7</color>                    <!-- ║║║║ ║╔╗║ ║║║║ ║║    -->
+    <color name="yp_white">#FFFFFF</color>                   <!-- ║╚╝║ ║║║║ ║╚╝║ ║╚══╗ -->
+    <color name="yp_text_gray">#AEAFB4</color>               <!-- ║╔╗║ ║║║║ ╚═╗║ ║╔═╗║ -->
+    <color name="yp_light_gray">#E6E8EB</color>              <!-- ║║║║ ║╚╝║   ║║ ║╚═╝║ -->
+    <color name="yp_black">#1A1B22</color>                   <!-- ╚╝╚╝ ╚══╝   ╚╝ ╚═══╝ -->
+    <color name="black">#FF000000</color>
+
+    <!-- ЦВЕТОВЫЕ ПАЛИТРЫ ДЛЯ ТЕМ И СТИЛЕЙ (ночь)-->
+    <!-- главное меню -->
+    <!-- цвет фона главного меню -->
+    <color name="background_main">@color/yp_black</color>
+    <!-- цвет кнопок главного меню -->
+    <color name="buttons_main">@color/yp_white</color>
+    <!-- цвет шрифта главного меню  -->
+    <color name="text_main">@color/yp_black</color>
+    <!-- цвет иконок главного меню -->
+    <color name="icon_main">@color/yp_black</color>
+
+    <!-- второстепенное меню -->
+    <!-- цвет кнопок вторичного меню -->
+    <color name="buttons_secondary">@color/yp_black</color>
+    <!-- цвет на фон вторичного меню -->
+    <color name="background_secondary">@color/yp_black</color>
+    <!-- цвет шрифта вторичного меню -->
+    <color name="text_secondary">@color/yp_white</color>
+    <!-- цвет иконок вторичного меню -->
+    <color name="icon_secondary">@color/yp_white</color>
+    <!-- цвет тумблера свитч -->
+    <color name="gray_dark_styles">@color/yp_blue</color>
+    <color name="gray_light_styles">@color/yp_blue_light</color>
+    <!-- цвет поисковой строки -->
+    <color name="search_edit_text_and_icon">@color/yp_black</color>
+    <color name="search_edit_background">@color/yp_white</color>
+
+</resources>

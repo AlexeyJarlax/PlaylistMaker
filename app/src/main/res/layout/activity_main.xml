@@ -1,49 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:orientation="vertical"
-    android:background="@color/background"
-    android:paddingStart="@dimen/padding_for_linear_layout"
-    android:paddingTop="@dimen/padding_for_linear_layout"
-    android:paddingBottom="@dimen/padding_for_linear_layout"
-    android:paddingEnd="@dimen/padding_for_linear_layout">
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/FrontMenuLayout"
+    tools:context=".MainActivity">
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/padding_for_linear_layout"
-                android:gravity="center_vertical"
-                android:text="@string/playlist_maker"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_large">
-            </TextView>
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="@dimen/padding_for_linear_layout"
+        android:text="@string/playlist_maker"
+        android:textColor="@color/yp_white"
+        android:textSize="@dimen/text_size_large" />
 
-            <Button
-                android:id="@+id/button_search"
-                style="@style/main_menu_buttons"
-                android:text="@string/button_search"
-                app:icon="@drawable/search"
-                tools:ignore="VisualLintButtonSize">
-            </Button>
+    <Button
+        android:id="@+id/button_search"
+        style="@style/MainMenuButtons"
+        android:text="@string/button_search"
+        app:icon="@drawable/search"
+        tools:ignore="VisualLintButtonSize" />
 
-            <Button
-                android:id="@+id/button_media_lib"
-                style="@style/main_menu_buttons"
-                android:text="@string/button_media_lib"
-                app:icon="@drawable/library"
-                tools:ignore="VisualLintButtonSize">
-            </Button>
+    <Button
+        android:id="@+id/button_media_lib"
+        style="@style/MainMenuButtons"
+        android:text="@string/button_media_lib"
+        app:icon="@drawable/library"
+        tools:ignore="VisualLintButtonSize" />
 
-            <Button
-                android:id="@+id/button_settings"
-                style="@style/main_menu_buttons"
-                android:text="@string/button_settings"
-                app:icon="@drawable/settings"
-                tools:ignore="VisualLintButtonSize" />
+    <Button
+        android:id="@+id/button_settings"
+        style="@style/MainMenuButtons"
+        android:text="@string/button_settings"
+        app:icon="@drawable/settings"
+        tools:ignore="VisualLintButtonSize" />
 </LinearLayout>

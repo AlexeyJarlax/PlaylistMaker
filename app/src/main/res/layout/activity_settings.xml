@@ -2,54 +2,47 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@color/white"
-    android:orientation="vertical">
+    style="@style/BackMenuLayout"
+    tools:context=".SettingsActivity">
 
-        <Button
-            android:id="@+id/button_back"
-            style="@style/settings_menu_buttons"
-            android:layout_height="wrap_content"
-            android:text="@string/button_back"
-            android:textSize="@dimen/text_size_large"
-            app:icon="@drawable/back"
-            app:iconGravity="textStart"
-            tools:ignore="VisualLintButtonSize"/>
+    <Button
+        android:id="@+id/button_back_from_settings"
+        style="@style/GoBackButtons"
+        android:text="@string/button_settings" />
 
-        <Switch
-            android:id="@+id/switch_dark_mode"
-            style="@style/settings_menu_buttons"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:text="@string/dark_mod"
-            android:checked="false"
-            android:paddingEnd="@dimen/padding_z"
-            tools:ignore="VisualLintButtonSize"/>
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_dark_mode"
+        style="@style/SettingsMenuButtons"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:gravity="center_vertical"
+        android:paddingEnd="@dimen/padding_z"
+        android:text="@string/dark_mod"
+        tools:ignore="VisualLintButtonSize" />
+    <!--android:background="@color/buttons_secondary"-->
 
-        <Button
-            android:id="@+id/button_settings_share"
-            style="@style/settings_menu_buttons"
-            android:layout_height="wrap_content"
-            android:text="@string/share_the_app"
-            app:icon="@drawable/share"
-            tools:ignore="VisualLintButtonSize" />
+    <Button
+        android:id="@+id/button_settings_share"
+        style="@style/SettingsMenuButtons"
+        android:layout_height="wrap_content"
+        android:text="@string/share_the_app"
+        app:icon="@drawable/share"
+        tools:ignore="VisualLintButtonSize" />
 
-        <Button
-            android:id="@+id/button_settings_write_to_supp"
-            style="@style/settings_menu_buttons"
-            android:layout_height="wrap_content"
-            android:text="@string/write_to_support"
-            app:icon="@drawable/support"
-            tools:ignore="VisualLintButtonSize" />
+    <Button
+        android:id="@+id/button_settings_write_to_supp"
+        style="@style/SettingsMenuButtons"
+        android:layout_height="wrap_content"
+        android:text="@string/write_to_support"
+        app:icon="@drawable/support"
+        tools:ignore="VisualLintButtonSize" />
 
-        <Button
-            android:id="@+id/button_settings_user_agreement"
-            style="@style/settings_menu_buttons"
-            android:layout_height="wrap_content"
-            android:text="@string/user_agreement"
-            app:icon="@drawable/arrow_forward"
-            tools:ignore="VisualLintButtonSize" />
+    <Button
+        android:id="@+id/button_settings_user_agreement"
+        style="@style/SettingsMenuButtons"
+        android:layout_height="wrap_content"
+        android:text="@string/user_agreement"
+        app:icon="@drawable/arrow_forward"
+        tools:ignore="VisualLintButtonSize" />
 
 </LinearLayout>

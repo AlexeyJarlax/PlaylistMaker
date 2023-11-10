@@ -9,4 +9,5 @@
     <dimen name="icon_size">24dp</dimen>
     <dimen name="corner_radius">16dp</dimen>
     <dimen name="button_weight">1</dimen>
+
 </resources>
