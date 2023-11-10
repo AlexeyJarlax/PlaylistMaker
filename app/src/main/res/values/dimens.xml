@@ -1,2 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <dimen name="text_size_large">22sp</dimen>
+    <dimen name="text_size_small">16sp</dimen>
+    <dimen name="padding_z">0dp</dimen>
+    <dimen name="padding_default">8dp</dimen>
+    <dimen name="padding_icon">18dp</dimen>
+    <dimen name="padding_for_linear_layout">15dp</dimen>
+    <dimen name="icon_size">24dp</dimen>
+    <dimen name="corner_radius">16dp</dimen>
+    <dimen name="button_weight">1</dimen>
+
+</resources>

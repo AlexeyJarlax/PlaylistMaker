@@ -1,16 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".SearchActivity">
+    android:orientation="vertical"
+    tools:context=".SearchActivity"
+    style="@style/BackMenuLayout">
+
+    <Button
+        android:id="@+id/button_back_from_search_activity"
+        style="@style/GoBackButtons"
+        android:text="@string/button_settings" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/SearchButtons">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_edit_text"
+            style="@style/SearchButtons"
+            android:background="@android:color/transparent" />
+
+        <ImageButton
+            style="@style/ClearButtonStyle"
+            android:id="@+id/clearButton"
+            android:contentDescription="TODO" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/serch0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="в этом окне будет поиск"
-        tools:layout_editor_absoluteX="21dp"
-        tools:layout_editor_absoluteY="685dp" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:id="@+id/heading_search_history_list_view"
+        android:hint="@string/heading_search_history_list_view"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ListView
+        android:id="@+id/search_history_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
