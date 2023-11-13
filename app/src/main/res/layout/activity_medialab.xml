@@ -10,7 +10,7 @@
         android:id="@+id/medialab0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="в этом окне будет медиатека"
+        android:text="@string/there_wil_be_media_library"
         tools:layout_editor_absoluteX="21dp"
         tools:layout_editor_absoluteY="685dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

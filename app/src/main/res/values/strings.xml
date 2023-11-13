@@ -16,4 +16,6 @@
     <string name="support_email_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="user_agreement_url">https://yandex.ru/legal/practicum_offer/</string>
     <string name="heading_search_history_list_view">История запросов поисковой строки:</string>
+    <string name="todo">это приложение не пригодно для инвалидов</string>
+    <string name="there_wil_be_media_library">в этом окне будет медиатека</string>
 </resources>

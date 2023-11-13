@@ -4,9 +4,10 @@
     <dimen name="text_size_small">16sp</dimen>
     <dimen name="padding_z">0dp</dimen>
     <dimen name="padding_default">8dp</dimen>
-    <dimen name="padding_icon">16dp</dimen>
+    <dimen name="dp16">16dp</dimen>
+    <dimen name="dp12">12dp</dimen>
     <dimen name="padding_for_linear_layout">16dp</dimen>
-    <dimen name="icon_size">24dp</dimen>
+    <dimen name="dp24">24dp</dimen>
     <dimen name="corner_radius">16dp</dimen>
     <dimen name="button_weight">1</dimen>
 
