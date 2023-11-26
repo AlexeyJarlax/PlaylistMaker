@@ -18,4 +18,8 @@
     <string name="heading_search_history_list_view">История запросов поисковой строки:</string>
     <string name="todo">это приложение не пригодно для инвалидов</string>
     <string name="there_wil_be_media_library">в этом окне будет медиатека</string>
+    <string name="placeholder_track_name">No Reply</string>
+    <string name="placeholder_artist_name">The Beatles</string>
+    <string name="placeholder_track_time">5:12</string>
+
 </resources>

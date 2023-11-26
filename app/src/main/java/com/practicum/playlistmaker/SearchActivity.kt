@@ -6,19 +6,26 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.practicum.playlistmaker.util.Track
+import com.practicum.playlistmaker.util.TrackAdapter
+import com.practicum.playlistmaker.util.arrayTrackList
 
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var searchEditText: EditText
     private lateinit var clearButton: ImageButton
-    private lateinit var searchHistoryListView: ListView
+    private lateinit var searchHistorySpinner: Spinner
     private lateinit var searchHistoryAdapter: ArrayAdapter<String>
+    private lateinit var searchHistoryList: ArrayList<String>
     private lateinit var searchHistorySet: HashSet<String>
+    private lateinit var trackRecyclerView: RecyclerView
+    private var shouldUpdateSearchField = true
 
     companion object {
         private const val PREF_SEARCH_HISTORY = "SearchHistory"
@@ -29,38 +36,48 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        searchEditText = findViewById(R.id.search_edit_text)
+        // обработка кнопок меню поиска
         clearButton = findViewById(R.id.clearButton)
-        searchHistoryListView = findViewById(R.id.search_history_list_view)
+        searchHistorySpinner = findViewById(R.id.search_history_spinner)
 
-        val back = findViewById<Button>(R.id.button_back_from_search_activity) // КНОПКА НАЗАД
+        // обработка кнопки НАЗАД
+        val back = findViewById<Button>(R.id.button_back_from_search_activity)
         back.setOnClickListener {
             finish()
         }
 
-        // Считываем сохраненный набор поисковых запросов
-        val preferences: SharedPreferences =
-            getSharedPreferences(PREF_SEARCH_HISTORY, Context.MODE_PRIVATE)
-        searchHistorySet = preferences.getStringSet(PREF_KEY_SEARCH_HISTORY, HashSet()) as HashSet<String>
+        // обработка инициализации списка песен\альбомов
+        trackRecyclerView = findViewById(R.id.track_recycler_view)
+        setupTrackRecyclerView()
 
-        val searchHistoryList = ArrayList(searchHistorySet)
-
-        // Создаем ArrayAdapter для отображения списка поисковых запросов
-        searchHistoryAdapter =
-            ArrayAdapter(this, android.R.layout.simple_list_item_1, searchHistoryList)
-        searchHistoryListView.adapter = searchHistoryAdapter
-
-        // Обработчик клика по элементу списка
-        searchHistoryListView.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, view, position, id ->
-                val selectedQuery = parent.getItemAtPosition(position) as String
-                searchEditText.setText(selectedQuery)
+//============================== ПОИСКОВАЯ СТРОКА ==============================//
+        searchEditText = findViewById(R.id.search_edit_text)
+        val searchIcon = findViewById<ImageButton>(R.id.search_icon)
+        // чистим поисковую строку
+        if (savedInstanceState == null) {
+            searchEditText.setText("")
+        }
+        clearButton.visibility = View.GONE
+        hideKeyboard()
+        searchEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                searchHistorySpinner.visibility = View.VISIBLE
+            } else {
+                searchHistorySpinner.visibility = View.GONE
             }
-        // Обработчик ввода
+        }
+// обработка клика по лупе
+        searchIcon.setOnClickListener {
+            val searchText = searchEditText.text.toString().trim()
+            if (searchText.isNotEmpty()) {
+                showToast("Мы пошли искать: $searchText")
+                saveSearchQuery(searchText)
+            }
+            clearSearchFieldAndHideKeyboard()
+        }
+// обработка ввода
         searchEditText.setOnEditorActionListener { textView, actionId, keyEvent ->
-            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL ||
-                (keyEvent != null && keyEvent.action == KeyEvent.ACTION_DOWN && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER)
-            ) {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val searchText = searchEditText.text.toString().trim()
                 if (searchText.isNotEmpty()) {
                     showToast("Мы пошли искать: $searchText")
@@ -73,30 +90,62 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        // Обработчик очистки ввода
         clearButton.setOnClickListener {
             searchEditText.text.clear()
             clearButton.visibility = View.GONE
             hideKeyboard()
         }
 
-        // Обновление видимости кнопки очистки
+// считыватель ввода
         searchEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                 }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 updateClearButtonVisibility(s?.isNotEmpty() ?: false)
             }
 
-            override fun afterTextChanged(s: Editable?) {}
+            override fun afterTextChanged(s: Editable?) {
+            }
         })
-    }
 
+//=========== ОБРАБОТКА Spinner с СОХРАНЕНИЕМ РЕЗУЛЬТАТА ПРОШЛЫХ ПОИСКОВ ====================//
+        val preferences: SharedPreferences =
+            getSharedPreferences(PREF_SEARCH_HISTORY, Context.MODE_PRIVATE)
+        searchHistorySet =
+            HashSet(preferences.getStringSet(PREF_KEY_SEARCH_HISTORY, HashSet()))
+        searchHistoryList = ArrayList(searchHistorySet)
+
+        searchHistoryAdapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_item, searchHistoryList)
+        searchHistoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        searchHistorySpinner.adapter = searchHistoryAdapter
+
+        searchHistorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if (shouldUpdateSearchField) {
+                    val selectedQuery = parent.getItemAtPosition(position) as String
+                    searchEditText.setText(selectedQuery)
+                }
+                shouldUpdateSearchField = true
+
+                parent.getChildAt(0)?.findViewById<TextView>(android.R.id.text1)?.visibility =
+                    View.GONE
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                //
+            }
+        }
+    }
     private fun updateClearButtonVisibility(isVisible: Boolean) {
         clearButton.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 
-    // Обработчик сокрытие клавы
     private fun hideKeyboard() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(searchEditText.windowToken, 0)
@@ -111,10 +160,11 @@ class SearchActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    // Обработчик сейва поисковых запросов
     private fun saveSearchQuery(query: String) {
         searchHistorySet.add(query)
-        searchHistoryAdapter.add(query)
+        searchHistoryList = ArrayList(searchHistorySet)
+        searchHistoryAdapter.clear()
+        searchHistoryAdapter.addAll(searchHistoryList)
         searchHistoryAdapter.notifyDataSetChanged()
 
         val preferences: SharedPreferences =
@@ -122,5 +172,18 @@ class SearchActivity : AppCompatActivity() {
         val editor = preferences.edit()
         editor.putStringSet(PREF_KEY_SEARCH_HISTORY, searchHistorySet)
         editor.apply()
+
+        shouldUpdateSearchField = false
+    }
+
+    //=========== ОБРАБОТКА СПИСКА ПЕСЕН\АЛЬБОМОВ ====================//
+    private fun setupTrackRecyclerView() {
+        val layoutManager = LinearLayoutManager(this)
+        val trackAdapter = TrackAdapter(this, arrayTrackList) { track ->
+            // Обработка клика по треку на будущее
+        }
+
+        trackRecyclerView.layoutManager = layoutManager
+        trackRecyclerView.adapter = trackAdapter
     }
 }

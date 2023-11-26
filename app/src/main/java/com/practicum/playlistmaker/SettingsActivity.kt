@@ -2,35 +2,34 @@ package com.practicum.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.SwitchCompat
+import com.practicum.playlistmaker.util._UtilThemeManager
 
 class SettingsActivity : AppCompatActivity() {
+
+
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _UtilThemeManager.applyTheme(this)
         setContentView(R.layout.activity_settings)
-
 
         val back = findViewById<Button>(R.id.button_back_from_settings) // КНОПКА НАЗАД
         back.setOnClickListener {
             finish()
         }
 
-        // КНОПКА НОЧНОЙ И ДНЕВНОЙ ТЕМЫ
-        val switchDarkMode: androidx.appcompat.widget.SwitchCompat =
-            findViewById(R.id.switch_dark_mode)
-        switchDarkMode.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                setNightMode(true)
-            } else {
-                setNightMode(false)
-            }
+        // КНОПКА НОЧНОЙ И ДНЕВНОЙ ТЕМЫ (РЕАЛИЗАЦИЯ ВЫНЕСЕНА В ОТДЕЛЬНЫЙ КЛАСС)
+        val switchDarkMode: SwitchCompat = findViewById(R.id.switch_dark_mode)
+        switchDarkMode.isChecked = _UtilThemeManager.isNightModeEnabled(this)
+        switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
+            _UtilThemeManager.setNightModeEnabled(this, isChecked)
         }
+
 
         // КНОПКА ПОДЕЛИТЬСЯ
         val shareButton = findViewById<Button>(R.id.button_settings_share)
@@ -64,25 +63,5 @@ class SettingsActivity : AppCompatActivity() {
             intent.data = Uri.parse(url)
             startActivity(intent)
         }
-    }
-
-    // ИСПОЛНИТЕЛЬ КНОПКИ НОЧНОЙ И ДНЕВНОЙ ТЕМЫ
-    private fun setNightMode(enabled: Boolean) {
-        val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        when (nightModeFlags) {
-            Configuration.UI_MODE_NIGHT_YES -> if (!enabled) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                recreateActivity()
-            }
-
-            Configuration.UI_MODE_NIGHT_NO -> if (enabled) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                recreateActivity()
-            }
-        }
-    }
-
-    private fun recreateActivity() {
-        recreate()
     }
 }

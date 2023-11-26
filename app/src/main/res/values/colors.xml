@@ -28,15 +28,15 @@
     <color name="buttons_secondary">@color/yp_white</color>
     <!-- цвет на фон вторичного меню -->
     <color name="background_secondary">@color/yp_white</color>
-    <!-- цвет шрифта вторичного меню -->
+    <!-- цвет шрифта вторичного меню, название песен -->
     <color name="text_secondary">@color/black</color>
-    <!-- цвет иконок вторичного меню -->
+    <!-- цвет иконок вторичного меню, имени автора и продолжительности трека -->
     <color name="icon_secondary">@color/yp_text_gray</color>
     <!-- цвет тумблера свитч, цвет поисковой строки и текста в ней -->
     <color name="gray_dark_styles">@color/yp_text_gray</color>
     <color name="gray_light_styles">@color/yp_light_gray</color>
     <!-- цвет поисковой строки -->
-    <color name="search_edit_text_and_icon">@color/yp_text_gray</color>
+    <color name="search_and_track_icons">@color/yp_text_gray</color>
     <color name="search_edit_background">@color/yp_light_gray</color>
 
 </resources>

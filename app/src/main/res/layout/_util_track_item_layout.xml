@@ -1,0 +1,80 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp60"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:paddingStart="@dimen/dp12"
+    >
+
+    <ImageView
+        android:id="@+id/artwork_image_view"
+        style="@style/IconStyle"
+        android:layout_width="@dimen/dp44"
+        android:layout_height="@dimen/dp44"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_placeholder"
+        tools:src="@drawable/ic_placeholder" />
+
+    <LinearLayout
+
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginStart="@dimen/dp16">
+
+        <TextView
+            android:id="@+id/track_name_text_view"
+            style="@style/TrackText"
+            android:padding="@dimen/z"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/placeholder_track_name"
+            tools:text="@string/placeholder_track_name" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+        <TextView
+            android:id="@+id/artist_name_text_view"
+            style="@style/TrackTextSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/placeholder_artist_name"
+            tools:text="@string/placeholder_artist_name" />
+
+            <ImageView
+                android:id="@+id/dra"
+                style="@style/IconStyle"
+                android:layout_width="@dimen/dp12"
+                android:layout_height="@dimen/dp12"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_point"
+                tools:src="@drawable/ic_point"
+                />
+
+        <TextView
+            android:id="@+id/track_time_text_view"
+            style="@style/TrackTextSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/placeholder_track_time"
+            tools:text="@string/placeholder_track_time" />
+    </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/button_right_arrow"
+        style="@style/IconStyle"
+        android:layout_width="@dimen/dp24"
+        android:layout_height="@dimen/dp24"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_arrow_forward"
+        tools:src="@drawable/ic_arrow_forward" />
+
+</LinearLayout>

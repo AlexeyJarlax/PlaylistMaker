@@ -34,7 +34,7 @@
     <color name="gray_dark_styles">@color/yp_blue</color>
     <color name="gray_light_styles">@color/yp_blue_light</color>
     <!-- цвет поисковой строки -->
-    <color name="search_edit_text_and_icon">@color/yp_black</color>
+    <color name="search_and_track_icons">@color/yp_black</color>
     <color name="search_edit_background">@color/yp_white</color>
 
 </resources>
