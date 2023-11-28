@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="@dimen/padding_for_linear_layout"
+        android:padding="@dimen/dp16"
         android:text="@string/playlist_maker"
         android:textColor="@color/yp_white"
         android:textSize="@dimen/text_size_large_sp22" />

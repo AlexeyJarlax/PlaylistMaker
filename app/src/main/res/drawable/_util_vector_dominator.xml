@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- цветопокрас векторов для IconStyle: лупа, крестик для меню поиска  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="@dimen/dp16"
+    android:height="@dimen/dp16"
+    android:viewportWidth="16"
+    android:viewportHeight="16">
+
+    <path
+        android:fillColor="?attr/iconColor"
+        android:pathData="?attr/iconPath" />
+
+</vector>
+
+
+
+<!--    ／ﾌﾌ 　　　　　 　　 　ム｀ヽ         -->
+<!--    / ノ)　　 ∧　　∧　　　　）　ヽ        -->
+<!--    / ｜　　(´・ω ・`）ノ⌒（ゝ._,ノ      -->
+<!--    /　ﾉ⌒＿⌒ゝーく　 ＼　　／           -->
+<!--    丶＿ ノ 　　 ノ､　　|　/            -->
+<!--    　　 `ヽ `ー-‘人`ーﾉ /             -->
+<!--    　　　 丶 ￣ _人’彡ﾉ               -->
+<!--    　　　／｀ヽ _/\__'                -->

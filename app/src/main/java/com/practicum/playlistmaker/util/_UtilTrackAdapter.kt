@@ -24,6 +24,10 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val artworkImageView: ImageView = itemView.findViewById(R.id.artwork_image_view)
     private val rightArrowButton: ImageView = itemView.findViewById(R.id.button_right_arrow)
 
+    companion object {
+        private const val ALBUM_ROUNDED_CORNERS = 8
+    }
+
     fun bind(trackItem: TrackItem, onItemClick: (String) -> Unit) {
         val track = trackItem.track
         trackNameTextView.text = track.trackName
@@ -33,7 +37,8 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         Glide.with(itemView)
             .load(track.artworkUrl100)
             .fitCenter()
-            .transform(RoundedCorners(8)) // закругление уголов у пикчи
+            // ❓ Углы обложек треков закруглены.
+            .transform(RoundedCorners(ALBUM_ROUNDED_CORNERS)) // закругление уголов у пикчи
             .into(artworkImageView)
 
         rightArrowButton.setOnClickListener {  // стрелка > запускает переход на поиск песни в ЯндексМузыке
@@ -44,13 +49,16 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 class TrackAdapter(
     private val context: Context,
-    private val trackList: List<Track>,
+    private val originalTrackList: List<Track>,
+    private var trackList: List<Track>,
     private val onItemClick: (String) -> Unit
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
+    private var isSearching: Boolean = false
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val inflater = LayoutInflater.from(context)
-        val itemView = inflater.inflate(R.layout._util_track_item_layout, parent, false)
+        val itemView = inflater.inflate(R.layout._util_track_layout, parent, false)
         return TrackViewHolder(itemView)
     }
 
@@ -58,14 +66,20 @@ class TrackAdapter(
         val track = trackList[position]
         val trackItem = TrackItem(track)
         holder.bind(trackItem) { webUrl ->
-            // Обработка клика по кнопке справа
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(webUrl))
-            context.startActivity(intent)
+            holder.itemView.context.startActivity(intent)
         }
     }
 
     override fun getItemCount(): Int {
         return trackList.size
     }
+
+    fun updateList(newTrackList: List<Track>) {
+        trackList = newTrackList
+        notifyDataSetChanged()
+    }
 }
+
+
 
