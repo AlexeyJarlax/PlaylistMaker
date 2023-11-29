@@ -58,8 +58,8 @@
                 android:layout_marginEnd="@dimen/dp16"
                 android:contentDescription="@string/todo"
                 android:src="@drawable/_util_vector_dominator"
-                app:iconPath="@drawable/ic_clear_light_mode"
-                tools:src="@drawable/ic_clear_light_mode" />
+                app:iconPath="@drawable/ic_clear"
+                tools:src="@drawable/ic_clear" />
 
         </RelativeLayout>
 

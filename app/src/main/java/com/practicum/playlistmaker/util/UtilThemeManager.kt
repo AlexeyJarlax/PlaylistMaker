@@ -5,7 +5,7 @@ package com.practicum.playlistmaker.util
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 
-object _UtilThemeManager { //РЕАЛИЗАЦИЯ КНОПКИ НОЧНОЙ И ДНЕВНОЙ ТЕМЫ
+object UtilThemeManager { //РЕАЛИЗАЦИЯ КНОПКИ НОЧНОЙ И ДНЕВНОЙ ТЕМЫ
 
     private const val PREFS_NAME = "MyPrefs"
     private const val KEY_NIGHT_MODE = "nightMode"

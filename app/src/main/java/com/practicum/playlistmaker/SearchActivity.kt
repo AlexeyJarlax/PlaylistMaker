@@ -21,22 +21,15 @@ import com.practicum.playlistmaker.util.Track
 import com.practicum.playlistmaker.util.TrackAdapter
 import com.practicum.playlistmaker.util.arrayTrackList
 
-
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var searchEditText: EditText
     private lateinit var clearButton: ImageButton
-    private lateinit var searchHistorySpinner: Spinner
-    private lateinit var searchHistoryAdapter: ArrayAdapter<String>
-    private lateinit var searchHistoryList: ArrayList<String>
-    private lateinit var searchHistorySet: HashSet<String>
     private lateinit var trackRecyclerView: RecyclerView
     private lateinit var loadingIndicator: ProgressBar
     private lateinit var trackAdapter: TrackAdapter
-    private var shouldUpdateSearchField = true
     private val sortedTracks = mutableListOf<Track>()
     private val originalTracks = mutableListOf<Track>()
-
 
     companion object {
         private const val PREF_SEARCH_HISTORY = "SearchHistory"
@@ -46,18 +39,15 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-
         originalTracks.addAll(arrayTrackList)
         setupViews()
         backToMain()
-        setupHistorySpinner()
         setupPicturesDayNightForm()
         setupTrackRecyclerViewAndTrackAdapter()
     }
 
     private fun setupViews() {
         clearButton = findViewById(R.id.clearButton)
-        searchHistorySpinner = findViewById(R.id.search_history_spinner)
         searchEditText = findViewById(R.id.search_edit_text)
         loadingIndicator = findViewById(R.id.loading_indicator)
         loadingIndicator.visibility = View.GONE
@@ -84,71 +74,22 @@ class SearchActivity : AppCompatActivity() {
 
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val searchText = s.toString().trim()
-//                updateClearButtonVisibility(searchText.isNotEmpty())  // кнопка Х будет для сброса поиска
                 if (searchText.isEmpty()) {
                     trackAdapter.updateList(originalTracks)
                     trackRecyclerView.scrollToPosition(0)
                 }
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
-}
-    private fun updateClearButtonVisibility(isVisible: Boolean) {
-        clearButton.visibility = if (isVisible) View.VISIBLE else View.GONE
-    } // пока не нужно
-
+    }
 
     private fun backToMain() { // кнопка НАЗАД
         val backButton = findViewById<Button>(R.id.button_back_from_search_activity)
         backButton.setOnClickListener {
             finish()
-        }}
-
-    private fun setupHistorySpinner() { // заполнение спинера
-        val preferences: SharedPreferences =
-            getSharedPreferences(PREF_SEARCH_HISTORY, Context.MODE_PRIVATE)
-        val historySet = preferences.getStringSet(PREF_KEY_SEARCH_HISTORY, null)
-
-        if (historySet != null) { // Чек на тип значения historySet
-            if (historySet is HashSet<*>) {
-                searchHistorySet = HashSet(historySet)
-            } else {
-                val message = "ошибка searchHistorySet"
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-                searchHistorySet = HashSet()
-            }
-        } else {
-            searchHistorySet = HashSet()
-        }
-
-        searchHistoryList = ArrayList(searchHistorySet)
-
-        searchHistoryAdapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_item, searchHistoryList)
-        searchHistoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        searchHistorySpinner.adapter = searchHistoryAdapter
-
-        searchHistorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                if (shouldUpdateSearchField) {
-                    val selectedQuery = parent.getItemAtPosition(position) as String
-                    searchEditText.setText(selectedQuery)
-                }
-                shouldUpdateSearchField = true
-                parent.getChildAt(0)?.findViewById<TextView>(android.R.id.text1)?.visibility =
-                    View.GONE
-            }
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                //
-            }
         }
     }
 
@@ -159,7 +100,7 @@ class SearchActivity : AppCompatActivity() {
         clearButton.setImageDrawable(
             ContextCompat.getDrawable(
                 this,
-                R.drawable.ic_clear_light_mode
+                R.drawable.ic_clear
             )
         )
         val attributes = obtainStyledAttributes(intArrayOf(R.attr.iconColor, R.attr.iconPath))
@@ -167,25 +108,22 @@ class SearchActivity : AppCompatActivity() {
             attributes.getColor(0, ContextCompat.getColor(this, R.color.yp_text_gray__yp_black))
         val iconPath = attributes.getString(1)
         attributes.recycle()
-
         searchIcon.setColorFilter(iconColor)
         searchIcon.tag = iconPath
         clearButton.setColorFilter(iconColor)
         clearButton.tag = iconPath
     }
 
-
     private fun setupTrackRecyclerViewAndTrackAdapter() {
         trackRecyclerView = findViewById(R.id.track_recycler_view)
         val layoutManager = LinearLayoutManager(this)
-        trackAdapter = TrackAdapter(this, originalTracks, originalTracks) { webUrl ->
+        trackAdapter = TrackAdapter(this, originalTracks) { webUrl ->
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(webUrl))
             startActivity(intent)
         }
         trackRecyclerView.layoutManager = layoutManager
         trackRecyclerView.adapter = trackAdapter
     }
-
 
     private fun hideKeyboard() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -201,53 +139,31 @@ class SearchActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun preparingForSearch(searchText: String) { // Подготовка поиска: Индикатор, отключение кнопок на момент поиска, performSearch, задержка и запуск сохранения списка
+    private fun preparingForSearch(searchText: String) { // Подготовка поиска
         loadingIndicator.visibility = View.VISIBLE
         clearButton.isEnabled = false
-//        searchHistorySpinner.isEnabled = false
         Handler(Looper.getMainLooper()).postDelayed({
             performSearch(searchText) // поиск
-            saveSearchQuery(searchText)
+//            saveSearchQuery(searchText)
             loadingIndicator.visibility = View.GONE
             clearButton.isEnabled = true
-//            searchHistorySpinner.isEnabled = true
-            updatePage()
         }, 500)
     }
 
-    private fun updatePage() {
-        searchHistoryAdapter?.notifyDataSetChanged() // тут должно быть что-то важное, пока не понял что
-    }
-    private fun performSearch(query: String) {  // Попытка сделать вумный поиск
+    private fun performSearch(query: String) {
         val filteredTracks = originalTracks.filter { track ->
-            track.trackName.contains(query, ignoreCase = true) || track.artistName.contains(query, ignoreCase = true)
-        }.toMutableList() // Преобразование к изменяемому списку
-        sortedTracks.clear() // Очистка отсортированного списка
-        sortedTracks.addAll(filteredTracks.sortedBy { it.trackName }) // Добавляем отфильтрованные и отсортированные треки в sortedTracks
-        trackAdapter.updateList(sortedTracks) // Обновляем список треков в адаптере
-        trackRecyclerView.scrollToPosition(0) // Скроллим к началу списка
-
+            track.trackName.contains(query, ignoreCase = true) || track.artistName.contains(
+                query,
+                ignoreCase = true
+            )
+        }.toMutableList()
+        sortedTracks.clear()
+        sortedTracks.addAll(filteredTracks.sortedBy { it.trackName })
+        trackAdapter.updateList(sortedTracks)
     }
 
-    private fun saveSearchQuery(searchText: String) {
-        searchHistorySet.add(searchText)
-        searchHistoryList = ArrayList(searchHistorySet)
-        searchHistoryAdapter.clear()
-        searchHistoryAdapter.addAll(searchHistoryList)
-        searchHistoryAdapter.notifyDataSetChanged()
-
-        val preferences: SharedPreferences =
-            getSharedPreferences(PREF_SEARCH_HISTORY, Context.MODE_PRIVATE)
-        val editor = preferences.edit()
-        editor.putStringSet(PREF_KEY_SEARCH_HISTORY, searchHistorySet)
-        editor.apply()
-
-        shouldUpdateSearchField = false
-    }
-
-    override fun onStop() { // Очищаем историю запросов при выходе
+    override fun onStop() { // Досвидули
         super.onStop()
-
         val preferences: SharedPreferences =
             getSharedPreferences(PREF_SEARCH_HISTORY, Context.MODE_PRIVATE)
         val editor = preferences.edit()

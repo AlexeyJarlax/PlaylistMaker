@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import com.practicum.playlistmaker.util._UtilThemeManager
+import com.practicum.playlistmaker.util.UtilThemeManager
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -15,7 +15,7 @@ class SettingsActivity : AppCompatActivity() {
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _UtilThemeManager.applyTheme(this)
+        UtilThemeManager.applyTheme(this)
         setContentView(R.layout.activity_settings)
 
         val back = findViewById<Button>(R.id.button_back_from_settings) // КНОПКА НАЗАД
@@ -25,9 +25,9 @@ class SettingsActivity : AppCompatActivity() {
 
         // КНОПКА НОЧНОЙ И ДНЕВНОЙ ТЕМЫ (РЕАЛИЗАЦИЯ ВЫНЕСЕНА В ОТДЕЛЬНЫЙ КЛАСС)
         val switchDarkMode: SwitchCompat = findViewById(R.id.switch_dark_mode)
-        switchDarkMode.isChecked = _UtilThemeManager.isNightModeEnabled(this)
+        switchDarkMode.isChecked = UtilThemeManager.isNightModeEnabled(this)
         switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
-            _UtilThemeManager.setNightModeEnabled(this, isChecked)
+            UtilThemeManager.setNightModeEnabled(this, isChecked)
         }
 
 

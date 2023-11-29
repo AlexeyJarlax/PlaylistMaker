@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.util
 
-// адаптор для RecyclerView, Glide
+// адаптер для RecyclerView, Glide
 
 import android.content.Context
 import android.content.Intent
@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 
-class TrackItem(val track: Track) {}
+data class TrackItem(val track: Track) {}
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val trackNameTextView: TextView = itemView.findViewById(R.id.track_name_text_view)
@@ -37,7 +37,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         Glide.with(itemView)
             .load(track.artworkUrl100)
             .fitCenter()
-            // ❓ Углы обложек треков закруглены.
+            .placeholder(R.drawable.ic_placeholder) // placeholder по умолчанию
             .transform(RoundedCorners(ALBUM_ROUNDED_CORNERS)) // закругление уголов у пикчи
             .into(artworkImageView)
 
@@ -49,12 +49,9 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 class TrackAdapter(
     private val context: Context,
-    private val originalTrackList: List<Track>,
     private var trackList: List<Track>,
-    private val onItemClick: (String) -> Unit
+    private val onItemClick: (String) -> Unit // объявляется и используется при создании TrackAdapter в fun setupTrackRecyclerViewAndTrackAdapter()
 ) : RecyclerView.Adapter<TrackViewHolder>() {
-
-    private var isSearching: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val inflater = LayoutInflater.from(context)

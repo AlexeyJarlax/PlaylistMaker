@@ -13,8 +13,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Окно поиска описано в отдельном layout: _util_search_layout.xml -->
-
     <include
         android:id="@+id/search_box_include"
         layout="@layout/_util_search_layout"
@@ -25,17 +23,6 @@
         android:text=""
         app:layout_constraintTop_toTopOf="@id/button_back_from_search_activity"
         tools:layout_editor_absoluteX="@dimen/z" />
-
-    <Spinner
-        android:id="@+id/search_history_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp36"
-        android:layout_marginEnd="@dimen/dp16"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:text=""
-        app:layout_constraintTop_toBottomOf="@+id/search_box_include"
-        app:layout_constraintTop_toTopOf="@id/search_box_include" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/track_recycler_view"
