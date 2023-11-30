@@ -1,42 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    tools:context=".SearchActivity"
-    style="@style/BackMenuLayout">
+    style="@style/BackMenuLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <Button
         android:id="@+id/button_back_from_search_activity"
         style="@style/GoBackButtons"
-        android:text="@string/button_settings" />
+        android:text="@string/button_settings"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/SearchButtons">
+    <include
+        android:id="@+id/search_box_include"
+        layout="@layout/_util_search_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp36"
+        android:layout_marginTop="@dimen/dp60"
+        android:imeOptions="actionDone"
+        android:text=""
+        app:layout_constraintTop_toTopOf="@id/button_back_from_search_activity"
+        tools:layout_editor_absoluteX="@dimen/z" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/search_edit_text"
-            style="@style/SearchButtons"
-            android:background="@android:color/transparent" />
-
-        <ImageButton
-            style="@style/ClearButtonStyle"
-            android:id="@+id/clearButton"
-            android:contentDescription="TODO" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/heading_search_history_list_view"
-        android:hint="@string/heading_search_history_list_view"
-        android:padding="16dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/track_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp24"
+        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/_util_track_layout"
+        tools:context=".MedialabActivity"
+        app:tint="@color/yp_light_gray__yp_white"
+        app:layout_constraintTop_toBottomOf="@id/search_box_include" />
 
-    <ListView
-        android:id="@+id/search_history_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <ProgressBar
+        android:id="@+id/loading_indicator"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/track_recycler_view"
+        app:layout_constraintStart_toStartOf="@+id/track_recycler_view"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/yp_text_gray__yp_black" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

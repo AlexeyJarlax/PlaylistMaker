@@ -10,29 +10,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="@dimen/padding_for_linear_layout"
+        android:padding="@dimen/dp16"
         android:text="@string/playlist_maker"
         android:textColor="@color/yp_white"
-        android:textSize="@dimen/text_size_large" />
+        android:textSize="@dimen/text_size_large_sp22" />
 
     <Button
         android:id="@+id/button_search"
         style="@style/MainMenuButtons"
         android:text="@string/button_search"
-        app:icon="@drawable/search"
+        app:icon="@drawable/ic_search"
         tools:ignore="VisualLintButtonSize" />
 
     <Button
         android:id="@+id/button_media_lib"
         style="@style/MainMenuButtons"
         android:text="@string/button_media_lib"
-        app:icon="@drawable/library"
+        app:icon="@drawable/ic_library"
         tools:ignore="VisualLintButtonSize" />
 
     <Button
         android:id="@+id/button_settings"
         style="@style/MainMenuButtons"
         android:text="@string/button_settings"
-        app:icon="@drawable/settings"
+        app:icon="@drawable/ic_settings"
         tools:ignore="VisualLintButtonSize" />
 </LinearLayout>

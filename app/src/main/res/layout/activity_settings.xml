@@ -12,37 +12,37 @@
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switch_dark_mode"
-        style="@style/SettingsMenuButtons"
+        style="@style/SecondaryButtonsAndText"
         android:layout_height="wrap_content"
         android:checked="false"
         android:gravity="center_vertical"
-        android:paddingEnd="@dimen/padding_z"
+        android:paddingEnd="@dimen/dp8"
         android:text="@string/dark_mod"
         tools:ignore="VisualLintButtonSize" />
     <!--android:background="@color/buttons_secondary"-->
 
     <Button
         android:id="@+id/button_settings_share"
-        style="@style/SettingsMenuButtons"
+        style="@style/SecondaryButtonsAndText"
         android:layout_height="wrap_content"
         android:text="@string/share_the_app"
-        app:icon="@drawable/share"
+        app:icon="@drawable/ic_share"
         tools:ignore="VisualLintButtonSize" />
 
     <Button
         android:id="@+id/button_settings_write_to_supp"
-        style="@style/SettingsMenuButtons"
+        style="@style/SecondaryButtonsAndText"
         android:layout_height="wrap_content"
         android:text="@string/write_to_support"
-        app:icon="@drawable/support"
+        app:icon="@drawable/ic_support"
         tools:ignore="VisualLintButtonSize" />
 
     <Button
         android:id="@+id/button_settings_user_agreement"
-        style="@style/SettingsMenuButtons"
+        style="@style/SecondaryButtonsAndText"
         android:layout_height="wrap_content"
         android:text="@string/user_agreement"
-        app:icon="@drawable/arrow_forward"
+        app:icon="@drawable/ic_arrow_forward"
         tools:ignore="VisualLintButtonSize" />
 
 </LinearLayout>

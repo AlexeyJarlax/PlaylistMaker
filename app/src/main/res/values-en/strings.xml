@@ -17,4 +17,9 @@
     <string name="support_email_text">Thanks to the developers and developers for the cool app!</string>
     <string name="user_agreement_url">https://yandex.ru/legal/practicum_offer/</string>
     <string name="heading_search_history_list_view">Search string query history</string>
+    <string name="todo">this app is not suitable for the disabled</string>
+    <string name="there_wil_be_media_library">there will be a media library in this window</string>
+    <string name="placeholder_track_name">No Reply</string>
+    <string name="placeholder_artist_name">The Beatles</string>
+    <string name="placeholder_track_time">5.12</string>
 </resources>

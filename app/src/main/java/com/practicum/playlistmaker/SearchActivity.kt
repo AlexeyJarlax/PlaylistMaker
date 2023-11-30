@@ -1,65 +1,69 @@
 package com.practicum.playlistmaker
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.practicum.playlistmaker.util.Track
+import com.practicum.playlistmaker.util.TrackAdapter
+import com.practicum.playlistmaker.util.arrayTrackList
 
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var searchEditText: EditText
     private lateinit var clearButton: ImageButton
-    private lateinit var searchHistoryListView: ListView
-    private lateinit var searchHistoryAdapter: ArrayAdapter<String>
-    private lateinit var searchHistorySet: HashSet<String>
+    private lateinit var trackRecyclerView: RecyclerView
+    private lateinit var loadingIndicator: ProgressBar
+    private lateinit var trackAdapter: TrackAdapter
+    private val sortedTracks = mutableListOf<Track>()
+    private val originalTracks = mutableListOf<Track>()
+
+    companion object {
+        private const val PREF_SEARCH_HISTORY = "SearchHistory"
+        private const val PREF_KEY_SEARCH_HISTORY = "search_history"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+        originalTracks.addAll(arrayTrackList)
+        setupViews()
+        backToMain()
+        setupPicturesDayNightForm()
+        setupTrackRecyclerViewAndTrackAdapter()
+    }
 
-        searchEditText = findViewById(R.id.search_edit_text)
+    private fun setupViews() {
         clearButton = findViewById(R.id.clearButton)
-        searchHistoryListView = findViewById(R.id.search_history_list_view)
+        searchEditText = findViewById(R.id.search_edit_text)
+        loadingIndicator = findViewById(R.id.loading_indicator)
+        loadingIndicator.visibility = View.GONE
 
-        val back = findViewById<Button>(R.id.button_back_from_search_activity) // КНОПКА НАЗАД
-        back.setOnClickListener {
-            finish()
+        clearButton.setOnClickListener {
+            searchEditText.text.clear()
+            clearButton.visibility = View.GONE
+            trackAdapter.updateList(originalTracks)
         }
 
-        // Считываем сохраненный набор поисковых запросов
-        val preferences: SharedPreferences =
-            getSharedPreferences("SearchHistory", Context.MODE_PRIVATE)
-        searchHistorySet = preferences.getStringSet("search_history", HashSet()) as HashSet<String>
-
-        val searchHistoryList = ArrayList(searchHistorySet)
-
-        // Создаем ArrayAdapter для отображения списка поисковых запросов
-        searchHistoryAdapter =
-            ArrayAdapter(this, android.R.layout.simple_list_item_1, searchHistoryList)
-        searchHistoryListView.adapter = searchHistoryAdapter
-
-        // Обработчик клика по элементу списка
-        searchHistoryListView.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, view, position, id ->
-                val selectedQuery = parent.getItemAtPosition(position) as String
-                searchEditText.setText(selectedQuery)
-            }
-        // Обработчик ввода
-        searchEditText.setOnEditorActionListener { textView, actionId, keyEvent ->
-            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL ||
-                (keyEvent != null && keyEvent.action == KeyEvent.ACTION_DOWN && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER)
-            ) {
+        searchEditText.setOnEditorActionListener { textView, actionId, keyEvent -> // заполнение с виртуальной клавиатуры
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val searchText = searchEditText.text.toString().trim()
                 if (searchText.isNotEmpty()) {
+                    preparingForSearch(searchText)
                     showToast("Мы пошли искать: $searchText")
-                    saveSearchQuery(searchText)
                 }
                 clearSearchFieldAndHideKeyboard()
                 true
@@ -68,30 +72,59 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        // Обработчик очистки ввода
-        clearButton.setOnClickListener {
-            searchEditText.text.clear()
-            clearButton.visibility = View.GONE
-            hideKeyboard()
-        }
-
-        // Обновление видимости кнопки очистки
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                updateClearButtonVisibility(s?.isNotEmpty() ?: false)
+                val searchText = s.toString().trim()
+                if (searchText.isEmpty()) {
+                    trackAdapter.updateList(originalTracks)
+                    trackRecyclerView.scrollToPosition(0)
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {}
         })
     }
 
-    private fun updateClearButtonVisibility(isVisible: Boolean) {
-        clearButton.visibility = if (isVisible) View.VISIBLE else View.GONE
+    private fun backToMain() { // кнопка НАЗАД
+        val backButton = findViewById<Button>(R.id.button_back_from_search_activity)
+        backButton.setOnClickListener {
+            finish()
+        }
     }
 
-    // Обработчик сокрытие клавы
+    private fun setupPicturesDayNightForm() { // цветовая настройка День\ночь на две иконки (Лупа и Х) внутри окна поиска иконки
+        val searchIcon: ImageButton = findViewById(R.id.search_icon)
+        searchIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_search))
+        val clearButton: ImageButton = findViewById(R.id.clearButton)
+        clearButton.setImageDrawable(
+            ContextCompat.getDrawable(
+                this,
+                R.drawable.ic_clear
+            )
+        )
+        val attributes = obtainStyledAttributes(intArrayOf(R.attr.iconColor, R.attr.iconPath))
+        val iconColor =
+            attributes.getColor(0, ContextCompat.getColor(this, R.color.yp_text_gray__yp_black))
+        val iconPath = attributes.getString(1)
+        attributes.recycle()
+        searchIcon.setColorFilter(iconColor)
+        searchIcon.tag = iconPath
+        clearButton.setColorFilter(iconColor)
+        clearButton.tag = iconPath
+    }
+
+    private fun setupTrackRecyclerViewAndTrackAdapter() {
+        trackRecyclerView = findViewById(R.id.track_recycler_view)
+        val layoutManager = LinearLayoutManager(this)
+        trackAdapter = TrackAdapter(this, originalTracks) { webUrl ->
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(webUrl))
+            startActivity(intent)
+        }
+        trackRecyclerView.layoutManager = layoutManager
+        trackRecyclerView.adapter = trackAdapter
+    }
+
     private fun hideKeyboard() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(searchEditText.windowToken, 0)
@@ -106,16 +139,35 @@ class SearchActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    // Обработчик сейва поисковых запросов
-    private fun saveSearchQuery(query: String) {
-        searchHistorySet.add(query)
-        searchHistoryAdapter.add(query)
-        searchHistoryAdapter.notifyDataSetChanged()
+    private fun preparingForSearch(searchText: String) { // Подготовка поиска
+        loadingIndicator.visibility = View.VISIBLE
+        clearButton.isEnabled = false
+        Handler(Looper.getMainLooper()).postDelayed({
+            performSearch(searchText) // поиск
+//            saveSearchQuery(searchText)
+            loadingIndicator.visibility = View.GONE
+            clearButton.isEnabled = true
+        }, 500)
+    }
 
+    private fun performSearch(query: String) {
+        val filteredTracks = originalTracks.filter { track ->
+            track.trackName.contains(query, ignoreCase = true) || track.artistName.contains(
+                query,
+                ignoreCase = true
+            )
+        }.toMutableList()
+        sortedTracks.clear()
+        sortedTracks.addAll(filteredTracks.sortedBy { it.trackName })
+        trackAdapter.updateList(sortedTracks)
+    }
+
+    override fun onStop() { // Досвидули
+        super.onStop()
         val preferences: SharedPreferences =
-            getSharedPreferences("SearchHistory", Context.MODE_PRIVATE)
+            getSharedPreferences(PREF_SEARCH_HISTORY, Context.MODE_PRIVATE)
         val editor = preferences.edit()
-        editor.putStringSet("search_history", searchHistorySet)
+        editor.remove(PREF_KEY_SEARCH_HISTORY)
         editor.apply()
     }
 }
