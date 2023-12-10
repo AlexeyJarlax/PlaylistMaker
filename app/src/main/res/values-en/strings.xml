@@ -22,4 +22,10 @@
     <string name="placeholder_track_name">No Reply</string>
     <string name="placeholder_artist_name">The Beatles</string>
     <string name="placeholder_track_time">5.12</string>
+    <string name="error_text_web">Communication problems \n
+        The download failed. \n
+        Check your internet connection</string>
+    <string name="nothing_was_found">Nothing was found</string>
+    <string name="refresh">Refresh</string>
+    <string name="any_mistake">there will be an error message,\nthe icon will change depending on\nthe nature of the error</string>
 </resources>
