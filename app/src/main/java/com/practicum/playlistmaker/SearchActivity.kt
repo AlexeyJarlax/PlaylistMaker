@@ -41,6 +41,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 import timber.log.Timber
+import java.lang.Error
 import java.util.concurrent.TimeUnit
 
 class SearchActivity : AppCompatActivity() {
@@ -78,7 +79,6 @@ class SearchActivity : AppCompatActivity() {
         queryInput = findViewById(R.id.search_edit_text)
         loadingIndicator = findViewById(R.id.loading_indicator)
         loadingIndicator.visibility = View.GONE
-
         clearButton.setOnClickListener {
             queryInput.text.clear()
         }
@@ -87,10 +87,12 @@ class SearchActivity : AppCompatActivity() {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val searchText = queryInput.text.toString().trim()
                 if (searchText.isNotEmpty()) {
+                    utilErrorBox = findViewById<LinearLayout>(R.id.util_error_box)
+                    utilErrorBox.visibility = View.GONE // исчезновение сообщения с ошибкой
                     preparingForSearch(searchText)
                     showToast("Поиск: $searchText")
                 }
-                clearSearchFieldAndHideKeyboard()
+                hideKeyboard()
                 true
             } else {
                 false
@@ -99,7 +101,6 @@ class SearchActivity : AppCompatActivity() {
 
         queryInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val searchText = s.toString().trim()
                 clearButton.visibility = if (searchText.isNotEmpty()) View.VISIBLE else View.GONE
@@ -158,11 +159,12 @@ class SearchActivity : AppCompatActivity() {
     private var lastQuery: String? = null
     private var lastCallback: ((List<TrackData>) -> Unit)? = null
     private fun performSearch(query: String, callback: (List<TrackData>) -> Unit) {
+        // Сохраняем последний запрос и колбэк
         lastQuery = query
         lastCallback = callback
-        Timber.d(
-            "Запускаем метод performSearch с параметрами Query: ${query} и Callback"
-        )
+        Timber.d("Запускаем метод performSearch с параметрами Query: $query и Callback")
+
+        // Выполняем поиск с использованием iTunesSearchAPI
         iTunesSearchAPI.search(query).enqueue(object : Callback<TrackResponse> {
             override fun onResponse(
                 call: Call<TrackResponse>,
@@ -171,6 +173,7 @@ class SearchActivity : AppCompatActivity() {
                 if (response.code() == 200) {
                     val trackResponse = response.body()
                     val trackData = if (trackResponse?.results?.isNotEmpty() == true) {
+                        // Преобразуем результаты в список объектов TrackData
                         trackResponse.results.map { track ->
                             Timber.d("Метод performSearch => response.isSuccessful! track.trackName:${track.trackName}")
                             TrackData(
@@ -185,47 +188,29 @@ class SearchActivity : AppCompatActivity() {
                         solvingAbsentProblem() // вызываем заглушку о пустом листе запроса
                         emptyList()
                     }
+                    // Вызываем колбэк с полученными данными
                     callback(trackData)
-                    Timber.d(
-                        "Метод performSearch => response.isSuccessful! => callback(trackData): ${
-                            callback(trackData)
-                        }"
-                    )
-                } else if (response.code() == 400) {
-                    val error = "400 (Bad Request) - ошибка запроса"
-                    Timber.d(error)
-                    showToast(error)
-                } else if (response.code() == 401) {
-                    // Знаю, что тут авторизации нет, но всё же вдруг неожиданно появится, а я не готов:)
-                    val error = "401 (Unauthorized) - неавторизованный запрос"
-                    Timber.d(error)
-                    showToast(error)
-                } else if (response.code() == 403) {
-                    val error = "403 (Forbidden) - запрещенный запрос"
-                    Timber.d(error)
-                    showToast(error)
-                } else if (response.code() == 404) {
-                    val error = "404 (Not Found) - не найдено"
-                    Timber.d(error)
-                    showToast(error)
-                } else if (response.code() == 500) {
-                    val error = "500 (Internal Server Error)- внутренняя ошибка сервера"
-                    Timber.d(error)
-                    showToast(error)
-                } else if (response.code() == 503) {
-                    val error = "503 (Service Unavailable) - сервис временно недоступен"
-                    Timber.d(error)
-                    showToast(error)
+                    Timber.d("Метод performSearch => response.isSuccessful! => callback(trackData): $trackData")
                 } else {
-                    val error = "(unspecified error) - неустановленная ошибка"
+                    val error = when (response.code()) {
+                        400 -> "400 (Bad Request) - ошибка запроса"
+                        401 -> "401 (Unauthorized) - неавторизованный запрос"
+                        403 -> "403 (Forbidden) - запрещенный запрос"
+                        404 -> "404 (Not Found) - не найдено"
+                        500 -> "500 (Internal Server Error) - внутренняя ошибка сервера"
+                        503 -> "503 (Service Unavailable) - сервис временно недоступен"
+                        else -> "(unspecified error) - неустановленная ошибка"
+                    }
                     Timber.d(error)
                     showToast(error)
+                    onFailure(call, Throwable(error)) // Вызываем onFailure с информацией об ошибке
                 }
             }
             override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                solvingConnectionProblem() // вызываем заглушку с релоадером
+                solvingConnectionProblem()
+                val trackData = emptyList<TrackData>()
+                callback(trackData)
             }
-
         })
     }
 
