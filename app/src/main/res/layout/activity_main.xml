@@ -13,7 +13,7 @@
         android:padding="@dimen/dp16"
         android:text="@string/playlist_maker"
         android:textColor="@color/yp_white"
-        android:textSize="@dimen/text_size_large_sp22" />
+        android:textSize="@dimen/text_size_sp22" />
 
     <Button
         android:id="@+id/button_search"

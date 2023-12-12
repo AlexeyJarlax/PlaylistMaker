@@ -19,7 +19,6 @@
         android:paddingEnd="@dimen/dp8"
         android:text="@string/dark_mod"
         tools:ignore="VisualLintButtonSize" />
-    <!--android:background="@color/buttons_secondary"-->
 
     <Button
         android:id="@+id/button_settings_share"

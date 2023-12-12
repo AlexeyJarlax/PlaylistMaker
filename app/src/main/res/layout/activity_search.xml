@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/BackMenuLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".SearchActivity">
 
     <Button
         android:id="@+id/button_back_from_search_activity"
@@ -15,7 +16,7 @@
 
     <include
         android:id="@+id/search_box_include"
-        layout="@layout/_util_search_layout"
+        layout="@layout/util_search_layout"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp36"
         android:layout_marginTop="@dimen/dp60"
@@ -29,11 +30,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp24"
-        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/_util_track_layout"
-        tools:context=".MedialabActivity"
+        app:layout_constraintTop_toBottomOf="@id/search_box_include"
         app:tint="@color/yp_light_gray__yp_white"
-        app:layout_constraintTop_toBottomOf="@id/search_box_include" />
+        tools:context=".MedialabActivity"
+        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/util_item_track" />
 
     <ProgressBar
         android:id="@+id/loading_indicator"
@@ -45,5 +46,12 @@
         app:layout_constraintStart_toStartOf="@+id/track_recycler_view"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/yp_text_gray__yp_black" />
+
+    <include
+        android:id="@+id/util_error_box"
+        layout="@layout/util_error_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

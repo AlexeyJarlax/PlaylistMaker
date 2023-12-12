@@ -17,10 +17,10 @@
     <color name="yp_white__yp_white">@color/yp_white</color>
     <!-- цвет шрифта главного меню, иконок главного меню -->
     <color name="yp_black__yp_black">@color/yp_black</color>
+    <!-- цвет иконок с ошибкой, цвет шрифта вторичного меню, название песен-->
+    <color name="yp_black__yp_white">@color/yp_white</color>
     <!-- цвет кнопок вторичного меню, фон вторичного меню -->
     <color name="yp_white__yp_black">@color/yp_black</color>
-    <!-- цвет шрифта вторичного меню, название песен -->
-    <color name="black__yp_white">@color/yp_white</color>
     <!-- цвет иконок вторичного меню, имени автора и продолжительности трека -->
     <color name="yp_text_gray__yp_white">@color/yp_white</color>
     <!-- цвет тумблера свитч, цвет поисковой строки и текста в ней -->

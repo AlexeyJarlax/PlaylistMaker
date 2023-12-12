@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!-- Окно поиска для activity_search.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/search_layout"
     android:layout_width="match_parent"
     android:layout_height="36dp"
@@ -23,16 +21,14 @@
 
             <ImageButton
                 android:id="@+id/search_icon"
-                style="@style/IconStyle"
+                style="@style/SearchIconStyle"
                 android:layout_width="@dimen/dp16"
                 android:layout_height="@dimen/dp16"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/dp16"
                 android:contentDescription="@string/todo"
-                android:src="@drawable/_util_vector_dominator"
-                app:iconPath="@drawable/ic_search"
-                tools:src="@drawable/ic_search" />
+                android:src="@drawable/ic_search" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/search_edit_text"
@@ -50,16 +46,13 @@
 
             <ImageButton
                 android:id="@+id/clearButton"
-                style="@style/IconStyle"
+                style="@style/SearchIconStyle"
                 android:layout_width="@dimen/dp16"
                 android:layout_height="@dimen/dp16"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/dp16"
-                android:contentDescription="@string/todo"
-                android:src="@drawable/_util_vector_dominator"
-                app:iconPath="@drawable/ic_clear"
-                tools:src="@drawable/ic_clear" />
+                android:src="@drawable/ic_clear" />
 
         </RelativeLayout>
 

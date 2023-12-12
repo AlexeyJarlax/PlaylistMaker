@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="text_size_large_sp22">22sp</dimen>
-    <dimen name="text_size_small_sp16">16sp</dimen>
-    <dimen name="text_size_super_small_sp11">11sp</dimen>
+    <dimen name="text_size_sp11">11sp</dimen>
+    <dimen name="text_size_sp14">14sp</dimen>
+    <dimen name="text_size_sp16">16sp</dimen>
+    <dimen name="text_size_sp19">19sp</dimen>
+    <dimen name="text_size_sp22">22sp</dimen>
+
     <dimen name="button_weight">1</dimen>
     <dimen name="z">0dp</dimen>
     <dimen name="dp8">8dp</dimen>
@@ -12,4 +15,6 @@
     <dimen name="dp36">36dp</dimen>
     <dimen name="dp44">44dp</dimen>
     <dimen name="dp60">60dp</dimen>
+    <dimen name="dp77">77dp</dimen>
+    <dimen name="dp91">91dp</dimen>
 </resources>
