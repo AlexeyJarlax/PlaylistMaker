@@ -30,7 +30,7 @@
                 android:contentDescription="@string/todo"
                 android:src="@drawable/ic_search" />
 
-            <com.google.android.material.textfield.TextInputEditText
+            <EditText
                 android:id="@+id/search_edit_text"
                 style="@style/SearchButtons"
                 android:layout_width="match_parent"

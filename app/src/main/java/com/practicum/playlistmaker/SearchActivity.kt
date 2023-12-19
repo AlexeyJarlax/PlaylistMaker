@@ -17,7 +17,6 @@ package com.practicum.playlistmaker
 //3.1 : performSearch => [возникла ошибка с вызовом TrackResponse] => Запускаем метод solvingConnectionProblem() ===> Запускаем повторно 2 этап
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -34,7 +33,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.practicum.playlistmaker.util.MyCompObj
 import com.practicum.playlistmaker.util.UtilHistoryAdapter
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,82 +42,116 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 import timber.log.Timber
-import java.lang.Error
 import java.util.concurrent.TimeUnit
-
 
 class SearchActivity : AppCompatActivity() {
 
     private val iTunesSearch = "https://itunes.apple.com"
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(iTunesSearch)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    private val retrofit =
+        Retrofit.Builder().baseUrl(iTunesSearch).addConverterFactory(GsonConverterFactory.create())
+            .build()
     private val iTunesSearchAPI = retrofit.create(iTunesApiService::class.java)
     private lateinit var queryInput: EditText
     private lateinit var clearButton: ImageButton
+    private lateinit var backButton: Button
     private lateinit var trackRecyclerView: RecyclerView
     private lateinit var loadingIndicator: ProgressBar
     private lateinit var trackAdapter: UtilTrackAdapter
-    private val originalTracks = ArrayList<TrackData>()
+    private val cleanTrackList = ArrayList<TrackData>()
     private lateinit var utilErrorBox: View
-    private lateinit var historyAdapter: UtilHistoryAdapter // Добавим переменную
-
-
+    private lateinit var utilHistoryAdapter: UtilHistoryAdapter // Добавим переменную
+    var counter = 0 // счетчик сбросов
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.plant(Timber.DebugTree()) // для логирования ошибок
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-        setupViews()
+        setupOneLineViews()
+        clearButton()
         backToMain()
+//        setupHistoryAdapter()
+        historyAdapter()
         setupTrackRecyclerViewAndTrackAdapter()
-        historyAdapter = UtilHistoryAdapter(this, object : OnTrackItemClickListener {
-            override fun onTrackItemClick(
-                trackName: String,
-                artistName: String,
-                trackTimeMillis: Long,
-                artworkUrl100: String
-            ) {
-                // Тут вы можете выполнить необходимые действия при клике на элемент истории
-            }
-        })
+        queryInputListener() // заполнение с виртуальной клавиатуры
+        queryTextChangedListener()
+//        onFocusChangeListener(queryInput)
+    }
+
+    private fun setupOneLineViews() {
+        backButton = findViewById<Button>(R.id.button_back_from_search_activity)
+        clearButton = findViewById(R.id.clearButton)
+        queryInput = findViewById(R.id.search_edit_text)
+        trackRecyclerView = findViewById(R.id.track_recycler_view)
+        loadingIndicator = findViewById(R.id.loading_indicator)
+        loadingIndicator.visibility = View.GONE
+        utilErrorBox = findViewById<LinearLayout>(R.id.util_error_box)
+    }
+
+
+    private fun clearButton() {
+        clearButton.setOnClickListener {
+            queryInput.text.clear()
+
+        }
+    }
+
+    private fun backToMain() {
+        backButton.setOnClickListener {
+            finish()
+        }
+    }
+
+    private fun historyAdapter() {
+        val trackAdapter =
+            UtilTrackAdapter(this, mutableListOf(), object : OnTrackItemClickListener {
+                override fun onTrackItemClick(
+                    trackName: String,
+                    artistName: String,
+                    trackTimeMillis: Long,
+                    artworkUrl100: String
+                ) {
+                    // Действия при клике на элемент истории, если нужны
+                }
+            })
+
+        utilHistoryAdapter =
+            UtilHistoryAdapter(this, trackAdapter, object : OnTrackItemClickListener {
+                override fun onTrackItemClick(
+                    trackName: String,
+                    artistName: String,
+                    trackTimeMillis: Long,
+                    artworkUrl100: String
+                ) {
+                    // Действия при клике на элемент истории, если нужны
+                }
+            })
+        utilHistoryAdapter.setRecyclerView(trackRecyclerView)
     }
 
     private fun setupTrackRecyclerViewAndTrackAdapter() {
-        trackRecyclerView = findViewById(R.id.track_recycler_view)
         val layoutManager = LinearLayoutManager(this)
-        trackAdapter = UtilTrackAdapter(this, originalTracks, object : OnTrackItemClickListener {
+        trackAdapter = UtilTrackAdapter(this, cleanTrackList, object : OnTrackItemClickListener {
             override fun onTrackItemClick(
-                trackName: String,
-                artistName: String,
-                trackTimeMillis: Long,
-                artworkUrl100: String
+                trackName: String, artistName: String, trackTimeMillis: Long, artworkUrl100: String
             ) {
-                historyAdapter.saveTrack(trackName, artistName, trackTimeMillis, artworkUrl100)
+                utilHistoryAdapter.saveTrack(trackName, artistName, trackTimeMillis, artworkUrl100)
+                toastIt("добавлен: ${trackName}")
+                Timber.d("historyAdapter.saveTrack:${trackName}${artistName}")
             }
         })
         trackRecyclerView.layoutManager = layoutManager
         trackRecyclerView.adapter = trackAdapter
     }
 
-    private fun setupViews() {
-        clearButton = findViewById(R.id.clearButton)
-        queryInput = findViewById(R.id.search_edit_text)
-        loadingIndicator = findViewById(R.id.loading_indicator)
-        loadingIndicator.visibility = View.GONE
-        clearButton.setOnClickListener {
-            queryInput.text.clear()
-        }
-
+    private fun queryInputListener() { // заполнение с виртуальной клавиатуры
         queryInput.setOnEditorActionListener { textView, actionId, keyEvent -> // заполнение с виртуальной клавиатуры
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val searchText = queryInput.text.toString().trim()
                 if (searchText.isNotEmpty()) {
-                    utilErrorBox = findViewById<LinearLayout>(R.id.util_error_box)
                     utilErrorBox.visibility = View.GONE // исчезновение сообщения с ошибкой
                     preparingForSearch(searchText)
-                    showToast("Поиск: $searchText")
+                    toastIt("Поиск: $searchText")
+//                    clearTrackAdapterFromHistory()
                 }
                 hideKeyboard()
                 true
@@ -127,36 +159,53 @@ class SearchActivity : AppCompatActivity() {
                 false
             }
         }
+    }
 
+    private fun queryTextChangedListener() { // заполнение с виртуальной клавиатуры
         queryInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(
+                s: CharSequence?, start: Int, count: Int, after: Int
+            ) {
+//                fillTrackAdapterWithHistory()
+            }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val searchText = s.toString().trim()
                 clearButton.visibility = if (searchText.isNotEmpty()) View.VISIBLE else View.GONE
+                var hasFocus = true
+                queryInput.onFocusChangeListener = View.OnFocusChangeListener { _, focus ->
+                    hasFocus = focus}
                 if (searchText.isEmpty()) {
-                    trackAdapter.updateList(originalTracks)
-                    trackRecyclerView.scrollToPosition(0)
+                    fillTrackAdapterWithHistory()
+                    counter++
+                } else if (counter > 0) {
+                    clearTrackAdapterFromHistory()
+                    counter = 0
                 }
             }
-
-            override fun afterTextChanged(s: Editable?) {}
+            override fun afterTextChanged(p0: Editable?) {
+                // Реализуйте этот метод с необходимой логикой
+            }
         })
     }
 
-    private fun backToMain() {
-        val backButton = findViewById<Button>(R.id.button_back_from_search_activity)
-        backButton.setOnClickListener {
-            finish()
-        }
+    private fun fillTrackAdapterWithHistory() {
+        trackAdapter.updateList(cleanTrackList)
+        utilHistoryAdapter?.syncTracks()
+        utilHistoryAdapter.setRecyclerView(trackRecyclerView)
+        trackRecyclerView.scrollToPosition(0)
     }
 
-    // Добавьте метод для получения UtilHistoryAdapter
-    private fun getUtilHistoryAdapter(): UtilHistoryAdapter {
-        // Замените на ваш способ получения экземпляра UtilHistoryAdapter
-        // Например, если у вас есть переменная historyAdapter в классе SearchActivity, используйте ее
-        return historyAdapter
-    }
+    private fun clearTrackAdapterFromHistory() {
+        utilHistoryAdapter.killList() // чистит адаптер с историей
+//        val cleanestTrackList = ArrayList<TrackData>()
+        trackAdapter.updateList(cleanTrackList) // чистит адаптер с API
+//        utilHistoryAdapter.updateList(cleanestTrackList)
+//        trackAdapter.notifyDataSetChanged()
+//        trackRecyclerView.scrollToPosition(0)
+//        queryInput.clearFocus()
+//        historyAdapter.syncTracks()
 
+    }
 
     private fun hideKeyboard() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -168,7 +217,7 @@ class SearchActivity : AppCompatActivity() {
         hideKeyboard()
     }
 
-    private fun showToast(message: String) {
+    private fun toastIt(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
@@ -195,8 +244,7 @@ class SearchActivity : AppCompatActivity() {
         // Выполняем поиск с использованием iTunesSearchAPI
         iTunesSearchAPI.search(query).enqueue(object : Callback<TrackResponse> {
             override fun onResponse(
-                call: Call<TrackResponse>,
-                response: Response<TrackResponse>
+                call: Call<TrackResponse>, response: Response<TrackResponse>
             ) {
                 if (response.code() == 200) {
                     val trackResponse = response.body()
@@ -230,8 +278,11 @@ class SearchActivity : AppCompatActivity() {
                         else -> "(unspecified error) - неустановленная ошибка"
                     }
                     Timber.d(error)
-                    showToast(error)
-                    onFailure(call, Throwable(error)) // Вызываем onFailure с информацией об ошибке
+                    toastIt(error)
+                    onFailure(
+                        call,
+                        Throwable(error)
+                    ) // Вызываем onFailure с информацией об ошибке
                 }
             }
 
@@ -245,7 +296,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun solvingAbsentProblem() {
         loadingIndicator.visibility = View.GONE
-        utilErrorBox = findViewById<LinearLayout>(R.id.util_error_box)
+//        utilErrorBox = findViewById<LinearLayout>(R.id.util_error_box)
         val errorIcon = findViewById<ImageView>(R.id.error_icon)
         val errorTextWeb = findViewById<TextView>(R.id.error_text_web)
         errorIcon.setImageResource(R.drawable.ic_error_notfound)
@@ -260,7 +311,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun solvingConnectionProblem() {
         loadingIndicator.visibility = View.GONE
-        utilErrorBox = findViewById<LinearLayout>(R.id.util_error_box)
+//        utilErrorBox = findViewById<LinearLayout>(R.id.util_error_box)
         val errorIcon = findViewById<ImageView>(R.id.error_icon)
         val errorTextWeb = findViewById<TextView>(R.id.error_text_web)
         errorIcon.setImageResource(R.drawable.ic_error_internet)
@@ -290,7 +341,8 @@ class SearchActivity : AppCompatActivity() {
 class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val trackNameTextView: TextView = itemView.findViewById(R.id.track_name_text_view)
     private val artistNameTextView: TextView = itemView.findViewById(R.id.artist_name_text_view)
-    private val trackTimeTextView: TextView = itemView.findViewById(R.id.track_duration_text_view)
+    private val trackTimeTextView: TextView =
+        itemView.findViewById(R.id.track_duration_text_view)
     private val artworkImageView: ImageView = itemView.findViewById(R.id.artwork_image_view)
     private val playButton: LinearLayout = itemView.findViewById(R.id.util_item_track)
 
@@ -317,14 +369,14 @@ class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private fun formatTrackDuration(trackTimeMillis: Long): String {
         val minutes = TimeUnit.MILLISECONDS.toMinutes(trackTimeMillis)
         val seconds =
-            TimeUnit.MILLISECONDS.toSeconds(trackTimeMillis) - TimeUnit.MINUTES.toSeconds(minutes)
+            TimeUnit.MILLISECONDS.toSeconds(trackTimeMillis) - TimeUnit.MINUTES.toSeconds(
+                minutes
+            )
         return String.format("%02d:%02d", minutes, seconds)
     }
 
     private fun loadImage(imageUrl: String, imageView: ImageView) {
-        Glide.with(imageView)
-            .load(imageUrl)
-            .placeholder(R.drawable.ic_placeholder)
+        Glide.with(imageView).load(imageUrl).placeholder(R.drawable.ic_placeholder)
             .transform(RoundedCorners(ALBUM_ROUNDED_CORNERS))
             .error(R.drawable.ic_error_internet)
             .into(imageView)
@@ -333,7 +385,7 @@ class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 class UtilTrackAdapter(
     private val context: Context,
-    private var trackData: List<TrackData>,
+    private var trackData: MutableList<TrackData>,
     private val trackItemClickListener: OnTrackItemClickListener
 ) : RecyclerView.Adapter<UtilTrackViewHolder>() {
 
@@ -351,7 +403,12 @@ class UtilTrackAdapter(
     }
 
     fun updateList(newList: List<TrackData>) {
-        trackData = newList
+        trackData = newList.toMutableList()
+        notifyDataSetChanged()
+    }
+
+    fun clearList() {
+        trackData.clear()
         notifyDataSetChanged()
     }
 }
@@ -373,10 +430,7 @@ data class ITunesTrack(
 
 interface OnTrackItemClickListener {
     fun onTrackItemClick(
-        trackName: String,
-        artistName: String,
-        trackTimeMillis: Long,
-        artworkUrl100: String
+        trackName: String, artistName: String, trackTimeMillis: Long, artworkUrl100: String
     )
 }
 
