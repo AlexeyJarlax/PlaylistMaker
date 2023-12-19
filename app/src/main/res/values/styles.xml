@@ -11,10 +11,7 @@
         <item name="android:background">@color/yp_blue__yp_black</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:paddingStart">@dimen/dp16</item>
-        <item name="android:paddingTop">@dimen/dp16</item>
-        <item name="android:paddingEnd">@dimen/dp16</item>
-        <item name="android:paddingBottom">@dimen/dp16</item>
+        <item name="android:padding">@dimen/dp16</item>
     </style>
 
     <!-- Стиль для вложенных менюшек-->
@@ -107,18 +104,6 @@
         <item name="android:layout_marginBottom">0dp</item>
     </style>
 
-    <!-- Стиль иконок: лупа, крест для меню поиска, placeholder, точка-разделитель и стрелка вправо для меню песен-->
-<!--    <style name="IconStyle" parent="Widget.MaterialComponents.Button">-->
-<!--        <item name="android:layout_width">match_parent</item>-->
-<!--        <item name="android:layout_height">match_parent</item>-->
-<!--        <item name="iconSize">@dimen/dp16</item>-->
-<!--        <item name="android:drawableTint">@color/yp_text_gray__yp_black</item>-->
-<!--        <item name="android:background">@android:color/transparent</item>-->
-<!--        <item name="android:layout_gravity">center_vertical</item>-->
-<!--        <item name="android:elevation">0dp</item> &lt;!&ndash; тени &ndash;&gt;-->
-<!--        <item name="android:stateListAnimator">@null</item> &lt;!&ndash; анимацию нажатия &ndash;&gt;-->
-<!--    </style>-->
-
     <style name="SearchIconStyle" parent="SearchButtons">
         <item name="android:tint">@color/yp_text_gray__yp_black</item>
         <item name="android:background">@color/yp_light_gray__yp_white</item>
@@ -138,11 +123,6 @@
         <item name="android:tint">@android:color/transparent</item>
     </style>
 
-<!--    <style name="ErrorBlackAndWhite" parent="TrackStyleCustom">-->
-<!--        <item name="android:background">@android:color/transparent</item>-->
-<!--        <item name="android:tint">@color/yp_black__yp_white</item>-->
-<!--    </style>-->
-
     <style name="ErrorTransparent" parent="TrackStyleCustom">
         <item name="android:background">@android:color/transparent</item>
         <item name="android:tint">@android:color/transparent</item>
@@ -155,10 +135,7 @@
         <item name="android:textColor">@color/yp_black__yp_white</item>
         <item name="android:textColorHint">@color/yp_text_gray__yp_black</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="android:layout_marginStart">0dp</item>
-        <item name="android:layout_marginTop">0dp</item>
-        <item name="android:layout_marginEnd">0dp</item>
-        <item name="android:layout_marginBottom">0dp</item>
+        <item name="android:layout_margin">0dp</item>
         <item name="android:elevation">0dp</item> <!-- тени -->
         <item name="android:stateListAnimator">@null</item> <!-- анимацию нажатия -->
     </style>
@@ -188,5 +165,4 @@
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
-
 </resources>

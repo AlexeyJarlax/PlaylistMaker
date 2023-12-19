@@ -8,6 +8,7 @@ package com.practicum.playlistmaker
 //TrackResponse - класс данных, представляющий ответ от iTunes Search API.
 //ITunesTrack - класс данных для преобразования ответа iTunes Search API в список объектов TrackData.
 //TrackData - класс данных, представляющий список треков на устройстве.
+//OnTrackItemClickListener - интерфейс для обработки истории
 
 // Этапы поиска:
 //1. этап: считываем ввод в queryInput.setOnEditorActionListener и queryInput.addTextChangedListener ===> запуск 2 этапа
@@ -33,6 +34,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.practicum.playlistmaker.util.MyCompObj
+import com.practicum.playlistmaker.util.UtilHistoryAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,6 +46,7 @@ import retrofit2.http.Query
 import timber.log.Timber
 import java.lang.Error
 import java.util.concurrent.TimeUnit
+
 
 class SearchActivity : AppCompatActivity() {
 
@@ -59,11 +63,9 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var trackAdapter: UtilTrackAdapter
     private val originalTracks = ArrayList<TrackData>()
     private lateinit var utilErrorBox: View
+    private lateinit var historyAdapter: UtilHistoryAdapter // Добавим переменную
 
-    companion object {
-        private const val PREF_SEARCH_HISTORY = "SearchHistory"
-        private const val PREF_KEY_SEARCH_HISTORY = "search_history"
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.plant(Timber.DebugTree()) // для логирования ошибок
@@ -72,6 +74,33 @@ class SearchActivity : AppCompatActivity() {
         setupViews()
         backToMain()
         setupTrackRecyclerViewAndTrackAdapter()
+        historyAdapter = UtilHistoryAdapter(this, object : OnTrackItemClickListener {
+            override fun onTrackItemClick(
+                trackName: String,
+                artistName: String,
+                trackTimeMillis: Long,
+                artworkUrl100: String
+            ) {
+                // Тут вы можете выполнить необходимые действия при клике на элемент истории
+            }
+        })
+    }
+
+    private fun setupTrackRecyclerViewAndTrackAdapter() {
+        trackRecyclerView = findViewById(R.id.track_recycler_view)
+        val layoutManager = LinearLayoutManager(this)
+        trackAdapter = UtilTrackAdapter(this, originalTracks, object : OnTrackItemClickListener {
+            override fun onTrackItemClick(
+                trackName: String,
+                artistName: String,
+                trackTimeMillis: Long,
+                artworkUrl100: String
+            ) {
+                historyAdapter.saveTrack(trackName, artistName, trackTimeMillis, artworkUrl100)
+            }
+        })
+        trackRecyclerView.layoutManager = layoutManager
+        trackRecyclerView.adapter = trackAdapter
     }
 
     private fun setupViews() {
@@ -121,14 +150,13 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-
-    private fun setupTrackRecyclerViewAndTrackAdapter() {
-        trackRecyclerView = findViewById(R.id.track_recycler_view)
-        val layoutManager = LinearLayoutManager(this)
-        trackAdapter = UtilTrackAdapter(this, originalTracks)
-        trackRecyclerView.layoutManager = layoutManager
-        trackRecyclerView.adapter = trackAdapter
+    // Добавьте метод для получения UtilHistoryAdapter
+    private fun getUtilHistoryAdapter(): UtilHistoryAdapter {
+        // Замените на ваш способ получения экземпляра UtilHistoryAdapter
+        // Например, если у вас есть переменная historyAdapter в классе SearchActivity, используйте ее
+        return historyAdapter
     }
+
 
     private fun hideKeyboard() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -206,6 +234,7 @@ class SearchActivity : AppCompatActivity() {
                     onFailure(call, Throwable(error)) // Вызываем onFailure с информацией об ошибке
                 }
             }
+
             override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
                 solvingConnectionProblem()
                 val trackData = emptyList<TrackData>()
@@ -256,14 +285,6 @@ class SearchActivity : AppCompatActivity() {
         fun search(@Query("term") text: String): Call<TrackResponse>
     }
 
-    override fun onStop() {
-        super.onStop()
-        val preferences: SharedPreferences =
-            getSharedPreferences(PREF_SEARCH_HISTORY, Context.MODE_PRIVATE)
-        val editor = preferences.edit()
-        editor.remove(PREF_KEY_SEARCH_HISTORY)
-        editor.apply()
-    }
 }
 
 class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -271,22 +292,32 @@ class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val artistNameTextView: TextView = itemView.findViewById(R.id.artist_name_text_view)
     private val trackTimeTextView: TextView = itemView.findViewById(R.id.track_duration_text_view)
     private val artworkImageView: ImageView = itemView.findViewById(R.id.artwork_image_view)
+    private val playButton: LinearLayout = itemView.findViewById(R.id.util_item_track)
 
     companion object {
         private const val ALBUM_ROUNDED_CORNERS = 8
     }
 
-    fun bind(trackData: TrackData) {
+    fun bind(trackData: TrackData, trackItemClickListener: OnTrackItemClickListener) {
         trackNameTextView.text = trackData.trackName
         artistNameTextView.text = trackData.artistName
         trackTimeTextView.text = formatTrackDuration(trackData.trackTimeMillis)
         loadImage(trackData.artworkUrl100, artworkImageView)
+
+        playButton.setOnClickListener {
+            trackItemClickListener.onTrackItemClick(
+                trackData.trackName,
+                trackData.artistName,
+                trackData.trackTimeMillis,
+                trackData.artworkUrl100
+            )
+        }
     }
 
     private fun formatTrackDuration(trackTimeMillis: Long): String {
         val minutes = TimeUnit.MILLISECONDS.toMinutes(trackTimeMillis)
-        val seconds = TimeUnit.MILLISECONDS.toSeconds(trackTimeMillis) -
-                TimeUnit.MINUTES.toSeconds(minutes)
+        val seconds =
+            TimeUnit.MILLISECONDS.toSeconds(trackTimeMillis) - TimeUnit.MINUTES.toSeconds(minutes)
         return String.format("%02d:%02d", minutes, seconds)
     }
 
@@ -303,8 +334,8 @@ class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 class UtilTrackAdapter(
     private val context: Context,
     private var trackData: List<TrackData>,
-
-    ) : RecyclerView.Adapter<UtilTrackViewHolder>() {
+    private val trackItemClickListener: OnTrackItemClickListener
+) : RecyclerView.Adapter<UtilTrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UtilTrackViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.util_item_track, parent, false)
@@ -312,7 +343,7 @@ class UtilTrackAdapter(
     }
 
     override fun onBindViewHolder(holder: UtilTrackViewHolder, position: Int) {
-        holder.bind(trackData[position])
+        holder.bind(trackData[position], trackItemClickListener)
     }
 
     override fun getItemCount(): Int {
@@ -339,3 +370,13 @@ data class ITunesTrack(
     val trackTimeMillis: Long,
     val artworkUrl100: String
 )
+
+interface OnTrackItemClickListener {
+    fun onTrackItemClick(
+        trackName: String,
+        artistName: String,
+        trackTimeMillis: Long,
+        artworkUrl100: String
+    )
+}
+

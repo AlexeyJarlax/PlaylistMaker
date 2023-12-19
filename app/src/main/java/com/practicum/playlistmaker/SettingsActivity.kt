@@ -23,7 +23,7 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         }
 
-        // КНОПКА НОЧНОЙ И ДНЕВНОЙ ТЕМЫ (РЕАЛИЗАЦИЯ ВЫНЕСЕНА В ОТДЕЛЬНЫЙ КЛАСС)
+        // КНОПКА НОЧНОЙ И ДНЕВНОЙ ТЕМЫ (РЕАЛИЗАЦИЯ ВЫНЕСЕНА В UtilThemeManager)
         val switchDarkMode: SwitchCompat = findViewById(R.id.switch_dark_mode)
         switchDarkMode.isChecked = UtilThemeManager.isNightModeEnabled(this)
         switchDarkMode.setOnCheckedChangeListener { _, isChecked ->

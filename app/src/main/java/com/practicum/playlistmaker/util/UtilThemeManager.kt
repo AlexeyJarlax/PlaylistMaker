@@ -7,13 +7,9 @@ import androidx.appcompat.app.AppCompatDelegate
 
 object UtilThemeManager { //РЕАЛИЗАЦИЯ КНОПКИ НОЧНОЙ И ДНЕВНОЙ ТЕМЫ
 
-    private const val PREFS_NAME = "MyPrefs"
-    private const val KEY_NIGHT_MODE = "nightMode"
-
     fun applyTheme(context: Context) {
-        val sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val nightModeEnabled = sharedPreferences.getBoolean(KEY_NIGHT_MODE, false)
-
+        val sharedPreferences = context.getSharedPreferences(MyCompObj.PREFS_NAME, Context.MODE_PRIVATE)
+        val nightModeEnabled = sharedPreferences.getBoolean(MyCompObj.KEY_NIGHT_MODE, false)
         if (nightModeEnabled) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
@@ -22,16 +18,15 @@ object UtilThemeManager { //РЕАЛИЗАЦИЯ КНОПКИ НОЧНОЙ И Д
     }
 
     fun isNightModeEnabled(context: Context): Boolean {
-        val sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        return sharedPreferences.getBoolean(KEY_NIGHT_MODE, false)
+        val sharedPreferences = context.getSharedPreferences(MyCompObj.PREFS_NAME, Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean(MyCompObj.KEY_NIGHT_MODE, false)
     }
 
     fun setNightModeEnabled(context: Context, enabled: Boolean) {
-        val sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(MyCompObj.PREFS_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        editor.putBoolean(KEY_NIGHT_MODE, enabled)
+        editor.putBoolean(MyCompObj.KEY_NIGHT_MODE, enabled)
         editor.apply()
-
         applyTheme(context)
     }
 }
