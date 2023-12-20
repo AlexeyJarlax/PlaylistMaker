@@ -59,7 +59,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var trackAdapter: UtilTrackAdapter
     private val cleanTrackList = ArrayList<TrackData>()
     private lateinit var utilErrorBox: View
-    private lateinit var utilHistoryAdapter: UtilHistoryAdapter // Добавим переменную
+    private lateinit var utilHistoryAdapter: UtilHistoryAdapter
     var counter = 0 // счетчик сбросов
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,12 +69,10 @@ class SearchActivity : AppCompatActivity() {
         setupOneLineViews()
         clearButton()
         backToMain()
-//        setupHistoryAdapter()
         historyAdapter()
         setupTrackRecyclerViewAndTrackAdapter()
         queryInputListener() // заполнение с виртуальной клавиатуры
         queryTextChangedListener()
-//        onFocusChangeListener(queryInput)
     }
 
     private fun setupOneLineViews() {
@@ -86,7 +84,6 @@ class SearchActivity : AppCompatActivity() {
         loadingIndicator.visibility = View.GONE
         utilErrorBox = findViewById<LinearLayout>(R.id.util_error_box)
     }
-
 
     private fun clearButton() {
         clearButton.setOnClickListener {
@@ -102,29 +99,17 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun historyAdapter() {
-        val trackAdapter =
-            UtilTrackAdapter(this, mutableListOf(), object : OnTrackItemClickListener {
-                override fun onTrackItemClick(
-                    trackName: String,
-                    artistName: String,
-                    trackTimeMillis: Long,
-                    artworkUrl100: String
-                ) {
-                    // Действия при клике на элемент истории, если нужны
-                }
-            })
-
-        utilHistoryAdapter =
-            UtilHistoryAdapter(this, trackAdapter, object : OnTrackItemClickListener {
-                override fun onTrackItemClick(
-                    trackName: String,
-                    artistName: String,
-                    trackTimeMillis: Long,
-                    artworkUrl100: String
-                ) {
-                    // Действия при клике на элемент истории, если нужны
-                }
-            })
+        // Создайте экземпляр UtilHistoryAdapter, передавая только контекст и обработчик OnTrackItemClickListener
+        utilHistoryAdapter = UtilHistoryAdapter(this, object : OnTrackItemClickListener {
+            override fun onTrackItemClick(
+                trackName: String,
+                artistName: String,
+                trackTimeMillis: Long,
+                artworkUrl100: String
+            ) {
+                // Обработайте клик по треку, если необходимо
+            }
+        })
         utilHistoryAdapter.setRecyclerView(trackRecyclerView)
     }
 
@@ -149,9 +134,9 @@ class SearchActivity : AppCompatActivity() {
                 val searchText = queryInput.text.toString().trim()
                 if (searchText.isNotEmpty()) {
                     utilErrorBox.visibility = View.GONE // исчезновение сообщения с ошибкой
+//                    clearTrackAdapterFromHistory()
                     preparingForSearch(searchText)
                     toastIt("Поиск: $searchText")
-//                    clearTrackAdapterFromHistory()
                 }
                 hideKeyboard()
                 true
@@ -163,18 +148,18 @@ class SearchActivity : AppCompatActivity() {
 
     private fun queryTextChangedListener() { // заполнение с виртуальной клавиатуры
         queryInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(
-                s: CharSequence?, start: Int, count: Int, after: Int
-            ) {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 //                fillTrackAdapterWithHistory()
             }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val searchText = s.toString().trim()
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                val searchText = queryInput.text.toString().trim()
                 clearButton.visibility = if (searchText.isNotEmpty()) View.VISIBLE else View.GONE
                 var hasFocus = true
                 queryInput.onFocusChangeListener = View.OnFocusChangeListener { _, focus ->
-                    hasFocus = focus}
-                if (searchText.isEmpty()) {
+                    hasFocus = focus
+                }
+                if (p0?.isEmpty() == true) {
                     fillTrackAdapterWithHistory()
                     counter++
                 } else if (counter > 0) {
@@ -182,29 +167,25 @@ class SearchActivity : AppCompatActivity() {
                     counter = 0
                 }
             }
+
             override fun afterTextChanged(p0: Editable?) {
-                // Реализуйте этот метод с необходимой логикой
             }
         })
     }
 
     private fun fillTrackAdapterWithHistory() {
-        trackAdapter.updateList(cleanTrackList)
+//        trackAdapter.updateList(cleanTrackList)
+        clearTrackAdapterFromHistory()
+
+        utilHistoryAdapter?.setRecyclerView(trackRecyclerView)
         utilHistoryAdapter?.syncTracks()
-        utilHistoryAdapter.setRecyclerView(trackRecyclerView)
         trackRecyclerView.scrollToPosition(0)
     }
 
     private fun clearTrackAdapterFromHistory() {
         utilHistoryAdapter.killList() // чистит адаптер с историей
-//        val cleanestTrackList = ArrayList<TrackData>()
-        trackAdapter.updateList(cleanTrackList) // чистит адаптер с API
-//        utilHistoryAdapter.updateList(cleanestTrackList)
-//        trackAdapter.notifyDataSetChanged()
-//        trackRecyclerView.scrollToPosition(0)
-//        queryInput.clearFocus()
-//        historyAdapter.syncTracks()
-
+//        trackAdapter.updateList(cleanTrackList) // чистит адаптер с API
+//        trackAdapter.clearList()
     }
 
     private fun hideKeyboard() {
@@ -229,6 +210,7 @@ class SearchActivity : AppCompatActivity() {
                 loadingIndicator.visibility = View.GONE
                 clearButton.isEnabled = true
                 trackAdapter.updateList(trackItems)
+                trackAdapter.setRecyclerView(trackRecyclerView)
             }
         }, 1500)
     }
@@ -280,8 +262,7 @@ class SearchActivity : AppCompatActivity() {
                     Timber.d(error)
                     toastIt(error)
                     onFailure(
-                        call,
-                        Throwable(error)
+                        call, Throwable(error)
                     ) // Вызываем onFailure с информацией об ошибке
                 }
             }
@@ -296,7 +277,6 @@ class SearchActivity : AppCompatActivity() {
 
     private fun solvingAbsentProblem() {
         loadingIndicator.visibility = View.GONE
-//        utilErrorBox = findViewById<LinearLayout>(R.id.util_error_box)
         val errorIcon = findViewById<ImageView>(R.id.error_icon)
         val errorTextWeb = findViewById<TextView>(R.id.error_text_web)
         errorIcon.setImageResource(R.drawable.ic_error_notfound)
@@ -311,7 +291,6 @@ class SearchActivity : AppCompatActivity() {
 
     private fun solvingConnectionProblem() {
         loadingIndicator.visibility = View.GONE
-//        utilErrorBox = findViewById<LinearLayout>(R.id.util_error_box)
         val errorIcon = findViewById<ImageView>(R.id.error_icon)
         val errorTextWeb = findViewById<TextView>(R.id.error_text_web)
         errorIcon.setImageResource(R.drawable.ic_error_internet)
@@ -341,8 +320,7 @@ class SearchActivity : AppCompatActivity() {
 class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val trackNameTextView: TextView = itemView.findViewById(R.id.track_name_text_view)
     private val artistNameTextView: TextView = itemView.findViewById(R.id.artist_name_text_view)
-    private val trackTimeTextView: TextView =
-        itemView.findViewById(R.id.track_duration_text_view)
+    private val trackTimeTextView: TextView = itemView.findViewById(R.id.track_duration_text_view)
     private val artworkImageView: ImageView = itemView.findViewById(R.id.artwork_image_view)
     private val playButton: LinearLayout = itemView.findViewById(R.id.util_item_track)
 
@@ -368,24 +346,22 @@ class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private fun formatTrackDuration(trackTimeMillis: Long): String {
         val minutes = TimeUnit.MILLISECONDS.toMinutes(trackTimeMillis)
-        val seconds =
-            TimeUnit.MILLISECONDS.toSeconds(trackTimeMillis) - TimeUnit.MINUTES.toSeconds(
-                minutes
-            )
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(trackTimeMillis) - TimeUnit.MINUTES.toSeconds(
+            minutes
+        )
         return String.format("%02d:%02d", minutes, seconds)
     }
 
     private fun loadImage(imageUrl: String, imageView: ImageView) {
         Glide.with(imageView).load(imageUrl).placeholder(R.drawable.ic_placeholder)
-            .transform(RoundedCorners(ALBUM_ROUNDED_CORNERS))
-            .error(R.drawable.ic_error_internet)
+            .transform(RoundedCorners(ALBUM_ROUNDED_CORNERS)).error(R.drawable.ic_error_internet)
             .into(imageView)
     }
 }
 
 class UtilTrackAdapter(
     private val context: Context,
-    private var trackData: MutableList<TrackData>,
+    private var trackData: List<TrackData>,
     private val trackItemClickListener: OnTrackItemClickListener
 ) : RecyclerView.Adapter<UtilTrackViewHolder>() {
 
@@ -402,35 +378,41 @@ class UtilTrackAdapter(
         return trackData.size
     }
 
+    fun setRecyclerView(recyclerView: RecyclerView) {
+        recyclerView.adapter = this
+        recyclerView.layoutManager = LinearLayoutManager(context)
+    }
+
     fun updateList(newList: List<TrackData>) {
-        trackData = newList.toMutableList()
+        trackData = newList
         notifyDataSetChanged()
     }
 
     fun clearList() {
-        trackData.clear()
+        val newList: MutableList<TrackData> = mutableListOf()
+        trackData = newList
         notifyDataSetChanged()
     }
 }
 
-data class TrackData(
-    val trackName: String,
-    val artistName: String,
-    val trackTimeMillis: Long,
-    val artworkUrl100: String
-)
-
-data class TrackResponse(val results: List<ITunesTrack>)
-data class ITunesTrack(
-    val trackName: String,
-    val artistName: String,
-    val trackTimeMillis: Long,
-    val artworkUrl100: String
-)
-
-interface OnTrackItemClickListener {
-    fun onTrackItemClick(
-        trackName: String, artistName: String, trackTimeMillis: Long, artworkUrl100: String
+    data class TrackData(
+        val trackName: String,
+        val artistName: String,
+        val trackTimeMillis: Long,
+        val artworkUrl100: String
     )
-}
+
+    data class TrackResponse(val results: List<ITunesTrack>)
+    data class ITunesTrack(
+        val trackName: String,
+        val artistName: String,
+        val trackTimeMillis: Long,
+        val artworkUrl100: String
+    )
+
+    interface OnTrackItemClickListener {
+        fun onTrackItemClick(
+            trackName: String, artistName: String, trackTimeMillis: Long, artworkUrl100: String
+        )
+    }
 

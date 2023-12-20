@@ -12,16 +12,19 @@ import com.practicum.playlistmaker.TrackData
 
 class UtilHistoryAdapter(
     private val context: Context,
-    private val trackAdapter: UtilTrackAdapter,
     private val trackItemClickListener: OnTrackItemClickListener
 ) {
 
-
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences(MyCompObj.PREFS_HISTORY_NAME, Context.MODE_PRIVATE)
+    private val utilHistoryAdapter: UtilTrackAdapter // Создаем свой экземпляр адаптера
+
+    init {
+        utilHistoryAdapter = UtilTrackAdapter(context, mutableListOf(), trackItemClickListener)
+    }
 
     fun setRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter = trackAdapter
+        recyclerView.adapter = utilHistoryAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
     }
 
@@ -34,13 +37,13 @@ class UtilHistoryAdapter(
         }
 
         saveTrackListToSharedPreferences(trackList)
-        trackAdapter.updateList(trackList.map { it.toTrackData() })
+        utilHistoryAdapter.updateList(trackList.map { it.toTrackData() })
     }
 
     fun syncTracks() {
         val trackList = getTrackListFromSharedPreferences()
         if (trackList.isNotEmpty()) {
-            trackAdapter.updateList(trackList.map { it.toTrackData() })
+            utilHistoryAdapter.updateList(trackList.map { it.toTrackData() })
         }
     }
 
@@ -65,7 +68,7 @@ class UtilHistoryAdapter(
     }
 
     fun killList() {
-        trackAdapter.clearList() // Предполагается, что у UtilTrackAdapter есть метод для очистки списка
-        trackAdapter.notifyDataSetChanged()
+        utilHistoryAdapter.clearList()
+        utilHistoryAdapter.notifyDataSetChanged()
     }
 }
