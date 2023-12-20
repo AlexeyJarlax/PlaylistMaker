@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Playlist Maker</string>
     <string name="playlist_maker">Playlist Maker</string>
-    <string name="button_search">Поиск</string>
+    <string name="search">Поиск</string>
     <string name="button_back">Назад</string>
     <string name="button_media_lib">Медиатека</string>
     <string name="button_settings">Настройки</string>
@@ -28,6 +28,13 @@
     <string name="refresh">Обновить</string>
     <string name="any_mistake">тут будет сообщение об ошибке,\nиконка поменяется в зависимости\nот характера ошибки</string>
     <string name="you_were_looking_for">Вы искали</string>
-    <string name="clear_the_history">очистить историю</string>
-
+    <string name="clear_the_history">Очистить историю</string>
+    <string name="error400">400 - ошибка запроса</string>
+    <string name="error401">401 - неавторизованный запрос</string>
+    <string name="error403">403 - запрещенный запрос</string>
+    <string name="error404">404 - не найдено</string>
+    <string name="error500">500 - внутренняя ошибка сервера</string>
+    <string name="error503">503 - сервис временно недоступен</string>
+    <string name="error0">неустановленная ошибка</string>
+    <string name="added">добавлен: </string>
 </resources>

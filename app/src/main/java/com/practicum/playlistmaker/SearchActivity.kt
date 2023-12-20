@@ -3,7 +3,7 @@ package com.practicum.playlistmaker
 // Памятка о содержании файла:
 //SearchActivity - активити и вся обработка поискового запроса юзера.
 //UtilTrackViewHolder - холдер для RecyclerView, отображающий информацию о треках.
-//UtilTrackAdapter - адаптер для RecyclerView, отображающий информацию о треках.
+// AdapterForAPITracks - адаптер для RecyclerView, отображающий информацию о треках.
 //iTunesApiService - интерфейс для iTunes Search API.
 //TrackResponse - класс данных, представляющий ответ от iTunes Search API.
 //ITunesTrack - класс данных для преобразования ответа iTunes Search API в список объектов TrackData.
@@ -61,32 +61,22 @@ class SearchActivity : AppCompatActivity() {
     private val cleanTrackList = ArrayList<TrackData>()
     private lateinit var utilErrorBox: View
     private lateinit var adapterForHistoryTracks: AdapterForHistoryTracks
-    var counter = 0 // счетчик сбросов
     private lateinit var searchHistoryNotification: TextView
-    private lateinit var clearTheHistory: Button
+    private lateinit var killTheHistory: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.plant(Timber.DebugTree()) // для логирования ошибок
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-
         setupOneLineViews()
         clearButton()
         backToMain()
         callAdapterForHistoryTracks()
         setupRecyclerViewAndAdapter()
-
-//        clearTrackAdapterFromHistory()
-//        adapterForHistoryTracks?.setRecyclerView(trackRecyclerView)
-//        adapterForHistoryTracks?.syncTracks()
-//        trackRecyclerView.scrollToPosition(0)
-
         queryTextChangedListener()
         queryInputListener()
-        fillTrackAdapterWithHistory()
-//        clearTrackAdapterFromHistory()
-
-
+        fillTrackAdapter()
+        killTheHistory()
     }
 
     private fun setupOneLineViews() {
@@ -98,19 +88,7 @@ class SearchActivity : AppCompatActivity() {
         loadingIndicator.visibility = View.GONE
         utilErrorBox = findViewById<LinearLayout>(R.id.util_error_box)
         searchHistoryNotification = findViewById(R.id.you_were_looking_for)
-        clearTheHistory = findViewById(R.id.clear_the_history)
-    }
-
-    private fun clearButton() {
-        clearButton.setOnClickListener {
-            queryInput.text.clear()
-        }
-    }
-
-    private fun backToMain() {
-        backButton.setOnClickListener {
-            finish()
-        }
+        killTheHistory = findViewById(R.id.clear_the_history)
     }
 
     private fun callAdapterForHistoryTracks() {
@@ -136,7 +114,7 @@ class SearchActivity : AppCompatActivity() {
                     adapterForHistoryTracks.saveTrack(
                         trackName, artistName, trackTimeMillis, artworkUrl100
                     )
-                    toastIt("добавлен: ${trackName}")
+                    toastIt("${getString(R.string.added)} ${trackName}")
                     Timber.d("historyAdapter.saveTrack:${trackName}${artistName}")
                 }
             })
@@ -144,49 +122,28 @@ class SearchActivity : AppCompatActivity() {
         trackRecyclerView.adapter = adapterForAPITracks
     }
 
-//    private fun queryTextChangedListener() {
-//        queryInput.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
-//                // No action needed before text changes
-//            }
-//
-//            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
-//                val searchText = queryInput.text.toString().trim()
-//                clearButton.visibility = if (searchText.isNotEmpty()) View.VISIBLE else View.GONE
-//
-//                queryInput.onFocusChangeListener = View.OnFocusChangeListener { _, focus ->
-//                    if (focus) {
-//                        hasFocus = true
-//                    }
-//                }
-//                if (hasFocus && charSequence?.isEmpty() == true) {
-//                    fillTrackAdapterWithHistory()
-//                    showHistoryViews()
-//                } else if (counter > 0) {
-//                    clearTrackAdapterFromHistory()
-//                    hideHistoryViews()
-//                    counter = 0
-//                }
-//            }
-//
-//            override fun afterTextChanged(editable: Editable?) {
-//                // No action needed after text changes
-//            }
-//        })
-//    }
-
     private fun queryTextChangedListener() {
         queryInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
+            override fun beforeTextChanged(
+                charSequence: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
             }
 
-            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
+            override fun onTextChanged(
+                charSequence: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
                 val searchText = queryInput.text.toString().trim()
                 clearButton.visibility = if (searchText.isNotEmpty()) View.VISIBLE else View.GONE
                 if (hasFocus && searchText.isEmpty()) {  // обработка ввода без нажатий
-                    showHistoryViews()
+                    showHistoryViewsAndFillTrackAdapter()
                 } else {
-                    hideHistoryViews()
+                    hideHistoryViewsAndClearTrackAdapter()
                 }
             }
 
@@ -197,24 +154,56 @@ class SearchActivity : AppCompatActivity() {
         // Фокус + ЖЦ вход в приложение queryInput пуст
         queryInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && queryInput.text.isEmpty()) {
-                showHistoryViews()
+                showHistoryViewsAndFillTrackAdapter()
             } else if (queryInput.text.isNotEmpty()) {
-                hideHistoryViews()
+                hideHistoryViewsAndClearTrackAdapter()
             }
         }
     }
 
+    private fun showHistoryViewsAndFillTrackAdapter() {
+        fillTrackAdapter()
+        trackRecyclerView.visibility = View.VISIBLE
+        searchHistoryNotification.visibility = View.VISIBLE
+        killTheHistory.visibility = View.VISIBLE
+    }
 
-    private fun queryInputListener() { // обработка ввода с нажатием
+    private fun fillTrackAdapter() {
+        clearTrackAdapter()
+        adapterForHistoryTracks?.setRecyclerView(trackRecyclerView)
+        adapterForHistoryTracks?.syncTracks()
+        trackRecyclerView.scrollToPosition(0)
+    }
+
+    private fun hideHistoryViewsAndClearTrackAdapter() {
+        clearTrackAdapter()
+        trackRecyclerView.visibility = View.GONE
+        searchHistoryNotification.visibility = View.GONE
+        killTheHistory.visibility = View.GONE
+    }
+
+    private fun clearTrackAdapter() {
+        adapterForHistoryTracks.clearHistoryList() // чистит адаптер с историей
+//        trackAdapter.updateList(cleanTrackList)
+//        trackAdapter.clearList()
+    }
+
+    private fun killTheHistory() {
+        killTheHistory.setOnClickListener {
+            adapterForHistoryTracks.killHistoryList()
+            hideHistoryViewsAndClearTrackAdapter()
+        }
+    }
+
+    private fun queryInputListener() { // обработка ввода с нажатием DONE
         queryInput.setOnEditorActionListener { textView, actionId, keyEvent ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val searchText = queryInput.text.toString().trim()
                 if (searchText.isNotEmpty()) {
                     utilErrorBox.visibility = View.GONE
-                    clearTrackAdapterFromHistory()
-
+                    clearTrackAdapter()
                     preparingForSearch(searchText)
-                    toastIt("Поиск: $searchText")
+                    toastIt("${getString(R.string.search)} $searchText")
                 }
                 hideKeyboard()
                 true
@@ -224,47 +213,9 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun showHistoryViews() {
-        fillTrackAdapterWithHistory()
-        counter++
-        trackRecyclerView.visibility = View.VISIBLE
-        searchHistoryNotification.visibility = View.VISIBLE
-        clearTheHistory.visibility = View.VISIBLE
-    }
-
-    private fun hideHistoryViews() {
-        clearTrackAdapterFromHistory()
-        counter = 0
-        trackRecyclerView.visibility = View.GONE
-        searchHistoryNotification.visibility = View.GONE
-        clearTheHistory.visibility = View.GONE
-    }
-
-    private fun fillTrackAdapterWithHistory() {
-        clearTrackAdapterFromHistory()
-        adapterForHistoryTracks?.setRecyclerView(trackRecyclerView)
-        adapterForHistoryTracks?.syncTracks()
-        trackRecyclerView.scrollToPosition(0)
-    }
-
-    private fun clearTrackAdapterFromHistory() {
-        adapterForHistoryTracks.killList() // чистит адаптер с историей
-//        trackAdapter.updateList(cleanTrackList) // чистит адаптер с API
-//        trackAdapter.clearList()
-    }
-
     private fun hideKeyboard() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(queryInput.windowToken, 0)
-    }
-
-    private fun clearSearchFieldAndHideKeyboard() {
-        queryInput.text.clear()
-        hideKeyboard()
-    }
-
-    private fun toastIt(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun preparingForSearch(searchText: String) {
@@ -284,11 +235,9 @@ class SearchActivity : AppCompatActivity() {
     private var lastQuery: String? = null
     private var lastCallback: ((List<TrackData>) -> Unit)? = null
     private fun performSearch(query: String, callback: (List<TrackData>) -> Unit) {
-        // Сохраняем последний запрос и колбэк
-        lastQuery = query
+        lastQuery = query        // Сохраняем последний запрос и колбэк
         lastCallback = callback
         Timber.d("Запускаем метод performSearch с параметрами Query: $query и Callback")
-        // Выполняем поиск с использованием iTunesSearchAPI
         iTunesSearchAPI.search(query).enqueue(object : Callback<TrackResponse> {
             override fun onResponse(
                 call: Call<TrackResponse>, response: Response<TrackResponse>
@@ -311,24 +260,23 @@ class SearchActivity : AppCompatActivity() {
                         solvingAbsentProblem() // вызываем заглушку о пустом листе запроса
                         emptyList()
                     }
-                    // Вызываем колбэк с полученными данными
-                    callback(trackData)
+                    callback(trackData)         // Вызываем колбэк с полученными данными
                     Timber.d("Метод performSearch => response.isSuccessful! => callback(trackData): $trackData")
                 } else {
                     val error = when (response.code()) {
-                        400 -> "400 (Bad Request) - ошибка запроса"
-                        401 -> "401 (Unauthorized) - неавторизованный запрос"
-                        403 -> "403 (Forbidden) - запрещенный запрос"
-                        404 -> "404 (Not Found) - не найдено"
-                        500 -> "500 (Internal Server Error) - внутренняя ошибка сервера"
-                        503 -> "503 (Service Unavailable) - сервис временно недоступен"
-                        else -> "(unspecified error) - неустановленная ошибка"
+                        400 -> "${getString(R.string.error400)}"
+                        401 -> "${getString(R.string.error401)}"
+                        403 -> "${getString(R.string.error403)}"
+                        404 -> "${getString(R.string.error404)}"
+                        500 -> "${getString(R.string.error500)}"
+                        503 -> "${getString(R.string.error503)}"
+                        else -> "${getString(R.string.error0)}"
                     }
                     Timber.d(error)
                     toastIt(error)
                     onFailure(
                         call, Throwable(error)
-                    ) // Вызываем onFailure с информацией об ошибке
+                    )
                 }
             }
 
@@ -379,6 +327,20 @@ class SearchActivity : AppCompatActivity() {
         fun search(@Query("term") text: String): Call<TrackResponse>
     }
 
+    private fun clearButton() {
+        clearButton.setOnClickListener {
+            queryInput.text.clear()
+        }
+    }
+
+    private fun backToMain() {
+        backButton.setOnClickListener {
+            finish()
+        }
+    }
+    private fun toastIt(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 }
 
 class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

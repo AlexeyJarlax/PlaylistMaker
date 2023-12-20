@@ -58,6 +58,17 @@ class AdapterForHistoryTracks(
         return Gson().fromJson(jsonString, type) ?: mutableListOf()
     }
 
+    fun clearHistoryList() {
+        adapterForHistoryTracks.clearList()
+        adapterForHistoryTracks.notifyDataSetChanged()
+    }
+
+    fun killHistoryList() {
+        val editor = sharedPreferences.edit()
+        editor.remove(MyCompObj.KEY_HISTORY_LIST)
+        editor.apply()
+    }
+
     data class Track(
         val trackName: String,
         val artistName: String,
@@ -65,10 +76,5 @@ class AdapterForHistoryTracks(
         val artworkUrl100: String
     ) {
         fun toTrackData() = TrackData(trackName, artistName, trackTimeMillis, artworkUrl100)
-    }
-
-    fun killList() {
-        adapterForHistoryTracks.clearList()
-        adapterForHistoryTracks.notifyDataSetChanged()
     }
 }
