@@ -25,16 +25,46 @@
         app:layout_constraintTop_toTopOf="@id/button_back_from_search_activity"
         tools:layout_editor_absoluteX="@dimen/z" />
 
+    <TextView
+        android:id="@+id/you_were_looking_for"
+        style="@style/ErrorTextBig"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="@dimen/dp24"
+        android:paddingBottom="@dimen/dp16"
+        android:text="@string/you_were_looking_for"
+        android:textSize="19sp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/search_box_include" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/track_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp24"
-        app:layout_constraintTop_toBottomOf="@id/search_box_include"
+        app:layout_constraintTop_toBottomOf="@id/you_were_looking_for"
         app:tint="@color/yp_light_gray__yp_white"
         tools:context=".MedialabActivity"
         tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:layout_editor_absoluteX="0dp"
+        android:visibility="gone"
         tools:listitem="@layout/util_item_track" />
+
+    <Button
+        android:id="@+id/clear_the_history"
+        style="@style/ErrorButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp24"
+        android:text="@string/clear_the_history"
+        android:padding="@dimen/dp6"
+        android:gravity="center"
+        android:layout_marginHorizontal="@dimen/z"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/track_recycler_view"/>
 
     <ProgressBar
         android:id="@+id/loading_indicator"

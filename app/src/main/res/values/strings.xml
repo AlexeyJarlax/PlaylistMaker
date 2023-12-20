@@ -27,5 +27,7 @@
     <string name="nothing_was_found">Ничего не нашлось</string>
     <string name="refresh">Обновить</string>
     <string name="any_mistake">тут будет сообщение об ошибке,\nиконка поменяется в зависимости\nот характера ошибки</string>
+    <string name="you_were_looking_for">Вы искали</string>
+    <string name="clear_the_history">очистить историю</string>
 
 </resources>

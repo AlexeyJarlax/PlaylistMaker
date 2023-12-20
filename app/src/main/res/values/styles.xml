@@ -156,8 +156,10 @@
         <item name="android:padding">0dp</item>
         <item name="android:insetTop">0dp</item>
         <item name="android:insetBottom">0dp</item>
+        <item name="android:gravity">center</item>
     </style>
 
+    <!-- Стиль строки c описанием ошибки, стиль строки с историей поиска "вы искали"-->
     <style name="ErrorTextBig" parent="TrackText">
         <item name="android:textSize">@dimen/text_size_sp19</item>
         <item name="android:textColor">@color/yp_black__yp_white</item>

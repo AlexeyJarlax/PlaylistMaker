@@ -51,6 +51,7 @@ class SearchActivity : AppCompatActivity() {
         Retrofit.Builder().baseUrl(iTunesSearch).addConverterFactory(GsonConverterFactory.create())
             .build()
     private val iTunesSearchAPI = retrofit.create(iTunesApiService::class.java)
+    private var hasFocus = true
     private lateinit var queryInput: EditText
     private lateinit var clearButton: ImageButton
     private lateinit var backButton: Button
@@ -61,28 +62,43 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var utilErrorBox: View
     private lateinit var adapterForHistoryTracks: AdapterForHistoryTracks
     var counter = 0 // счетчик сбросов
+    private lateinit var searchHistoryNotification: TextView
+    private lateinit var clearTheHistory: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.plant(Timber.DebugTree()) // для логирования ошибок
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+
         setupOneLineViews()
         clearButton()
         backToMain()
         callAdapterForHistoryTracks()
         setupRecyclerViewAndAdapter()
-        queryInputListener()
+
+//        clearTrackAdapterFromHistory()
+//        adapterForHistoryTracks?.setRecyclerView(trackRecyclerView)
+//        adapterForHistoryTracks?.syncTracks()
+//        trackRecyclerView.scrollToPosition(0)
+
         queryTextChangedListener()
+        queryInputListener()
+        fillTrackAdapterWithHistory()
+//        clearTrackAdapterFromHistory()
+
+
     }
 
     private fun setupOneLineViews() {
-        backButton = findViewById<Button>(R.id.button_back_from_search_activity)
+        backButton = findViewById(R.id.button_back_from_search_activity)
         clearButton = findViewById(R.id.clearButton)
         queryInput = findViewById(R.id.search_edit_text)
         trackRecyclerView = findViewById(R.id.track_recycler_view)
         loadingIndicator = findViewById(R.id.loading_indicator)
         loadingIndicator.visibility = View.GONE
         utilErrorBox = findViewById<LinearLayout>(R.id.util_error_box)
+        searchHistoryNotification = findViewById(R.id.you_were_looking_for)
+        clearTheHistory = findViewById(R.id.clear_the_history)
     }
 
     private fun clearButton() {
@@ -128,12 +144,75 @@ class SearchActivity : AppCompatActivity() {
         trackRecyclerView.adapter = adapterForAPITracks
     }
 
-    private fun queryInputListener() { // заполнение с виртуальной клавиатуры
+//    private fun queryTextChangedListener() {
+//        queryInput.addTextChangedListener(object : TextWatcher {
+//            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
+//                // No action needed before text changes
+//            }
+//
+//            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
+//                val searchText = queryInput.text.toString().trim()
+//                clearButton.visibility = if (searchText.isNotEmpty()) View.VISIBLE else View.GONE
+//
+//                queryInput.onFocusChangeListener = View.OnFocusChangeListener { _, focus ->
+//                    if (focus) {
+//                        hasFocus = true
+//                    }
+//                }
+//                if (hasFocus && charSequence?.isEmpty() == true) {
+//                    fillTrackAdapterWithHistory()
+//                    showHistoryViews()
+//                } else if (counter > 0) {
+//                    clearTrackAdapterFromHistory()
+//                    hideHistoryViews()
+//                    counter = 0
+//                }
+//            }
+//
+//            override fun afterTextChanged(editable: Editable?) {
+//                // No action needed after text changes
+//            }
+//        })
+//    }
+
+    private fun queryTextChangedListener() {
+        queryInput.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
+                val searchText = queryInput.text.toString().trim()
+                clearButton.visibility = if (searchText.isNotEmpty()) View.VISIBLE else View.GONE
+                if (hasFocus && searchText.isEmpty()) {  // обработка ввода без нажатий
+                    showHistoryViews()
+                } else {
+                    hideHistoryViews()
+                }
+            }
+
+            override fun afterTextChanged(editable: Editable?) {
+            }
+        })
+
+        // Фокус + ЖЦ вход в приложение queryInput пуст
+        queryInput.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus && queryInput.text.isEmpty()) {
+                showHistoryViews()
+            } else if (queryInput.text.isNotEmpty()) {
+                hideHistoryViews()
+            }
+        }
+    }
+
+
+    private fun queryInputListener() { // обработка ввода с нажатием
         queryInput.setOnEditorActionListener { textView, actionId, keyEvent ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val searchText = queryInput.text.toString().trim()
                 if (searchText.isNotEmpty()) {
                     utilErrorBox.visibility = View.GONE
+                    clearTrackAdapterFromHistory()
+
                     preparingForSearch(searchText)
                     toastIt("Поиск: $searchText")
                 }
@@ -145,28 +224,20 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun queryTextChangedListener() { // слушатель с виртуальной клавиатуры
-        queryInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                val searchText = queryInput.text.toString().trim()
-                clearButton.visibility = if (searchText.isNotEmpty()) View.VISIBLE else View.GONE
-                var hasFocus = true
-                queryInput.onFocusChangeListener = View.OnFocusChangeListener { _, focus ->
-                    hasFocus = focus
-                }
-                if (queryInput.hasFocus() && p0?.isEmpty() == true) {
-                    fillTrackAdapterWithHistory()
-                    counter++
-                } else if (counter > 0) {
-                    clearTrackAdapterFromHistory()
-                    counter = 0
-                }
-            }
-            override fun afterTextChanged(p0: Editable?) {
-            }
-        })
+    private fun showHistoryViews() {
+        fillTrackAdapterWithHistory()
+        counter++
+        trackRecyclerView.visibility = View.VISIBLE
+        searchHistoryNotification.visibility = View.VISIBLE
+        clearTheHistory.visibility = View.VISIBLE
+    }
+
+    private fun hideHistoryViews() {
+        clearTrackAdapterFromHistory()
+        counter = 0
+        trackRecyclerView.visibility = View.GONE
+        searchHistoryNotification.visibility = View.GONE
+        clearTheHistory.visibility = View.GONE
     }
 
     private fun fillTrackAdapterWithHistory() {
@@ -205,6 +276,7 @@ class SearchActivity : AppCompatActivity() {
                 clearButton.isEnabled = true
                 adapterForAPITracks.updateList(trackItems)
                 adapterForAPITracks.setRecyclerView(trackRecyclerView)
+                trackRecyclerView.visibility = View.VISIBLE
             }
         }, 1500)
     }
