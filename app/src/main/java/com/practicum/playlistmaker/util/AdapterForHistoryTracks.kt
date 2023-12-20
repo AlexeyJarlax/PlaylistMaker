@@ -7,24 +7,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.OnTrackItemClickListener
-import com.practicum.playlistmaker.UtilTrackAdapter
+import com.practicum.playlistmaker.AdapterForAPITracks
 import com.practicum.playlistmaker.TrackData
 
-class UtilHistoryAdapter(
+class AdapterForHistoryTracks(
     private val context: Context,
     private val trackItemClickListener: OnTrackItemClickListener
 ) {
 
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences(MyCompObj.PREFS_HISTORY_NAME, Context.MODE_PRIVATE)
-    private val utilHistoryAdapter: UtilTrackAdapter // Создаем свой экземпляр адаптера
+    private val adapterForHistoryTracks: AdapterForAPITracks // Создаем History экземпляр адаптера
 
     init {
-        utilHistoryAdapter = UtilTrackAdapter(context, mutableListOf(), trackItemClickListener)
+        adapterForHistoryTracks = AdapterForAPITracks(context, mutableListOf(), trackItemClickListener)
     }
 
     fun setRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter = utilHistoryAdapter
+        recyclerView.adapter = adapterForHistoryTracks
         recyclerView.layoutManager = LinearLayoutManager(context)
     }
 
@@ -37,13 +37,13 @@ class UtilHistoryAdapter(
         }
 
         saveTrackListToSharedPreferences(trackList)
-        utilHistoryAdapter.updateList(trackList.map { it.toTrackData() })
+        adapterForHistoryTracks.updateList(trackList.map { it.toTrackData() })
     }
 
     fun syncTracks() {
         val trackList = getTrackListFromSharedPreferences()
         if (trackList.isNotEmpty()) {
-            utilHistoryAdapter.updateList(trackList.map { it.toTrackData() })
+            adapterForHistoryTracks.updateList(trackList.map { it.toTrackData() })
         }
     }
 
@@ -68,7 +68,7 @@ class UtilHistoryAdapter(
     }
 
     fun killList() {
-        utilHistoryAdapter.clearList()
-        utilHistoryAdapter.notifyDataSetChanged()
+        adapterForHistoryTracks.clearList()
+        adapterForHistoryTracks.notifyDataSetChanged()
     }
 }
