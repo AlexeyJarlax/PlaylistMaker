@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.util.AdapterForHistoryTracks
+import com.practicum.playlistmaker.util.MyCompObj
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -96,6 +97,8 @@ class SearchActivity : AppCompatActivity() {
             override fun onTrackItemClick(
                 trackName: String, artistName: String, trackTimeMillis: Long, artworkUrl100: String
             ) {
+                // повторный клик на треке в истории треков
+                adapterForHistoryTracks.saveTrack(trackName, artistName, trackTimeMillis, artworkUrl100)
             }
         })
         adapterForHistoryTracks.setRecyclerView(trackRecyclerView)
@@ -229,7 +232,7 @@ class SearchActivity : AppCompatActivity() {
                 adapterForAPITracks.setRecyclerView(trackRecyclerView)
                 trackRecyclerView.visibility = View.VISIBLE
             }
-        }, 1500)
+        }, MyCompObj.SERVER_PROCESSING_MILLISECONDS)
     }
 
     private var lastQuery: String? = null
