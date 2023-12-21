@@ -34,7 +34,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.util.AdapterForHistoryTracks
-import com.practicum.playlistmaker.util.MyCompObj
+import com.practicum.playlistmaker.util.AppPreferencesKeys
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -89,7 +89,7 @@ class SearchActivity : AppCompatActivity() {
         loadingIndicator.visibility = View.GONE
         utilErrorBox = findViewById<LinearLayout>(R.id.util_error_box)
         searchHistoryNotification = findViewById(R.id.you_were_looking_for)
-        killTheHistory = findViewById(R.id.clear_the_history)
+        killTheHistory = findViewById(R.id.kill_the_history)
     }
 
     private fun callAdapterForHistoryTracks() {
@@ -232,7 +232,7 @@ class SearchActivity : AppCompatActivity() {
                 adapterForAPITracks.setRecyclerView(trackRecyclerView)
                 trackRecyclerView.visibility = View.VISIBLE
             }
-        }, MyCompObj.SERVER_PROCESSING_MILLISECONDS)
+        }, AppPreferencesKeys.SERVER_PROCESSING_MILLISECONDS)
     }
 
     private var lastQuery: String? = null
@@ -353,10 +353,6 @@ class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val artworkImageView: ImageView = itemView.findViewById(R.id.artwork_image_view)
     private val playButton: LinearLayout = itemView.findViewById(R.id.util_item_track)
 
-    companion object {
-        private const val ALBUM_ROUNDED_CORNERS = 8
-    }
-
     fun bind(trackData: TrackData, trackItemClickListener: OnTrackItemClickListener) {
         trackNameTextView.text = trackData.trackName
         artistNameTextView.text = trackData.artistName
@@ -383,7 +379,7 @@ class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private fun loadImage(imageUrl: String, imageView: ImageView) {
         Glide.with(imageView).load(imageUrl).placeholder(R.drawable.ic_placeholder)
-            .transform(RoundedCorners(ALBUM_ROUNDED_CORNERS)).error(R.drawable.ic_error_internet)
+            .transform(RoundedCorners(AppPreferencesKeys.ALBUM_ROUNDED_CORNERS)).error(R.drawable.ic_error_internet)
             .into(imageView)
     }
 }

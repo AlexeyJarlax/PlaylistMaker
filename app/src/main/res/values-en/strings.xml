@@ -5,13 +5,13 @@
     <string name="search">Search</string>
     <string name="button_media_lib">Mediateka</string>
     <string name="button_settings">Settings</string>
-    <string name="dark_mod">Dark mod</string>
+    <string name="dark_mod">Dark theme</string>
     <string name="share_the_app">Share the app</string>
     <string name="write_to_support">Write to support</string>
     <string name="user_agreement">User agreement</string>
-    <string name="button_back">back</string>
+    <string name="button_back">Back</string>
     <string name="share_app_text">Try this app that I wrote furiously: https://play.google.com/store/apps/details?id=%1$s</string>
-    <string name="share_app_title">share app</string>
+    <string name="share_app_title">Share app</string>
     <string name="support_email">mailto:al3ksei.pav@yandex.ru</string>
     <string name="support_email_subject">Message to the developers and developers of the Playlist Maker app</string>
     <string name="support_email_text">Thanks to the developers and developers for the cool app!</string>
@@ -28,8 +28,8 @@
     <string name="nothing_was_found">Nothing was found</string>
     <string name="refresh">Refresh</string>
     <string name="any_mistake">there will be an error message,\nthe icon will change depending on\nthe nature of the error</string>
-    <string name="you_were_looking_for">you were looking for</string>
-    <string name="clear_the_history">clear the history</string>
+    <string name="you_were_looking_for">You were looking for</string>
+    <string name="clear_the_history">Clear the history</string>
     <string name="error400">error 400 (Bad Request)</string>
     <string name="error500">error 500 (Internal Server Error)</string>
     <string name="error503">error 503 (Service Unavailable)</string>
@@ -37,5 +37,5 @@
     <string name="error404">error 404 (Not Found)</string>
     <string name="error403">error 403 (Forbidden)</string>
     <string name="error401">error 401 (Unauthorized)</string>
-    <string name="added">добавлен:</string>
+    <string name="added">Added: </string>
 </resources>

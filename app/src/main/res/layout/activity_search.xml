@@ -26,8 +26,6 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp36"
             android:layout_marginTop="@dimen/dp60"
-            android:imeOptions="actionDone"
-            android:text=""
             app:layout_constraintTop_toTopOf="@id/button_back_from_search_activity"
             tools:layout_editor_absoluteX="@dimen/z" />
 
@@ -37,10 +35,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingTop="@dimen/dp24"
-            android:paddingBottom="@dimen/dp16"
+            android:paddingTop="@dimen/dp44"
+            android:paddingBottom="@dimen/dp12"
             android:text="@string/you_were_looking_for"
-            android:textSize="19sp"
+            android:textSize="@dimen/text_size_sp19"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/search_box_include" />
 
@@ -48,25 +46,26 @@
             android:id="@+id/track_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp24"
+            android:layout_marginTop="@dimen/dp8"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/you_were_looking_for"
-            app:tint="@color/yp_light_gray__yp_white"
+            app:tint="@color/yp_light_gray_and_yp_white"
             tools:context=".MedialabActivity"
             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:layout_editor_absoluteX="0dp"
             tools:listitem="@layout/util_item_track" />
 
         <Button
-            android:id="@+id/clear_the_history"
+            android:id="@+id/kill_the_history"
             style="@style/ErrorButtons"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/z"
+            android:layout_height="@dimen/dp36"
             android:layout_marginTop="@dimen/dp24"
             android:layout_marginBottom="@dimen/dp24"
             android:gravity="center"
-            android:padding="@dimen/dp6"
+            android:paddingVertical="@dimen/dp6"
+            android:paddingStart="@dimen/dp12"
+            android:paddingEnd="@dimen/dp12"
             android:text="@string/clear_the_history"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
@@ -82,7 +81,7 @@
             app:layout_constraintEnd_toEndOf="@+id/track_recycler_view"
             app:layout_constraintStart_toStartOf="@+id/track_recycler_view"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/yp_text_gray__yp_black" />
+            app:tint="@color/yp_text_gray_and_yp_black" />
 
         <include
             android:id="@+id/util_error_box"

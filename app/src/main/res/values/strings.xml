@@ -36,5 +36,5 @@
     <string name="error500">500 - внутренняя ошибка сервера</string>
     <string name="error503">503 - сервис временно недоступен</string>
     <string name="error0">неустановленная ошибка</string>
-    <string name="added">добавлен: </string>
+    <string name="added">Добавлен: </string>
 </resources>

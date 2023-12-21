@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp60"
-    android:background="@color/yp_white__yp_black"
+    android:background="@color/yp_white_and_yp_black"
     android:gravity="center"
     android:id="@+id/util_item_track"
     android:orientation="horizontal"

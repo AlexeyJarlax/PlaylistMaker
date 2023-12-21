@@ -52,6 +52,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/dp16"
+                android:visibility="gone"
                 android:src="@drawable/ic_clear" />
 
         </RelativeLayout>

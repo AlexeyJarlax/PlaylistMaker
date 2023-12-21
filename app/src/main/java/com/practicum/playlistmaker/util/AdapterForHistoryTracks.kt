@@ -16,24 +16,28 @@ class AdapterForHistoryTracks(
 ) {
 
     private val sharedPreferences: SharedPreferences =
-        context.getSharedPreferences(MyCompObj.PREFS_HISTORY_NAME, Context.MODE_PRIVATE)
-    private val adapterForHistoryTracks: AdapterForAPITracks // Создаем History экземпляр адаптера
+        context.getSharedPreferences(AppPreferencesKeys.PREFS_HISTORY_NAME, Context.MODE_PRIVATE)
 
-    init {
-        adapterForHistoryTracks = AdapterForAPITracks(context, mutableListOf(), trackItemClickListener)
-    }
+    // Создаем History экземпляр адаптера
+    private val adapterForHistoryTracks: AdapterForAPITracks =
+        AdapterForAPITracks(context, mutableListOf(), trackItemClickListener)
 
     fun setRecyclerView(recyclerView: RecyclerView) {
         recyclerView.adapter = adapterForHistoryTracks
         recyclerView.layoutManager = LinearLayoutManager(context)
     }
 
-    fun saveTrack(trackName: String, artistName: String, trackTimeMillis: Long, artworkUrl100: String) {
+    fun saveTrack(
+        trackName: String,
+        artistName: String,
+        trackTimeMillis: Long,
+        artworkUrl100: String
+    ) {
         val trackList = getTrackListFromSharedPreferences()
         trackList.removeAll { it.trackName == trackName && it.artistName == artistName }
         trackList.add(0, Track(trackName, artistName, trackTimeMillis, artworkUrl100))
-        if (trackList.size > 10) {
-            trackList.subList(10, trackList.size).clear()
+        if (trackList.size > AppPreferencesKeys.HISTORY_TRACK_LIST_SIZE) {
+            trackList.subList(AppPreferencesKeys.HISTORY_TRACK_LIST_SIZE, trackList.size).clear()
         }
 
         saveTrackListToSharedPreferences(trackList)
@@ -49,11 +53,11 @@ class AdapterForHistoryTracks(
 
     private fun saveTrackListToSharedPreferences(trackList: List<Track>) {
         val jsonString = Gson().toJson(trackList)
-        sharedPreferences.edit().putString(MyCompObj.KEY_HISTORY_LIST, jsonString).apply()
+        sharedPreferences.edit().putString(AppPreferencesKeys.KEY_HISTORY_LIST, jsonString).apply()
     }
 
     private fun getTrackListFromSharedPreferences(): MutableList<Track> {
-        val jsonString = sharedPreferences.getString(MyCompObj.KEY_HISTORY_LIST, null)
+        val jsonString = sharedPreferences.getString(AppPreferencesKeys.KEY_HISTORY_LIST, null)
         val type = object : TypeToken<List<Track>>() {}.type
         return Gson().fromJson(jsonString, type) ?: mutableListOf()
     }
@@ -65,7 +69,7 @@ class AdapterForHistoryTracks(
 
     fun killHistoryList() {
         val editor = sharedPreferences.edit()
-        editor.remove(MyCompObj.KEY_HISTORY_LIST)
+        editor.remove(AppPreferencesKeys.KEY_HISTORY_LIST)
         editor.apply()
     }
 
