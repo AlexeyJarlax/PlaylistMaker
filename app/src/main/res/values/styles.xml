@@ -121,6 +121,8 @@
     <style name="Placeholder" parent="TrackStyleCustom">
         <item name="android:background">@android:color/transparent</item>
         <item name="android:tint">@android:color/transparent</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">-4dp</item>
     </style>
 
     <style name="ErrorTransparent" parent="TrackStyleCustom">
