@@ -165,11 +165,12 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showHistoryViewsAndFillTrackAdapter() {
+        if(adapterForHistoryTracks.checkIfHistoryListExists()) {
         fillTrackAdapter()
         trackRecyclerView.visibility = View.VISIBLE
         searchHistoryNotification.visibility = View.VISIBLE
         killTheHistory.visibility = View.VISIBLE
-    }
+    }}
 
     private fun fillTrackAdapter() {
         clearTrackAdapter()

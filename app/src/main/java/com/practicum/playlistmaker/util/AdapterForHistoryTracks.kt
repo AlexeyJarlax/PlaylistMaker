@@ -62,6 +62,10 @@ class AdapterForHistoryTracks(
         return Gson().fromJson(jsonString, type) ?: mutableListOf()
     }
 
+    fun checkIfHistoryListExists(): Boolean {
+        return sharedPreferences.contains(AppPreferencesKeys.KEY_HISTORY_LIST)
+    }
+
     fun clearHistoryList() {
         adapterForHistoryTracks.clearList()
         adapterForHistoryTracks.notifyDataSetChanged()

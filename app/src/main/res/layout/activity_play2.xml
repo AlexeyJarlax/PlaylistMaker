@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftBorder"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightBorder"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+    <ImageView
+        android:id="@+id/backgroundImageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="h,16:9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <TextView
+        android:id="@+id/nameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Имя"
+        app:layout_constraintStart_toStartOf="@id/leftBorder"
+        app:layout_constraintTop_toBottomOf="@id/backgroundImageView" />
+
+    <TextView
+        android:id="@+id/nickNameTextView"
+        app:layout_constraintTag="nickNameTag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="32dp"
+        android:text="Никнейм"
+        app:layout_constraintStart_toStartOf="@id/leftBorder"
+        app:layout_constraintTop_toBottomOf="@id/nameTextView" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/textsBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_tags="nameTag, nickNameTag"
+        app:barrierDirection="end" />
+
+    <EditText
+        android:id="@+id/nameEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:hint="Имя"
+        android:inputType="textPersonName"
+        android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/nameTextView"
+        app:layout_constraintEnd_toEndOf="@id/rightBorder"
+        app:layout_constraintStart_toEndOf="@id/textsBarrier" />
+
+    <EditText
+        android:id="@+id/nicknameEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_goneMarginStart="32dp"
+        android:layout_marginStart="16dp"
+        android:hint="Никнейм"
+        android:inputType="textPersonName"
+        android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/nickNameTextView"
+        app:layout_constraintEnd_toEndOf="@id/rightBorder"
+        app:layout_constraintStart_toEndOf="@id/cameraImageView" />
+
+    <ImageView
+        android:id="@+id/cameraImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="@id/nickNameTextView"
+        app:layout_constraintStart_toEndOf="@id/textsBarrier"
+        app:layout_constraintTop_toTopOf="@id/nickNameTextView"
+        app:srcCompat="@android:drawable/ic_menu_camera" />
+
+    <TextView
+        android:id="@+id/versionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="v1.000"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/rightBorder"
+        app:layout_constraintStart_toStartOf="@id/leftBorder" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="textView,textView2" />
+
+    <View
+        android:id="@+id/viii"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp60"
+        app:layout_constraintTop_toBottomOf="@id/nicknameEditText" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/any_mistake"
+            app:layout_constraintBottom_toTopOf="@id/barrier"
+            app:layout_constraintEnd_toStartOf="@id/textView2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/viii"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/any_mistake"
+            app:layout_constraintBottom_toTopOf="@id/barrier"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/textView"
+            app:layout_constraintTop_toBottomOf="viii"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/any_mistake"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/barrier" />
+
+
+    <!-- Spread цепь -->
+<!--    <TextView-->
+<!--        android:id="@+id/view1"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@android:color/holo_blue_light"-->
+<!--        android:text="View1"-->
+<!--        android:layout_marginTop="@dimen/dp36"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/view2"-->
+<!--        app:layout_constraintHorizontal_chainStyle="spread"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/nicknameEditText" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/view2"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@android:color/holo_blue_light"-->
+<!--        android:text="View2"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/view1"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/view3"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/view1" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/view3"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@android:color/holo_blue_light"-->
+<!--        android:text="View3"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/view2"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/view2" />-->
+
+<!--    &lt;!&ndash; Spread inside цепь &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/view4"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="32dp"-->
+<!--        android:background="@android:color/holo_blue_light"-->
+<!--        android:text="View4"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/view5"-->
+<!--        app:layout_constraintHorizontal_chainStyle="spread_inside"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/view1" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/view5"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@android:color/holo_blue_light"-->
+<!--        android:text="View5"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/view4"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/view6"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/view4" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/view6"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@android:color/holo_blue_light"-->
+<!--        android:text="View6"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/view5"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/view5" />-->
+
+<!--    &lt;!&ndash; Packed цепь &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/view7"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="32dp"-->
+<!--        android:background="@android:color/holo_blue_light"-->
+<!--        android:text="View7"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/view8"-->
+<!--        app:layout_constraintHorizontal_chainStyle="packed"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/view4" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/view8"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@android:color/holo_blue_light"-->
+<!--        android:text="View8"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/view7"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/view9"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/view7" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/view9"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@android:color/holo_blue_light"-->
+<!--        android:text="View9"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/view8"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/view8" />-->
+
+<!--    &lt;!&ndash; Weighted цепь c весами &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/view10"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="32dp"-->
+<!--        android:background="@android:color/holo_red_dark"-->
+<!--        android:text="View10"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/view11"-->
+<!--        app:layout_constraintHorizontal_weight="3"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/view7" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/view11"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@android:color/holo_blue_light"-->
+<!--        android:text="View11"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/view10"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/view12"-->
+<!--        app:layout_constraintHorizontal_weight="2"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/view10" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/view12"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@android:color/darker_gray"-->
+<!--        android:text="View12"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/view11"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_weight="1"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/view11" />-->
+
+<!--    &lt;!&ndash; Равновесная Weighted цепь &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/view13"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="32dp"-->
+<!--        android:background="@android:color/holo_red_dark"-->
+<!--        android:text="View13"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/view14"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/view10" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/view14"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@android:color/holo_blue_light"-->
+<!--        android:text="View14"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/view13"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/view15"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/view13" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/view15"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@android:color/darker_gray"-->
+<!--        android:text="View15"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/view14"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/view14" />-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

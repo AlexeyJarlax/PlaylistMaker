@@ -27,6 +27,12 @@
         android:theme="@style/Theme.MyApp"
         tools:targetApi="31">
         <activity
+            android:name=".PlayActivity3"
+            android:exported="false" />
+        <activity
+            android:name=".PlayActivity2"
+            android:exported="false" />
+        <activity
             android:name=".PlayActivity"
             android:exported="false" />
         <activity
