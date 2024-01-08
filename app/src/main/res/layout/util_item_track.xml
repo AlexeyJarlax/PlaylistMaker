@@ -71,6 +71,6 @@
         style="@style/TrackStyleCustom"
         android:layout_width="@dimen/dp24"
         android:layout_height="@dimen/dp24"
-        android:src="@drawable/ic_arrow_forward" />
+        android:src="@drawable/ic_btn_arrow_forward" />
 
 </LinearLayout>

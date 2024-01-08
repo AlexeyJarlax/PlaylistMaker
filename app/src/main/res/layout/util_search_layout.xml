@@ -53,7 +53,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/dp16"
-                android:src="@drawable/ic_clear"
+                android:src="@drawable/ic_btn_clear"
                 android:visibility="gone"
                 tools:visibility="visible"/>
 

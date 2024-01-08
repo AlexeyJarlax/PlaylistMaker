@@ -33,6 +33,6 @@
         android:id="@+id/button_settings"
         style="@style/MainMenuButtons"
         android:text="@string/button_settings"
-        app:icon="@drawable/ic_settings"
+        app:icon="@drawable/ic_btn_settings"
         tools:ignore="VisualLintButtonSize" />
 </LinearLayout>

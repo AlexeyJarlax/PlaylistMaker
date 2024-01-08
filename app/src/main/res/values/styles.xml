@@ -76,7 +76,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="cornerRadius">0dp</item>
-        <item name="icon">@drawable/ic_back</item>
+        <item name="icon">@drawable/ic_btn_back</item>
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">@dimen/dp16</item>
         <item name="iconSize">@dimen/dp24</item>
@@ -148,6 +148,32 @@
         <item name="android:textColor">@color/yp_text_gray_and_yp_white</item>
     </style>
 
+    <!-- Стиль строк в проигрывателе title-->
+    <style name="TitleTextSmall" parent="TrackText">
+        <item name="android:textSize">@dimen/text_size_sp13</item>
+        <item name="android:textColor">@color/yp_text_gray_and_yp_text_gray</item>
+    </style>
+
+    <!-- Стиль строк в проигрывателе Content-->
+    <style name="ContentTextSmall" parent="TitleTextSmall">
+        <item name="android:textColor">@color/yp_black_and_yp_white</item>
+    </style>
+
+    <!-- Стиль строк в проигрывателе track_name-->
+    <style name="TrackNameText" parent="Widget.MaterialComponents.TextView">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textSize">@dimen/text_size_sp22</item>
+        <item name="android:textColor">@color/yp_black_and_yp_white</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:elevation">0dp</item> <!-- тени -->
+        <item name="android:stateListAnimator">@null</item> <!-- анимацию нажатия -->
+    </style>
+
+    <!-- Стиль строк в проигрывателе track_name-->
+    <style name="TrackArtistText" parent="TrackNameText">
+        <item name="android:textSize">@dimen/text_size_sp14</item>
+    </style>
+
     <style name="ErrorButtons" parent="Widget.MaterialComponents.Button">
         <item name="android:textColor">@color/yp_white_and_yp_black</item>
         <item name="android:textSize">@dimen/text_size_sp14</item>
@@ -169,4 +195,10 @@
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
+
+<!--    &lt;!&ndash; Стиль для Toast&ndash;&gt;-->
+<!--    <style name="SnackbarStyle" parent="Widget.MaterialComponents.Button">-->
+<!--        <item name="android:textColor">@color/yp_white_and_yp_black</item>-->
+<!--        <item name="android:backgroundTint">@color/yp_black_and_yp_white</item>-->
+<!--    </style>-->
 </resources>

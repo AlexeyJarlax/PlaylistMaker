@@ -19,8 +19,8 @@
     <string name="heading_search_history_list_view">Search string query history</string>
     <string name="todo">this app is not suitable for the disabled</string>
     <string name="there_wil_be_media_library">there will be a media library in this window</string>
-    <string name="placeholder_track_name">No Reply</string>
-    <string name="placeholder_artist_name">The Beatles</string>
+    <string name="placeholder_track_name">track name</string>
+    <string name="placeholder_artist_name">artist name</string>
     <string name="placeholder_track_time">5.12</string>
     <string name="error_text_web">Communication problems \n
         The download failed. \n
@@ -38,4 +38,10 @@
     <string name="error403">error 403 (Forbidden)</string>
     <string name="error401">error 401 (Unauthorized)</string>
     <string name="added">Added: </string>
+    <string name="duration">duration&#160;&#160;&#160;</string>
+    <string name="album">album&#160;&#160;&#160;</string>
+    <string name="year">year&#160;&#160;&#160;</string>
+    <string name="genre">genre&#160;&#160;&#160;</string>
+    <string name="country">country&#160;&#160;&#160;</string>
+    <string name="toast">toast</string>
 </resources>

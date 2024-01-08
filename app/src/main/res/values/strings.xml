@@ -18,8 +18,8 @@
     <string name="heading_search_history_list_view">История запросов поисковой строки:</string>
     <string name="todo">это приложение не пригодно для инвалидов</string>
     <string name="there_wil_be_media_library">в этом окне будет медиатека</string>
-    <string name="placeholder_track_name">No Reply</string>
-    <string name="placeholder_artist_name">The Beatles</string>
+    <string name="placeholder_track_name">Название песни</string>
+    <string name="placeholder_artist_name">Имя исполнителя</string>
     <string name="placeholder_track_time">5:12</string>
     <string name="error_text_web">Проблемы со связью \n
         \n Загрузка не удалась. Проверьте\n
@@ -36,5 +36,11 @@
     <string name="error500">500 - внутренняя ошибка сервера</string>
     <string name="error503">503 - сервис временно недоступен</string>
     <string name="error0">неустановленная ошибка</string>
-    <string name="added">Добавлен: </string>
+    <string name="added">Добавлен:&#160;&#160;&#160;</string>
+    <string name="duration">Длительность&#160;&#160;&#160;</string>
+    <string name="album">Альбом&#160;&#160;&#160;</string>
+    <string name="year">Год&#160;&#160;&#160;</string>
+    <string name="genre">Жанр&#160;&#160;&#160;</string>
+    <string name="country">Страна&#160;&#160;&#160;</string>
+    <string name="toast">toast</string>
 </resources>

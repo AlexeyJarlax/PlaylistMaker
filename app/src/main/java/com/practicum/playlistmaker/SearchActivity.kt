@@ -17,6 +17,7 @@ package com.practicum.playlistmaker
 //3.1 : performSearch => [возникла ошибка с вызовом TrackResponse] => Запускаем метод solvingConnectionProblem() ===> Запускаем повторно 2 этап
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -43,6 +44,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 import timber.log.Timber
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 
 class SearchActivity : AppCompatActivity() {
@@ -95,10 +98,26 @@ class SearchActivity : AppCompatActivity() {
     private fun callAdapterForHistoryTracks() {
         adapterForHistoryTracks = AdapterForHistoryTracks(this, object : OnTrackItemClickListener {
             override fun onTrackItemClick(
-                trackName: String, artistName: String, trackTimeMillis: Long, artworkUrl100: String
+                trackName: String?,
+                artistName: String?,
+                trackTimeMillis: Long?,
+                artworkUrl100: String?,
+                collectionName: String?,
+                releaseDate: String?,
+                primaryGenreName: String?,
+                country: String?
             ) {
                 // повторный клик на треке в истории треков
-                adapterForHistoryTracks.saveTrack(trackName, artistName, trackTimeMillis, artworkUrl100)
+                adapterForHistoryTracks.saveTrack(
+                    trackName,
+                    artistName,
+                    trackTimeMillis,
+                    artworkUrl100,
+                    collectionName,
+                    releaseDate,
+                    primaryGenreName,
+                    country
+                )
             }
         })
         adapterForHistoryTracks.setRecyclerView(trackRecyclerView)
@@ -109,15 +128,26 @@ class SearchActivity : AppCompatActivity() {
         adapterForAPITracks =
             AdapterForAPITracks(this, cleanTrackList, object : OnTrackItemClickListener {
                 override fun onTrackItemClick(
-                    trackName: String,
-                    artistName: String,
-                    trackTimeMillis: Long,
-                    artworkUrl100: String
+                    trackName: String?,
+                    artistName: String?,
+                    trackTimeMillis: Long?,
+                    artworkUrl100: String?,
+                    collectionName: String?,
+                    releaseDate: String?,
+                    primaryGenreName: String?,
+                    country: String?
                 ) {
                     adapterForHistoryTracks.saveTrack(
-                        trackName, artistName, trackTimeMillis, artworkUrl100
+                        trackName,
+                        artistName,
+                        trackTimeMillis,
+                        artworkUrl100,
+                        collectionName,
+                        releaseDate,
+                        primaryGenreName,
+                        country
                     )
-                    toastIt("${getString(R.string.added)} ${trackName}")
+//                    toastIt("${getString(R.string.added)} ${trackName}")
                     Timber.d("historyAdapter.saveTrack:${trackName}${artistName}")
                 }
             })
@@ -165,12 +195,13 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showHistoryViewsAndFillTrackAdapter() {
-        if(adapterForHistoryTracks.checkIfHistoryListExists()) {
-        fillTrackAdapter()
-        trackRecyclerView.visibility = View.VISIBLE
-        searchHistoryNotification.visibility = View.VISIBLE
-        killTheHistory.visibility = View.VISIBLE
-    }}
+        if (adapterForHistoryTracks.checkIfHistoryListExists()) {
+            fillTrackAdapter()
+            trackRecyclerView.visibility = View.VISIBLE
+            searchHistoryNotification.visibility = View.VISIBLE
+            killTheHistory.visibility = View.VISIBLE
+        }
+    }
 
     private fun fillTrackAdapter() {
         clearTrackAdapter()
@@ -252,11 +283,16 @@ class SearchActivity : AppCompatActivity() {
                         // Преобразуем результаты в список объектов TrackData
                         trackResponse.results.map { track ->
                             Timber.d("Метод performSearch => response.isSuccessful! track.trackName:${track.trackName}")
+                            val releaseDateTime = LocalDateTime.parse(track.releaseDate, DateTimeFormatter.ISO_DATE_TIME)
                             TrackData(
-                                track.trackName,
-                                track.artistName,
-                                track.trackTimeMillis,
-                                track.artworkUrl100
+                                track.trackName ?: "",
+                                track.artistName ?: "",
+                                track.trackTimeMillis ?: 0,
+                                track.artworkUrl100 ?: "",
+                                track.collectionName ?: "",
+                                releaseDateTime.year.toString(),
+                                track.primaryGenreName ?: "",
+                                track.country ?: ""
                             )
                         }
                     } else {
@@ -342,6 +378,7 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
     }
+
     private fun toastIt(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
@@ -355,18 +392,33 @@ class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val playButton: LinearLayout = itemView.findViewById(R.id.util_item_track)
 
     fun bind(trackData: TrackData, trackItemClickListener: OnTrackItemClickListener) {
-        trackNameTextView.text = trackData.trackName
-        artistNameTextView.text = trackData.artistName
-        trackTimeTextView.text = formatTrackDuration(trackData.trackTimeMillis)
-        loadImage(trackData.artworkUrl100, artworkImageView)
+        trackNameTextView.text = trackData.trackName ?: ""
+        artistNameTextView.text = trackData.artistName ?: ""
+        trackTimeTextView.text = trackData.trackTimeMillis?.let { formatTrackDuration(it) } ?: ""
+        trackData.artworkUrl100?.let { loadImage(it, artworkImageView) }
 
         playButton.setOnClickListener {
             trackItemClickListener.onTrackItemClick(
-                trackData.trackName,
-                trackData.artistName,
-                trackData.trackTimeMillis,
-                trackData.artworkUrl100
+                trackData.trackName ?: "",
+                trackData.artistName ?: "",
+                trackData.trackTimeMillis ?: 0,
+                trackData.artworkUrl100 ?: "",
+                trackData.collectionName ?: "",
+                trackData.releaseDate ?: "",
+                trackData.primaryGenreName ?: "",
+                trackData.country ?: ""
             )
+            //Intent для перехода в окно проигрывателя PlayActivity
+            val intent = Intent(itemView.context, PlayActivity::class.java)
+            intent.putExtra("trackName", trackData.trackName)
+            intent.putExtra("artistName", trackData.artistName)
+            intent.putExtra("trackTimeMillis", trackData.trackTimeMillis)
+            intent.putExtra("artworkUrl100", trackData.artworkUrl100)
+            intent.putExtra("collectionName", trackData.collectionName)
+            intent.putExtra("releaseDate", trackData.releaseDate)
+            intent.putExtra("primaryGenreName", trackData.primaryGenreName)
+            intent.putExtra("country", trackData.country)
+            itemView.context.startActivity(intent)
         }
     }
 
@@ -380,7 +432,8 @@ class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private fun loadImage(imageUrl: String, imageView: ImageView) {
         Glide.with(imageView).load(imageUrl).placeholder(R.drawable.ic_placeholder)
-            .transform(RoundedCorners(AppPreferencesKeys.ALBUM_ROUNDED_CORNERS)).error(R.drawable.ic_error_internet)
+            .transform(RoundedCorners(AppPreferencesKeys.ALBUM_ROUNDED_CORNERS))
+            .error(R.drawable.ic_error_internet)
             .into(imageView)
     }
 }
@@ -422,23 +475,39 @@ class AdapterForAPITracks(
 }
 
 data class TrackData(
-    val trackName: String,
-    val artistName: String,
-    val trackTimeMillis: Long,
-    val artworkUrl100: String
+    val trackName: String?,        // Название
+    val artistName: String?,       // Исполнитель
+    val trackTimeMillis: Long?,    // Продолжительность
+    val artworkUrl100: String?,    // Пикча на обложку
+    val collectionName: String?,  // Название альбома
+    val releaseDate: String?,     // Год
+    val primaryGenreName: String?,// Жанр
+    val country: String?          // Страна
+)
+
+data class ITunesTrack(
+    val trackName: String?,
+    val artistName: String?,
+    val trackTimeMillis: Long?,
+    val artworkUrl100: String?,
+    val collectionName: String?,
+    val releaseDate: String?,
+    val primaryGenreName: String?,
+    val country: String?
 )
 
 data class TrackResponse(val results: List<ITunesTrack>)
-data class ITunesTrack(
-    val trackName: String,
-    val artistName: String,
-    val trackTimeMillis: Long,
-    val artworkUrl100: String
-)
 
 interface OnTrackItemClickListener {
     fun onTrackItemClick(
-        trackName: String, artistName: String, trackTimeMillis: Long, artworkUrl100: String
+        trackName: String?,
+        artistName: String?,
+        trackTimeMillis: Long?,
+        artworkUrl100: String?,
+        collectionName: String?,
+        releaseDate: String?,
+        primaryGenreName: String?,
+        country: String?
     )
 }
 
