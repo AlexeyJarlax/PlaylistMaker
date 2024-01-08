@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Playlist Maker</string>
     <string name="playlist_maker">Playlist Maker</string>
-    <string name="button_search">Поиск</string>
+    <string name="search">Поиск</string>
     <string name="button_back">Назад</string>
     <string name="button_media_lib">Медиатека</string>
     <string name="button_settings">Настройки</string>
@@ -18,8 +18,8 @@
     <string name="heading_search_history_list_view">История запросов поисковой строки:</string>
     <string name="todo">это приложение не пригодно для инвалидов</string>
     <string name="there_wil_be_media_library">в этом окне будет медиатека</string>
-    <string name="placeholder_track_name">No Reply</string>
-    <string name="placeholder_artist_name">The Beatles</string>
+    <string name="placeholder_track_name">Название песни</string>
+    <string name="placeholder_artist_name">Имя исполнителя</string>
     <string name="placeholder_track_time">5:12</string>
     <string name="error_text_web">Проблемы со связью \n
         \n Загрузка не удалась. Проверьте\n
@@ -27,5 +27,20 @@
     <string name="nothing_was_found">Ничего не нашлось</string>
     <string name="refresh">Обновить</string>
     <string name="any_mistake">тут будет сообщение об ошибке,\nиконка поменяется в зависимости\nот характера ошибки</string>
-
+    <string name="you_were_looking_for">Вы искали</string>
+    <string name="clear_the_history">Очистить историю</string>
+    <string name="error400">400 - ошибка запроса</string>
+    <string name="error401">401 - неавторизованный запрос</string>
+    <string name="error403">403 - запрещенный запрос</string>
+    <string name="error404">404 - не найдено</string>
+    <string name="error500">500 - внутренняя ошибка сервера</string>
+    <string name="error503">503 - сервис временно недоступен</string>
+    <string name="error0">неустановленная ошибка</string>
+    <string name="added">Добавлен:&#160;&#160;&#160;</string>
+    <string name="duration">Длительность&#160;&#160;&#160;</string>
+    <string name="album">Альбом&#160;&#160;&#160;</string>
+    <string name="year">Год&#160;&#160;&#160;</string>
+    <string name="genre">Жанр&#160;&#160;&#160;</string>
+    <string name="country">Страна&#160;&#160;&#160;</string>
+    <string name="toast">toast</string>
 </resources>

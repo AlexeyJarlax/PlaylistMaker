@@ -25,7 +25,7 @@
         style="@style/SecondaryButtonsAndText"
         android:layout_height="wrap_content"
         android:text="@string/share_the_app"
-        app:icon="@drawable/ic_share"
+        app:icon="@drawable/ic_btn_share"
         tools:ignore="VisualLintButtonSize" />
 
     <Button
@@ -33,7 +33,7 @@
         style="@style/SecondaryButtonsAndText"
         android:layout_height="wrap_content"
         android:text="@string/write_to_support"
-        app:icon="@drawable/ic_support"
+        app:icon="@drawable/ic_btn_support"
         tools:ignore="VisualLintButtonSize" />
 
     <Button
@@ -41,7 +41,7 @@
         style="@style/SecondaryButtonsAndText"
         android:layout_height="wrap_content"
         android:text="@string/user_agreement"
-        app:icon="@drawable/ic_arrow_forward"
+        app:icon="@drawable/ic_btn_arrow_forward"
         tools:ignore="VisualLintButtonSize" />
 
 </LinearLayout>

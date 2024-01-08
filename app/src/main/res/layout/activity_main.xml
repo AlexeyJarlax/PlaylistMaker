@@ -18,7 +18,7 @@
     <Button
         android:id="@+id/button_search"
         style="@style/MainMenuButtons"
-        android:text="@string/button_search"
+        android:text="@string/search"
         app:icon="@drawable/ic_search"
         tools:ignore="VisualLintButtonSize" />
 
@@ -33,6 +33,6 @@
         android:id="@+id/button_settings"
         style="@style/MainMenuButtons"
         android:text="@string/button_settings"
-        app:icon="@drawable/ic_settings"
+        app:icon="@drawable/ic_btn_settings"
         tools:ignore="VisualLintButtonSize" />
 </LinearLayout>

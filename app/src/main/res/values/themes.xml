@@ -3,6 +3,7 @@
     <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
         <!-- ЦВЕТОВЫЕ СТИЛИ НОЧЬ\ДЕНЬ РЕАЛИЗОВАННЫ ЧЕРЕЗ COLORS.XML-->
-
+<!--        <item name="snackbarStyle">@style/SnackbarStyle</item>-->
     </style>
+
 </resources>
