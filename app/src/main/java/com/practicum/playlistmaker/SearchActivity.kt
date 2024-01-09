@@ -433,7 +433,7 @@ class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private fun loadImage(imageUrl: String, imageView: ImageView) {
         Glide.with(imageView).load(imageUrl).placeholder(R.drawable.ic_placeholder)
             .transform(RoundedCorners(AppPreferencesKeys.ALBUM_ROUNDED_CORNERS))
-            .error(R.drawable.ic_error_internet)
+            .error(R.drawable.ic_placeholder)
             .into(imageView)
     }
 }

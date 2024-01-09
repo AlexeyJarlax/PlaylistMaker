@@ -19,7 +19,9 @@ class PlayActivity : AppCompatActivity() {
     private var isPlaying: Boolean = false
     private var isAddedToPlaylist: Boolean = false
     private var isLiked: Boolean = false
-    var count = 0
+    private var count = 0 // заплатка на решение проблемы с появлением Тоста в момент прожатия кнопки
+    // в начале активити. Простое решение для проблемы, которая требует детальной проработки
+    // в следующих спринтах
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,7 +81,7 @@ class PlayActivity : AppCompatActivity() {
     private fun loadImage(imageUrl: String, imageView: ImageView) {
         Glide.with(imageView).load(imageUrl).placeholder(R.drawable.ic_placeholder)
             .transform(RoundedCorners(AppPreferencesKeys.ALBUM_ROUNDED_CORNERS))
-            .error(R.drawable.ic_error_internet)
+            .error(R.drawable.ic_placeholder)
             .into(imageView)
     }
 
