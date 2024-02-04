@@ -8,6 +8,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import com.practicum.playlistmaker.util.UtilThemeManager
+import com.practicum.playlistmaker.util.setDebouncedClickListener
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -19,7 +20,7 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
 
         val back = findViewById<Button>(R.id.button_back_from_settings) // КНОПКА НАЗАД
-        back.setOnClickListener {
+        back.setDebouncedClickListener {
             finish()
         }
 
@@ -33,7 +34,7 @@ class SettingsActivity : AppCompatActivity() {
 
         // КНОПКА ПОДЕЛИТЬСЯ
         val shareButton = findViewById<Button>(R.id.button_settings_share)
-        shareButton.setOnClickListener {
+        shareButton.setDebouncedClickListener {
             val appId = "com.Practicum.PlaylistMaker"
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/plain"
@@ -46,7 +47,7 @@ class SettingsActivity : AppCompatActivity() {
 
         // КНОПКА ТЕХПОДДЕРЖКИ
         val helpButton = findViewById<Button>(R.id.button_settings_write_to_supp)
-        helpButton.setOnClickListener {
+        helpButton.setDebouncedClickListener {
             Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse(getString(R.string.support_email))
                 putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_email_subject))
@@ -57,7 +58,7 @@ class SettingsActivity : AppCompatActivity() {
 
         // КНОПКА ПОЛЬЗОВАТЕЛЬСКОГО СОГЛАШЕНИЯ
         val userAgreementButton = findViewById<Button>(R.id.button_settings_user_agreement)
-        userAgreementButton.setOnClickListener {
+        userAgreementButton.setDebouncedClickListener {
             val url = getString(R.string.user_agreement_url)
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(url)

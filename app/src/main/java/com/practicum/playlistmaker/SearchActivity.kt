@@ -30,6 +30,8 @@ val previewUrl: String?         // ссылка на 30 сек. фрагмент
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -45,7 +47,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.util.AdapterForHistoryTracks
 import com.practicum.playlistmaker.util.AppPreferencesKeys
+import com.practicum.playlistmaker.util.Debouncer
+
 import com.practicum.playlistmaker.util.openThread
+import com.practicum.playlistmaker.util.setDebouncedClickListener
 import com.practicum.playlistmaker.util.stopLoadingIndicator
 import retrofit2.Call
 import retrofit2.Callback
@@ -61,6 +66,7 @@ import java.util.concurrent.TimeUnit
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import java.time.format.DateTimeParseException
 
 class SearchActivity : AppCompatActivity() {
 
@@ -132,6 +138,18 @@ class SearchActivity : AppCompatActivity() {
         trackRecyclerView.adapter = adapterForAPITracks
     }
 
+    private val searchRunnable = Runnable {
+        utilErrorBox.visibility = View.GONE
+        clearTrackAdapter()
+        preparingForSearch(queryInput.text.toString().trim())
+        toastIt("${getString(R.string.search)} ${queryInput.text.toString().trim()}")
+    }
+    private val handler = Handler(Looper.getMainLooper())
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, 2000)
+    }
+
     private fun queryTextChangedListener() {
         queryInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
@@ -153,7 +171,12 @@ class SearchActivity : AppCompatActivity() {
                 if (hasFocus && searchText.isEmpty()) {  // обработка ввода без нажатий
                     showHistoryViewsAndFillTrackAdapter()
                 } else {
-                    hideHistoryViewsAndClearTrackAdapter()
+                    searchDebounce()
+//                    hideHistoryViewsAndClearTrackAdapter()
+//                    val debouncer = Debouncer()
+//                    if(debouncer.inputDebounce()) {
+//                        preparingForSearch(searchText)
+//                    }
                 }
             }
 
@@ -201,7 +224,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun killTheHistory() {
-        killTheHistory.setOnClickListener {
+        killTheHistory.setDebouncedClickListener {
             adapterForHistoryTracks.killHistoryList()
             hideHistoryViewsAndClearTrackAdapter()
         }
@@ -249,24 +272,29 @@ class SearchActivity : AppCompatActivity() {
 
     private var lastQuery: String? = null
     private var lastCallback: ((List<Track>) -> Unit)? = null
+
     private fun performSearch(query: String, callback: (List<Track>) -> Unit) {
         lastQuery = query        // Сохраняем последний запрос и колбэк
         lastCallback = callback
         Timber.d("Запускаем метод performSearch с параметрами Query: $query и Callback")
+
         iTunesSearchAPI.search(query).enqueue(object : Callback<TrackResponse> {
-            override fun onResponse(
-                call: Call<TrackResponse>, response: Response<TrackResponse>
-            ) {
-                if (response.code() == 200) {
+            override fun onResponse(call: Call<TrackResponse>, response: Response<TrackResponse>) {
+                if (response.isSuccessful) {
                     val trackResponse = response.body()
                     val trackData = if (trackResponse?.results?.isNotEmpty() == true) {
                         // Преобразуем результаты в список объектов TrackData
                         trackResponse.results.map { track ->
                             Timber.d("Метод performSearch => response.isSuccessful! track.trackName:${track.trackName}")
-                            val releaseDateTime = LocalDateTime.parse(
-                                track.releaseDate,
-                                DateTimeFormatter.ISO_DATE_TIME
-                            )
+                            val releaseDateTime = try {
+                                track.releaseDate?.let {
+                                    LocalDateTime.parse(it, DateTimeFormatter.ISO_DATE_TIME)
+                                } ?: LocalDateTime.MIN // Если releaseDate == null, используем минимальное значение LocalDateTime
+                            } catch (e: DateTimeParseException) {
+                                Timber.e(e, "Ошибка при разборе даты: ${track.releaseDate}")
+                                LocalDateTime.MIN
+                            }
+
                             Track(
                                 track.trackName ?: "",
                                 track.artistName ?: "",
@@ -284,6 +312,7 @@ class SearchActivity : AppCompatActivity() {
                         solvingAbsentProblem() // вызываем заглушку о пустом листе запроса
                         emptyList()
                     }
+
                     callback(trackData)         // Вызываем колбэк с полученными данными
                     Timber.d("Метод performSearch => response.isSuccessful! => callback(trackData): $trackData")
                 } else {
@@ -298,9 +327,7 @@ class SearchActivity : AppCompatActivity() {
                     }
                     Timber.d(error)
                     toastIt(error)
-                    onFailure(
-                        call, Throwable(error)
-                    )
+                    onFailure(call, Throwable(error))
                 }
             }
 
@@ -321,7 +348,7 @@ class SearchActivity : AppCompatActivity() {
         val retryButton = findViewById<Button>(R.id.retry_button)
         retryButton.visibility = View.GONE // тут кнопка не нужна
         utilErrorBox.visibility = View.VISIBLE
-        utilErrorBox.setOnClickListener {
+        utilErrorBox.setDebouncedClickListener {
             utilErrorBox.visibility = View.GONE
         }
     }
@@ -336,7 +363,7 @@ class SearchActivity : AppCompatActivity() {
         retryButton.visibility = View.VISIBLE
         utilErrorBox.visibility = View.VISIBLE
 
-        retryButton.setOnClickListener {
+        retryButton.setDebouncedClickListener {
             lastQuery?.let { query ->
                 lastCallback?.let { callback ->
                     preparingForSearch(query)
@@ -352,13 +379,13 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun clearButton() {
-        clearButton.setOnClickListener {
+        clearButton.setDebouncedClickListener {
             queryInput.text.clear()
         }
     }
 
     private fun backToMain() {
-        backButton.setOnClickListener {
+        backButton.setDebouncedClickListener {
 //            if (`ViewExtensions.kt`(context = this).clickDebounce()) {
                 finish()
 //            }
@@ -383,7 +410,7 @@ class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         trackTimeTextView.text = track.trackTimeMillis?.let { formatTrackDuration(it) } ?: ""
         track.artworkUrl100?.let { loadImage(it, artworkImageView) }
 
-        playButton.setOnClickListener {
+        playButton.setDebouncedClickListener {
             trackItemClickListener.onTrackItemClick(track)
             val intent = Intent(itemView.context, PlayActivity::class.java)
             val trackJson = Json.encodeToString(Track.serializer(), track)

@@ -28,6 +28,6 @@
     <dimen name="dp100">100dp</dimen>
     <dimen name="dp248">248dp</dimen>
     <dimen name="maxEms">50</dimen>
-    <dimen name="dp106">106dp</dimen>
+    <dimen name="dp108">108dp</dimen>
 
 </resources>

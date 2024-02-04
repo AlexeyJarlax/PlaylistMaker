@@ -12,6 +12,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.snackbar.Snackbar
 import com.practicum.playlistmaker.util.AppPreferencesKeys
 import com.practicum.playlistmaker.util.openThread
+import com.practicum.playlistmaker.util.setDebouncedClickListener
 import com.practicum.playlistmaker.util.stopLoadingIndicator
 import com.practicum.playlistmaker.util.toast
 import kotlinx.serialization.json.Json
@@ -19,7 +20,7 @@ import timber.log.Timber
 
 class PlayActivity : AppCompatActivity() {
 
-//    private var track: Track? = null
+    //    private var track: Track? = null
     private lateinit var btnBackFromSettings: Button
     private lateinit var btnPlay: ImageView
     private lateinit var btnAddToPlaylist: ImageView
@@ -29,12 +30,14 @@ class PlayActivity : AppCompatActivity() {
     private var isLiked: Boolean = false
     private var count =
         0 // заплатка на решение проблемы с появлением Тоста в момент прожатия кнопки
+
     companion object {
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
     }
+
     private var playerState = STATE_DEFAULT
     private var mediaPlayer = MediaPlayer()
     private var url: String? = null
@@ -92,6 +95,7 @@ class PlayActivity : AppCompatActivity() {
             STATE_PLAYING -> {
                 pausePlayer()
             }
+
             STATE_PREPARED, STATE_PAUSED -> {
                 startPlayer()
             }
@@ -99,7 +103,7 @@ class PlayActivity : AppCompatActivity() {
     }
 
     private fun setupPlayButton() {
-        btnPlay.setOnClickListener {
+        btnPlay.setDebouncedClickListener {
             playbackControl()
         }
     }
@@ -107,14 +111,13 @@ class PlayActivity : AppCompatActivity() {
     private fun preparePlayer() {
         openThread {
             try {
-                Timber.d("=== preparePlayer начинаем в потоке: ${Thread.currentThread().name}")
                 mediaPlayer.setDataSource(url)
                 mediaPlayer.prepareAsync()
                 mediaPlayer.setOnPreparedListener {
                     runOnUiThread {
                         btnPlay.isEnabled = true
                         playerState = STATE_PREPARED
-                        Timber.d("=== OnPreparedListener в потоке: ${Thread.currentThread().name}")
+                        Timber.d("=== preparePlayer() === OnPreparedListener в потоке: ${Thread.currentThread().name}")
                         stopLoadingIndicator()
                     }
                 }
@@ -122,11 +125,19 @@ class PlayActivity : AppCompatActivity() {
                     runOnUiThread {
                         btnPlay.setImageResource(R.drawable.ic_btn_play)
                         playerState = STATE_PREPARED
-                        Timber.d("=== OnCompletionListener в потоке: ${Thread.currentThread().name}")
+                        Timber.d("=== preparePlayer() === OnCompletionListener в потоке: ${Thread.currentThread().name}")
                     }
                 }
+                mediaPlayer.setOnErrorListener { mp, what, extra ->
+                    Timber.e("=== preparePlayer() === setOnErrorListener: $what, $extra")
+                    runOnUiThread {
+                        toast(getString(R.string.error404))
+                        stopLoadingIndicator()
+                    }
+                    false
+                }
             } catch (e: Exception) {
-                Timber.e(e, "Ошибка при подготовке плеера")
+                Timber.e(e, "=== preparePlayer() === catch Exception")
                 runOnUiThread {
                     toast(getString(R.string.error500))
                     stopLoadingIndicator()
@@ -164,13 +175,13 @@ class PlayActivity : AppCompatActivity() {
     }
 
     private fun setupBackButton() {
-        btnBackFromSettings.setOnClickListener {
+        btnBackFromSettings.setDebouncedClickListener {
             finish()
         }
     }
 
     private fun setupAddToPlaylistButton() {
-        btnAddToPlaylist.setOnClickListener {
+        btnAddToPlaylist.setDebouncedClickListener {
 
             val newImageResource = if (isAddedToPlaylist) {
                 count -= 1
@@ -188,7 +199,7 @@ class PlayActivity : AppCompatActivity() {
     }
 
     private fun setupLikeButton() {
-        btnLike.setOnClickListener {
+        btnLike.setDebouncedClickListener {
             val newImageResource = if (isLiked) {
                 R.drawable.ic_btn_like_done
             } else {
