@@ -80,6 +80,7 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:indeterminateTint="@color/yp_black_and_yp_white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/track_recycler_view"
             app:layout_constraintStart_toStartOf="@+id/track_recycler_view"

@@ -1,21 +1,32 @@
 package com.practicum.playlistmaker
 
-// Памятка о содержании файла:
-//SearchActivity - активити и вся обработка поискового запроса юзера.
-//UtilTrackViewHolder - холдер для RecyclerView, отображающий информацию о треках.
-// AdapterForAPITracks - адаптер для RecyclerView, отображающий информацию о треках.
-//iTunesApiService - интерфейс для iTunes Search API.
-//TrackResponse - класс данных, представляющий ответ от iTunes Search API.
-//ITunesTrack - класс данных для преобразования ответа iTunes Search API в список объектов TrackData.
-//TrackData - класс данных, представляющий список треков на устройстве.
-//OnTrackItemClickListener - интерфейс для обработки истории
+/* === Памятка о содержании файла:
+SearchActivity - активити и вся обработка поискового запроса юзера.
+UtilTrackViewHolder - холдер для RecyclerView, отображающий информацию о треках.
+ AdapterForAPITracks - адаптер для RecyclerView, отображающий информацию о треках.
+iTunesApiService - интерфейс для iTunes Search API.
+TrackResponse - класс данных, представляющий ответ от iTunes Search API.
+ITunesTrack - класс данных для преобразования ответа iTunes Search API в список объектов TrackData.
+TrackData - класс данных, представляющий список треков на устройстве.
+OnTrackItemClickListener - интерфейс для обработки истории
 
-// Этапы поиска:
-//1. этап: считываем ввод в queryInput.setOnEditorActionListener и queryInput.addTextChangedListener ===> запуск 2 этапа
-//2. этап: передаем searchText в fun preparingForSearch для активации loadingIndicator и блокировки кнопок ===> запуск 3 этапа
-//3. этап: передаем searchText в fun performSearch => вызываем TrackResponse => заполняем TrackData  ===> вывод списка песен, соответствующих запросу
-//3.1 : performSearch => [возникла ошибка с вызовом TrackResponse] => Запускаем метод solvingConnectionProblem() ===> Запускаем повторно 2 этап
+=== Этапы поиска:
+1. этап: считываем ввод в queryInput.setOnEditorActionListener и queryInput.addTextChangedListener ===> запуск 2 этапа
+2. этап: передаем searchText в fun preparingForSearch для активации loadingIndicator и блокировки кнопок ===> запуск 3 этапа
+3. этап: передаем searchText в fun performSearch => вызываем TrackResponse => заполняем TrackData  ===> вывод списка песен, соответствующих запросу
+3.1 : performSearch => [возникла ошибка с вызовом TrackResponse] => Запускаем метод solvingConnectionProblem() ===> Запускаем повторно 2 этап
 
+=== Объект track содержит:
+val trackName: String?          // Название
+val artistName: String?         // Исполнитель
+val trackTimeMillis: Long?      // Продолжительность
+val artworkUrl100: String?      // Пикча на обложку
+val collectionName: String?     // Название альбома
+val releaseDate: String?        // Год
+val primaryGenreName: String?   // Жанр
+val country: String?            // Страна
+val previewUrl: String?         // ссылка на 30 сек. фрагмент
+*/
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -36,6 +47,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.util.AdapterForHistoryTracks
 import com.practicum.playlistmaker.util.AppPreferencesKeys
+import com.practicum.playlistmaker.util.Debouncer
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -283,7 +295,10 @@ class SearchActivity : AppCompatActivity() {
                         // Преобразуем результаты в список объектов TrackData
                         trackResponse.results.map { track ->
                             Timber.d("Метод performSearch => response.isSuccessful! track.trackName:${track.trackName}")
-                            val releaseDateTime = LocalDateTime.parse(track.releaseDate, DateTimeFormatter.ISO_DATE_TIME)
+                            val releaseDateTime = LocalDateTime.parse(
+                                track.releaseDate,
+                                DateTimeFormatter.ISO_DATE_TIME
+                            )
                             TrackData(
                                 track.trackName ?: "",
                                 track.artistName ?: "",
@@ -375,7 +390,9 @@ class SearchActivity : AppCompatActivity() {
 
     private fun backToMain() {
         backButton.setOnClickListener {
-            finish()
+            if (Debouncer(context = this).clickDebounce()) {
+                finish()
+            }
         }
     }
 

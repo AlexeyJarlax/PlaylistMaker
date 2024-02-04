@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker
 
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -22,10 +23,22 @@ class PlayActivity : AppCompatActivity() {
     private var count = 0 // заплатка на решение проблемы с появлением Тоста в момент прожатия кнопки
     // в начале активити. Простое решение для проблемы, которая требует детальной проработки
     // в следующих спринтах
+    companion object {
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
+    }
+    private var playerState = STATE_DEFAULT
+//    private lateinit var play: Button
+    private var mediaPlayer = MediaPlayer()
+    private var url: String? = "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/ac/c7/d1/acc7d13f-6634-495f-caf6-491eccb505e8/mzaf_4002676889906514534.plus.aac.p.m4a"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play)
+//        play = findViewById(R.id.btn_play)
 
         // Получение данных из Intent
         val trackName = intent.getStringExtra("trackName")
@@ -58,7 +71,7 @@ class PlayActivity : AppCompatActivity() {
         btnAddToPlaylist = findViewById(R.id.btn_add_to_playlist)
         btnLike = findViewById(R.id.btn_like)
         setupBackButton()
-        setupPlayButton()
+
         setupAddToPlaylistButton()
         setupLikeButton()
 
@@ -67,9 +80,78 @@ class PlayActivity : AppCompatActivity() {
         btnAddToPlaylist.performClick()
         btnLike.performClick()
         count += 1
+
+        // Воспроизведение плеером
+        preparePlayer()
+        setupPlayButton()
+//        play.setOnClickListener {
+//            playbackControl()
+//        }
+    } // конец onCreate
+
+    override fun onPause() {
+        super.onPause()
+        pausePlayer()
     }
 
-    private fun formatTrackDuration(trackTimeMillis: Long): String {
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
+    }
+
+    private fun playbackControl() {
+        when(playerState) {
+            STATE_PLAYING -> {
+                pausePlayer()
+//                btnPlay.setImageResource(R.drawable.ic_btn_play_done)
+            }
+            STATE_PREPARED, STATE_PAUSED -> {
+                startPlayer()
+//                btnPlay.setImageResource(R.drawable.ic_btn_play)
+            }
+        }
+    }
+
+    private fun setupPlayButton() {
+        btnPlay.setOnClickListener {
+            playbackControl()
+//            val newImageResource = if (isPlaying) {
+//                R.drawable.ic_btn_play_done
+//            } else {
+//                R.drawable.ic_btn_play
+//            }
+//            btnPlay.setImageResource(newImageResource as Int)
+//            isPlaying = !isPlaying
+        }
+    }
+
+    private fun preparePlayer() {
+        mediaPlayer.setDataSource(url)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            btnPlay.isEnabled = true
+            playerState = STATE_PREPARED
+        }
+        mediaPlayer.setOnCompletionListener {
+            btnPlay.setImageResource(R.drawable.ic_btn_play)
+            playerState = STATE_PREPARED
+        }
+    }
+
+    private fun startPlayer() {
+        mediaPlayer.start()
+        btnPlay.setImageResource(R.drawable.ic_btn_play_done)
+        playerState = STATE_PLAYING
+    }
+
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        btnPlay.setImageResource(R.drawable.ic_btn_play)
+        playerState = STATE_PAUSED
+    }
+
+
+private fun formatTrackDuration(trackTimeMillis: Long): String {
         val minutes = java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(trackTimeMillis)
         val seconds =
             java.util.concurrent.TimeUnit.MILLISECONDS.toSeconds(trackTimeMillis) - java.util.concurrent.TimeUnit.MINUTES.toSeconds(
@@ -88,18 +170,6 @@ class PlayActivity : AppCompatActivity() {
     private fun setupBackButton() {
         btnBackFromSettings.setOnClickListener {
             finish()
-        }
-    }
-
-    private fun setupPlayButton() {
-        btnPlay.setOnClickListener {
-            val newImageResource = if (isPlaying) {
-                R.drawable.ic_btn_play_done
-            } else {
-                R.drawable.ic_btn_play
-            }
-            btnPlay.setImageResource(newImageResource as Int)
-            isPlaying = !isPlaying
         }
     }
 
