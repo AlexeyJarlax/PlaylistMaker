@@ -8,7 +8,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.OnTrackItemClickListener
 import com.practicum.playlistmaker.AdapterForAPITracks
-import com.practicum.playlistmaker.TrackData
+import com.practicum.playlistmaker.Track
+//import com.practicum.playlistmaker.TrackData
 
 class AdapterForHistoryTracks(
     private val context: Context,
@@ -26,31 +27,11 @@ class AdapterForHistoryTracks(
         recyclerView.layoutManager = LinearLayoutManager(context)
     }
 
-    fun saveTrack(
-        trackName: String?,
-        artistName: String?,
-        trackTimeMillis: Long?,
-        artworkUrl100: String?,
-        collectionName: String?,
-        releaseDate: String?,
-        primaryGenreName: String?,
-        country: String?
-    ) {
+    fun saveTrack(track: Track) {
         val trackList = getTrackListFromSharedPreferences()
-        trackList.removeAll { it.trackName == trackName && it.artistName == artistName }
-        trackList.add(
-            0,
-            Track(
-                trackName.orEmpty(),
-                artistName.orEmpty(),
-                trackTimeMillis ?: 0L,
-                artworkUrl100.orEmpty(),
-                collectionName.orEmpty(),
-                releaseDate.orEmpty(),
-                primaryGenreName.orEmpty(),
-                country.orEmpty()
-            )
-        )
+        trackList.removeAll { it.trackName == track.trackName && it.artistName == track.artistName }
+        trackList.add(0, track)
+
         if (trackList.size > AppPreferencesKeys.HISTORY_TRACK_LIST_SIZE) {
             trackList.subList(AppPreferencesKeys.HISTORY_TRACK_LIST_SIZE, trackList.size).clear()
         }
@@ -92,25 +73,25 @@ class AdapterForHistoryTracks(
         editor.apply()
     }
 
-    data class Track(
-        val trackName: String?,
-        val artistName: String?,
-        val trackTimeMillis: Long?,
-        val artworkUrl100: String?,
-        val collectionName: String?,
-        val releaseDate: String?,
-        val primaryGenreName: String?,
-        val country: String?
-    ) {
-        fun toTrackData() = TrackData(
-            trackName,
-            artistName,
-            trackTimeMillis,
-            artworkUrl100,
-            collectionName,
-            releaseDate,
-            primaryGenreName,
-            country
-        )
-    }
+//    data class Track(
+//        val trackName: String?,
+//        val artistName: String?,
+//        val trackTimeMillis: Long?,
+//        val artworkUrl100: String?,
+//        val collectionName: String?,
+//        val releaseDate: String?,
+//        val primaryGenreName: String?,
+//        val country: String?
+//    ) {
+//        fun toTrackData() = TrackData(
+//            trackName,
+//            artistName,
+//            trackTimeMillis,
+//            artworkUrl100,
+//            collectionName,
+//            releaseDate,
+//            primaryGenreName,
+//            country
+//        )
+//    }
 }

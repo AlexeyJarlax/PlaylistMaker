@@ -78,14 +78,15 @@
         <ProgressBar
             android:id="@+id/loading_indicator"
             style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminateTint="@color/yp_black_and_yp_white"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="@dimen/dp44"
+            android:layout_height="@dimen/dp44"
+            android:layout_marginTop="@dimen/dp248"
+            android:indeterminateTint="@color/progress_bar"
             app:layout_constraintEnd_toEndOf="@+id/track_recycler_view"
             app:layout_constraintStart_toStartOf="@+id/track_recycler_view"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/yp_text_gray_and_yp_black" />
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
         <include
             android:id="@+id/util_error_box"

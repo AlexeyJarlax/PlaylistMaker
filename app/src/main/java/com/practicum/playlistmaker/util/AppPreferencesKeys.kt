@@ -10,15 +10,10 @@ internal object AppPreferencesKeys { // глобальные объекты
 
     // числовые константы
     const val ALBUM_ROUNDED_CORNERS = 8
-    const val SERVER_PROCESSING_MILLISECONDS: Long = 1500
+    const val SERVER_PROCESSING_MILLISECONDS: Long = 500
     const val HISTORY_TRACK_LIST_SIZE = 10
     const val CLICK_DEBOUNCE_DELAY = 1000L // допустимое количество кликов / секунда
 
-    // состояния плеера
-//    const val STATE_DEFAULT = 0
-//    const val STATE_PREPARED = 1
-//    const val STATE_PLAYING = 2
-//    const val STATE_PAUSED = 3
 }
 
 

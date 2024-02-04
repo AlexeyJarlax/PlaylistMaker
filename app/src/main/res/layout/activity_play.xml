@@ -296,4 +296,18 @@
         app:layout_constraintTop_toBottomOf="@id/content4"
         tools:text="@string/country" />
 
+    <ProgressBar
+        android:id="@+id/loading_indicator"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="@dimen/dp106"
+        android:layout_height="@dimen/dp106"
+        android:layout_marginTop="@dimen/dp6"
+        android:indeterminateTint="@color/progress_bar"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_play"
+        app:layout_constraintEnd_toEndOf="@+id/btn_play"
+        app:layout_constraintStart_toStartOf="@+id/btn_play"
+        app:layout_constraintTop_toBottomOf="@+id/gasket3"
+        tools:visibility="visible" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

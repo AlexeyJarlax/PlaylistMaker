@@ -8,6 +8,7 @@
     <color name="yp_light_gray">#E6E8EB</color>              <!-- █   █  ███  █  █  ████ -->
     <color name="yp_black">#1A1B22</color>
     <color name="black">#FF000000</color>
+    <color name="progress_bar">#6200EE</color>
 
 
     <!-- ЦВЕТОВЫЕ ПАРЫ ДЛЯ ТЕМ И СТИЛЕЙ (день)-->

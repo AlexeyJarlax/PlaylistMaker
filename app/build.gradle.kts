@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+//    kotlin("multiplatform") version "1.9.21" // or kotlin("multiplatform") or any other kotlin plugin
+    kotlin("plugin.serialization") version "1.9.21"
 }
 
 android {
@@ -51,4 +53,5 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
     implementation("com.jakewharton.timber:timber:4.7.1") // для логирования серверных ошибок
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
 }
