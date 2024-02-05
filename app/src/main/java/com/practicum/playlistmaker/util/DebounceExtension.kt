@@ -1,39 +1,28 @@
 package com.practicum.playlistmaker.util
 
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 
-class Debouncer() {
-    private var lastClickTime: Long = 0
-    private var lastInputTime: Long = 0
+class DebounceExtension(private val delayMillis: Long, private val action: () -> Unit) {
+    private val handler = Handler(Looper.getMainLooper())
 
-    fun clickDebounce(): Boolean {
-        val currentTime = System.currentTimeMillis()
-        return if (currentTime - lastClickTime > AppPreferencesKeys.CLICK_DEBOUNCE_DELAY) {
-            lastClickTime = currentTime
-            true
-        } else {
-            false
-        }
+    fun debounce() {
+        handler.removeCallbacksAndMessages(null)
+        handler.postDelayed({
+            action.invoke()
+        }, delayMillis)
     }
 
-//    fun inputDebounce(): Boolean {
-//        val currentTime = System.currentTimeMillis()
-//        return if (currentTime - lastInputTime > 10000) {
-//            lastInputTime = currentTime
-//            true
-//        } else {
-//            false
-//        }
-//    }
-
+    fun getHandler(): Handler {
+        return handler
+    }
 }
 
-fun View.setDebouncedClickListener(onClick: () -> Unit) {
-    val debouncer = Debouncer()
+// расширение для кликера
+fun View.setDebouncedClickListener(delayMillis: Long = AppPreferencesKeys.CLICK_DEBOUNCE_DELAY, onClick: () -> Unit) {
+    val debouncer = DebounceExtension(delayMillis, onClick)
     setOnClickListener {
-        if (debouncer.clickDebounce()) {
-            onClick.invoke()
-        }
+        debouncer.debounce()
     }
 }
-

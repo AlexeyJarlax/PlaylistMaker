@@ -47,7 +47,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.util.AdapterForHistoryTracks
 import com.practicum.playlistmaker.util.AppPreferencesKeys
-import com.practicum.playlistmaker.util.Debouncer
+import com.practicum.playlistmaker.util.DebounceExtension
 
 import com.practicum.playlistmaker.util.openThread
 import com.practicum.playlistmaker.util.setDebouncedClickListener
@@ -141,7 +141,7 @@ class SearchActivity : AppCompatActivity() {
     private val searchRunnable = Runnable {
         utilErrorBox.visibility = View.GONE
         clearTrackAdapter()
-        preparingForSearch(queryInput.text.toString().trim())
+        searchStep2Thread(queryInput.text.toString().trim())
         toastIt("${getString(R.string.search)} ${queryInput.text.toString().trim()}")
     }
     private val handler = Handler(Looper.getMainLooper())
@@ -171,19 +171,12 @@ class SearchActivity : AppCompatActivity() {
                 if (hasFocus && searchText.isEmpty()) {  // обработка ввода без нажатий
                     showHistoryViewsAndFillTrackAdapter()
                 } else {
-                    searchDebounce()
-//                    hideHistoryViewsAndClearTrackAdapter()
-//                    val debouncer = Debouncer()
-//                    if(debouncer.inputDebounce()) {
-//                        preparingForSearch(searchText)
-//                    }
+                    searchWhisDebounce() // пытаемся искать песни во время паузы 2 секунды ввода
                 }
             }
-
             override fun afterTextChanged(editable: Editable?) {
             }
         })
-
         // Фокус + ЖЦ вход в приложение queryInput пуст
         queryInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && queryInput.text.isEmpty()) {
@@ -192,6 +185,14 @@ class SearchActivity : AppCompatActivity() {
                 hideHistoryViewsAndClearTrackAdapter()
             }
         }
+    }
+
+    private val twoSecondDebounceSearch = DebounceExtension(AppPreferencesKeys.SEARCH_DEBOUNCE_DELAY) { // задержка в 2 сек для поиска во время ввода
+        searchStep1Preparation(queryInput.text.toString().trim())
+    }
+
+    private fun searchWhisDebounce() {
+        twoSecondDebounceSearch.debounce()
     }
 
     private fun showHistoryViewsAndFillTrackAdapter() {
@@ -235,10 +236,7 @@ class SearchActivity : AppCompatActivity() {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val searchText = queryInput.text.toString().trim()
                 if (searchText.isNotEmpty()) {
-                    utilErrorBox.visibility = View.GONE
-                    clearTrackAdapter()
-                    preparingForSearch(searchText)
-                    toastIt("${getString(R.string.search)} $searchText")
+                    searchStep1Preparation(searchText)
                 }
                 hideKeyboard()
                 true
@@ -252,11 +250,18 @@ class SearchActivity : AppCompatActivity() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(queryInput.windowToken, 0)
     }
-
-    private fun preparingForSearch(searchText: String) {
+    
+    private fun searchStep1Preparation(searchText: String) {
+    utilErrorBox.visibility = View.GONE
+    clearTrackAdapter()
+    toastIt("${getString(R.string.search)} $searchText")
+    searchStep2Thread(searchText)
+    }
+    
+    private fun searchStep2Thread(searchText: String) {
         openThread {
             Timber.d("===preparingForSearch начинаем в потоке: ${Thread.currentThread().name}")
-            performSearch(searchText) { trackItems ->
+            searchStep3iTunesAPI(searchText) { trackItems ->
                 Timber.d("=== performSearch в потоке: ${Thread.currentThread().name}")
                 runOnUiThread {
                     adapterForAPITracks.updateList(trackItems)
@@ -273,7 +278,7 @@ class SearchActivity : AppCompatActivity() {
     private var lastQuery: String? = null
     private var lastCallback: ((List<Track>) -> Unit)? = null
 
-    private fun performSearch(query: String, callback: (List<Track>) -> Unit) {
+    private fun searchStep3iTunesAPI(query: String, callback: (List<Track>) -> Unit) {
         lastQuery = query        // Сохраняем последний запрос и колбэк
         lastCallback = callback
         Timber.d("Запускаем метод performSearch с параметрами Query: $query и Callback")
@@ -366,7 +371,7 @@ class SearchActivity : AppCompatActivity() {
         retryButton.setDebouncedClickListener {
             lastQuery?.let { query ->
                 lastCallback?.let { callback ->
-                    preparingForSearch(query)
+                    searchStep2Thread(query)
                 }
             }
             utilErrorBox.visibility = View.GONE
@@ -410,7 +415,7 @@ class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         trackTimeTextView.text = track.trackTimeMillis?.let { formatTrackDuration(it) } ?: ""
         track.artworkUrl100?.let { loadImage(it, artworkImageView) }
 
-        playButton.setDebouncedClickListener {
+        playButton.setOnClickListener {
             trackItemClickListener.onTrackItemClick(track)
             val intent = Intent(itemView.context, PlayActivity::class.java)
             val trackJson = Json.encodeToString(Track.serializer(), track)

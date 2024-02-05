@@ -3,24 +3,20 @@ package com.practicum.playlistmaker
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.snackbar.Snackbar
-import com.practicum.playlistmaker.util.AppPreferencesKeys
-import com.practicum.playlistmaker.util.openThread
+import com.practicum.playlistmaker.util.DebounceExtension
+import com.practicum.playlistmaker.util.SecondsCounter
 import com.practicum.playlistmaker.util.setDebouncedClickListener
-import com.practicum.playlistmaker.util.stopLoadingIndicator
-import com.practicum.playlistmaker.util.toast
 import kotlinx.serialization.json.Json
-import timber.log.Timber
+import java.util.Locale
+import java.util.concurrent.TimeUnit
+
 
 class PlayActivity : AppCompatActivity() {
 
-    //    private var track: Track? = null
     private lateinit var btnBackFromSettings: Button
     private lateinit var btnPlay: ImageView
     private lateinit var btnAddToPlaylist: ImageView
@@ -28,8 +24,16 @@ class PlayActivity : AppCompatActivity() {
     private var isPlaying: Boolean = false
     private var isAddedToPlaylist: Boolean = false
     private var isLiked: Boolean = false
-    private var count =
-        0 // заплатка на решение проблемы с появлением Тоста в момент прожатия кнопки
+    private lateinit var trackTime: TextView
+
+    private var playerState = STATE_DEFAULT
+    private var mediaPlayer = MediaPlayer()
+    private var url: String? = null
+    private val debouncer = DebounceExtension(1000) {
+        updatePlaybackTime()
+    }
+    private val handler = debouncer.getHandler()
+    private lateinit var secondsCounter: SecondsCounter
 
     companion object {
         private const val STATE_DEFAULT = 0
@@ -38,56 +42,42 @@ class PlayActivity : AppCompatActivity() {
         private const val STATE_PAUSED = 3
     }
 
-    private var playerState = STATE_DEFAULT
-    private var mediaPlayer = MediaPlayer()
-    private var url: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play)
+
         val trackJson = intent.getStringExtra("trackJson")
         val track = Json.decodeFromString(Track.serializer(), trackJson!!)
-        // Текстово-активичное
-        findViewById<TextView>(R.id.track_name).text = track.trackName
-        findViewById<TextView>(R.id.artist_name).text = track.artistName
-        findViewById<TextView>(R.id.track_time).text =
-            formatTrackDuration(track.trackTimeMillis ?: 0)
-        findViewById<TextView>(R.id.content1).text = formatTrackDuration(track.trackTimeMillis ?: 0)
-        findViewById<TextView>(R.id.content2).text = track.collectionName
-        findViewById<TextView>(R.id.content3).text = track.releaseDate
-        findViewById<TextView>(R.id.content4).text = track.primaryGenreName
-        findViewById<TextView>(R.id.content5).text = track.country
         url = track.previewUrl
-        track.artworkUrl100?.replace("100x100bb.jpg", "512x512bb.jpg")?.let {
-            loadImage(it, findViewById(R.id.track_cover))
-        }
-        // Кнопочно-активичное
+
+        trackTime = findViewById(R.id.track_time)
         btnBackFromSettings = findViewById(R.id.button_back_from_settings)
         btnPlay = findViewById(R.id.btn_play)
         btnAddToPlaylist = findViewById(R.id.btn_add_to_playlist)
         btnLike = findViewById(R.id.btn_like)
+
+        secondsCounter = SecondsCounter { seconds ->
+            trackTime.text = formatTrackDuration(seconds * 1000)
+        }
+
+        preparePlayer()
+        setupPlayButton()
         setupBackButton()
         setupAddToPlaylistButton()
         setupLikeButton()
-
-        // Подготовка к работе обработчиков
-        btnPlay.performClick()
-        btnAddToPlaylist.performClick()
-        btnLike.performClick()
-        count += 1
-
-        // Подготовка плеера
-        preparePlayer()
-        setupPlayButton()
-    } // конец onCreate
+    }
 
     override fun onPause() {
         super.onPause()
         pausePlayer()
+        secondsCounter.stop()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        handler.removeCallbacks(updateProgressRunnable)
         mediaPlayer.release()
+        secondsCounter.stop()
     }
 
     private fun playbackControl() {
@@ -95,9 +85,9 @@ class PlayActivity : AppCompatActivity() {
             STATE_PLAYING -> {
                 pausePlayer()
             }
-
             STATE_PREPARED, STATE_PAUSED -> {
                 startPlayer()
+                updatePlaybackTime()
             }
         }
     }
@@ -105,7 +95,32 @@ class PlayActivity : AppCompatActivity() {
     private fun setupPlayButton() {
         btnPlay.setDebouncedClickListener {
             playbackControl()
+
+            if (isPlaying) {
+                secondsCounter.start()
+            } else {
+                secondsCounter.stop()
+            }
         }
+    }
+
+    private fun updatePlaybackTime() {
+        if (mediaPlayer != null && (mediaPlayer.isPlaying || mediaPlayer.duration > 0)) {
+            val totalDuration = mediaPlayer.duration
+            val currentPosition = mediaPlayer.currentPosition
+            val formattedTime: String = if (mediaPlayer.isPlaying) {
+                formatTrackDuration(currentPosition.toLong())
+            } else {
+                formatTrackDuration(totalDuration.toLong())
+            }
+            trackTime.text = formattedTime
+        }
+    }
+
+    private fun formatTrackDuration(duration: Long): String {
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(duration)
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(minutes)
+        return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
     }
 
     private fun preparePlayer() {
@@ -117,29 +132,24 @@ class PlayActivity : AppCompatActivity() {
                     runOnUiThread {
                         btnPlay.isEnabled = true
                         playerState = STATE_PREPARED
-                        Timber.d("=== preparePlayer() === OnPreparedListener в потоке: ${Thread.currentThread().name}")
-                        stopLoadingIndicator()
+                        updatePlaybackTime()
+                        handler.post(updateProgressRunnable)
                     }
                 }
                 mediaPlayer.setOnCompletionListener {
                     runOnUiThread {
                         btnPlay.setImageResource(R.drawable.ic_btn_play)
                         playerState = STATE_PREPARED
-                        Timber.d("=== preparePlayer() === OnCompletionListener в потоке: ${Thread.currentThread().name}")
                     }
                 }
                 mediaPlayer.setOnErrorListener { mp, what, extra ->
-                    Timber.e("=== preparePlayer() === setOnErrorListener: $what, $extra")
                     runOnUiThread {
-                        toast(getString(R.string.error404))
                         stopLoadingIndicator()
                     }
                     false
                 }
             } catch (e: Exception) {
-                Timber.e(e, "=== preparePlayer() === catch Exception")
                 runOnUiThread {
-                    toast(getString(R.string.error500))
                     stopLoadingIndicator()
                 }
             }
@@ -158,20 +168,19 @@ class PlayActivity : AppCompatActivity() {
         playerState = STATE_PAUSED
     }
 
-    private fun formatTrackDuration(trackTimeMillis: Long): String {
-        val minutes = java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(trackTimeMillis)
-        val seconds =
-            java.util.concurrent.TimeUnit.MILLISECONDS.toSeconds(trackTimeMillis) - java.util.concurrent.TimeUnit.MINUTES.toSeconds(
-                minutes
-            )
-        return String.format("%02d:%02d", minutes, seconds)
+    private val updateProgressRunnable = object : Runnable {
+        override fun run() {
+            debouncer.debounce()
+            handler.postDelayed(this, 1000)
+        }
     }
 
-    private fun loadImage(imageUrl: String, imageView: ImageView) {
-        Glide.with(imageView).load(imageUrl).placeholder(R.drawable.ic_placeholder)
-            .transform(RoundedCorners(AppPreferencesKeys.ALBUM_ROUNDED_CORNERS))
-            .error(R.drawable.ic_placeholder)
-            .into(imageView)
+    private fun stopLoadingIndicator() {
+        // Implementation for stopLoadingIndicator method...
+    }
+
+    private fun openThread(block: () -> Unit) {
+        // Implementation for openThread method...
     }
 
     private fun setupBackButton() {
@@ -182,16 +191,11 @@ class PlayActivity : AppCompatActivity() {
 
     private fun setupAddToPlaylistButton() {
         btnAddToPlaylist.setDebouncedClickListener {
-
             val newImageResource = if (isAddedToPlaylist) {
-                count -= 1
                 R.drawable.ic_btn_add_to_playlist
             } else {
-                count += 1
-                R.drawable.ic_btn_add_to_playlist_done
-            }
-            if (count == 2) {
                 showSnackbar("Плейлист «BeSt SoNg EvEr!» создан")
+                R.drawable.ic_btn_add_to_playlist_done
             }
             btnAddToPlaylist.setImageResource(newImageResource)
             isAddedToPlaylist = !isAddedToPlaylist
