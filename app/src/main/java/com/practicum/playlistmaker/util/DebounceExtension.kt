@@ -13,13 +13,9 @@ class DebounceExtension(private val delayMillis: Long, private val action: () ->
             action.invoke()
         }, delayMillis)
     }
-
-    fun getHandler(): Handler {
-        return handler
-    }
 }
 
-// расширение для кликера
+// расширение для улучшенного кликера
 fun View.setDebouncedClickListener(delayMillis: Long = AppPreferencesKeys.CLICK_DEBOUNCE_DELAY, onClick: () -> Unit) {
     val debouncer = DebounceExtension(delayMillis, onClick)
     setOnClickListener {

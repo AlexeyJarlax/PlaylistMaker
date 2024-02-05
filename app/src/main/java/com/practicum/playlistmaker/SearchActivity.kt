@@ -48,7 +48,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.util.AdapterForHistoryTracks
 import com.practicum.playlistmaker.util.AppPreferencesKeys
 import com.practicum.playlistmaker.util.DebounceExtension
-
 import com.practicum.playlistmaker.util.openThread
 import com.practicum.playlistmaker.util.setDebouncedClickListener
 import com.practicum.playlistmaker.util.stopLoadingIndicator
@@ -109,8 +108,6 @@ class SearchActivity : AppCompatActivity() {
         clearButton = findViewById(R.id.clearButton)
         queryInput = findViewById(R.id.search_edit_text)
         trackRecyclerView = findViewById(R.id.track_recycler_view)
-//        loadingIndicator = findViewById(R.id.loading_indicator)
-//        loadingIndicator.visibility = View.GONE
         utilErrorBox = findViewById<LinearLayout>(R.id.util_error_box)
         searchHistoryNotification = findViewById(R.id.you_were_looking_for)
         killTheHistory = findViewById(R.id.kill_the_history)
@@ -138,18 +135,18 @@ class SearchActivity : AppCompatActivity() {
         trackRecyclerView.adapter = adapterForAPITracks
     }
 
-    private val searchRunnable = Runnable {
-        utilErrorBox.visibility = View.GONE
-        clearTrackAdapter()
-        searchStep2Thread(queryInput.text.toString().trim())
-        toastIt("${getString(R.string.search)} ${queryInput.text.toString().trim()}")
-    }
-    private val handler = Handler(Looper.getMainLooper())
-    private fun searchDebounce() {
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, 2000)
-    }
+//    private val searchRunnable = Runnable {
+//        utilErrorBox.visibility = View.GONE
+//        clearTrackAdapter()
+//        searchStep2Thread(queryInput.text.toString().trim())
+//    }
+//    private val handler = Handler(Looper.getMainLooper())
+//    private fun searchDebounce() {
+//        handler.removeCallbacks(searchRunnable)
+//        handler.postDelayed(searchRunnable, 2000)
+//    }
 
+//************************************************************ ввод в поле поиска и обработка ввода
     private fun queryTextChangedListener() {
         queryInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
@@ -187,7 +184,8 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private val twoSecondDebounceSearch = DebounceExtension(AppPreferencesKeys.SEARCH_DEBOUNCE_DELAY) { // задержка в 2 сек для поиска во время ввода
+    // задержка в 2 сек для поиска во время ввода
+    private val twoSecondDebounceSearch = DebounceExtension(AppPreferencesKeys.SEARCH_DEBOUNCE_DELAY) {
         searchStep1Preparation(queryInput.text.toString().trim())
     }
 
@@ -220,8 +218,6 @@ class SearchActivity : AppCompatActivity() {
 
     private fun clearTrackAdapter() {
         adapterForHistoryTracks.clearHistoryList() // чистит адаптер с историей
-//        trackAdapter.updateList(cleanTrackList)
-//        trackAdapter.clearList()
     }
 
     private fun killTheHistory() {
@@ -254,7 +250,6 @@ class SearchActivity : AppCompatActivity() {
     private fun searchStep1Preparation(searchText: String) {
     utilErrorBox.visibility = View.GONE
     clearTrackAdapter()
-    toastIt("${getString(R.string.search)} $searchText")
     searchStep2Thread(searchText)
     }
     
@@ -263,8 +258,8 @@ class SearchActivity : AppCompatActivity() {
             Timber.d("===preparingForSearch начинаем в потоке: ${Thread.currentThread().name}")
             searchStep3iTunesAPI(searchText) { trackItems ->
                 Timber.d("=== performSearch в потоке: ${Thread.currentThread().name}")
+                adapterForAPITracks.updateList(trackItems)
                 runOnUiThread {
-                    adapterForAPITracks.updateList(trackItems)
                     adapterForAPITracks.setRecyclerView(trackRecyclerView)
                     trackRecyclerView.visibility = View.VISIBLE
                     Timber.d("=== adapter и Recycler в потоке: ${Thread.currentThread().name}")
@@ -274,7 +269,7 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-
+//************************************************************************************** iTunes API
     private var lastQuery: String? = null
     private var lastCallback: ((List<Track>) -> Unit)? = null
 
@@ -391,9 +386,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun backToMain() {
         backButton.setDebouncedClickListener {
-//            if (`ViewExtensions.kt`(context = this).clickDebounce()) {
                 finish()
-//            }
         }
     }
 
@@ -402,6 +395,7 @@ class SearchActivity : AppCompatActivity() {
     }
 }
 
+//******************************************************************************* Adapter и Recycler
 class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val trackNameTextView: TextView = itemView.findViewById(R.id.track_name_text_view)
     private val artistNameTextView: TextView = itemView.findViewById(R.id.artist_name_text_view)
@@ -476,17 +470,6 @@ class AdapterForAPITracks(
     }
 }
 
-//data class TrackData(
-//    val trackName: String?,        // Название
-//    val artistName: String?,       // Исполнитель
-//    val trackTimeMillis: Long?,    // Продолжительность
-//    val artworkUrl100: String?,    // Пикча на обложку
-//    val collectionName: String?,  // Название альбома
-//    val releaseDate: String?,     // Год
-//    val primaryGenreName: String?,// Жанр
-//    val country: String?          // Страна
-//)
-
 data class ITunesTrack(
     val trackName: String?,
     val artistName: String?,
@@ -517,7 +500,6 @@ data class Track(
     @SerialName("country") val country: String?,
     @SerialName("previewUrl") val previewUrl: String?
 ) {
-    // Можно решить, оставить ли этот метод или нет, в зависимости от ваших потребностей.
     fun toTrackData() = Track(
         trackName,
         artistName,

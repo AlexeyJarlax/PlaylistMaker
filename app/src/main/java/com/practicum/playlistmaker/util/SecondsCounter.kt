@@ -9,12 +9,25 @@ class SecondsCounter(private val updateCallback: (Long) -> Unit) {
     private var isRunning = false
     private var elapsedTime = 0L
 
-    private val updateRunnable = object : Runnable {
+    val updateRunnable = object : Runnable {
         override fun run() {
             elapsedTime++
             updateCallback(elapsedTime)
-            mainThreadHandler.postDelayed(this, 1000)
+            mainThreadHandler.postDelayed(this, AppPreferencesKeys.ONE_SECOND)
         }
+    }
+
+    fun handlerRepeater(onThreadComplete: () -> Unit) { // повторятель
+        val handlerRepeater = Handler(Looper.getMainLooper())
+        val runnable = object : Runnable {
+            override fun run() {
+                handlerRepeater.post {
+                    onThreadComplete()
+                }
+                handlerRepeater.postDelayed(this, AppPreferencesKeys.ONE_SECOND)
+            }
+        }
+        handlerRepeater.post(runnable)
     }
 
     fun start() {

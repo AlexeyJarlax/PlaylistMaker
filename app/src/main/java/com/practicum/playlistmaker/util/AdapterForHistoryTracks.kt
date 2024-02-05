@@ -9,7 +9,7 @@ import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.OnTrackItemClickListener
 import com.practicum.playlistmaker.AdapterForAPITracks
 import com.practicum.playlistmaker.Track
-//import com.practicum.playlistmaker.TrackData
+
 
 class AdapterForHistoryTracks(
     private val context: Context,
@@ -72,26 +72,4 @@ class AdapterForHistoryTracks(
         editor.remove(AppPreferencesKeys.KEY_HISTORY_LIST)
         editor.apply()
     }
-
-//    data class Track(
-//        val trackName: String?,
-//        val artistName: String?,
-//        val trackTimeMillis: Long?,
-//        val artworkUrl100: String?,
-//        val collectionName: String?,
-//        val releaseDate: String?,
-//        val primaryGenreName: String?,
-//        val country: String?
-//    ) {
-//        fun toTrackData() = TrackData(
-//            trackName,
-//            artistName,
-//            trackTimeMillis,
-//            artworkUrl100,
-//            collectionName,
-//            releaseDate,
-//            primaryGenreName,
-//            country
-//        )
-//    }
 }
