@@ -11,9 +11,11 @@ OnTrackItemClickListener - интерфейс для обработки исто
 Track@Serializable - класс моделью данных, представляющей информацию о музыкальном треке одним объектом c возможностью упаковываться в джейсончики
 
 === Этапы поиска:
-1. этап: считываем ввод в queryInput.setOnEditorActionListener и queryInput.addTextChangedListener ===> запуск 2 этапа
-2. этап: передаем searchText в fun preparingForSearch для активации loadingIndicator и блокировки кнопок ===> запуск 3 этапа
-3. этап: передаем searchText в fun performSearch => вызываем TrackResponse => заполняем TrackData  ===> вывод списка песен, соответствующих запросу
+1. этап: считываем поле поиска
+1.1 ввод в queryInput.setOnEditorActionListener и кнопка DONE  ===> запуск 2 этапа
+1.2 ввод в queryInput.addTextChangedListener  ===> запуск 2 этапа через 2 секунды
+2. этап: передаем searchText в searchStep1 => searchStep2, для активации progressBar ===> запуск 3 этапа
+3. этап: передаем searchText в searchStep3 => вызываем TrackResponse => заполняем Track  ===> вывод списка песен, соответствующих запросу
 3.1 : performSearch => [возникла ошибка с вызовом TrackResponse] => Запускаем метод solvingConnectionProblem() ===> Запускаем повторно 2 этап
 
 === Объект track содержит:
@@ -30,8 +32,6 @@ val previewUrl: String?         // ссылка на 30 сек. фрагмент
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -135,17 +135,6 @@ class SearchActivity : AppCompatActivity() {
         trackRecyclerView.adapter = adapterForAPITracks
     }
 
-//    private val searchRunnable = Runnable {
-//        utilErrorBox.visibility = View.GONE
-//        clearTrackAdapter()
-//        searchStep2Thread(queryInput.text.toString().trim())
-//    }
-//    private val handler = Handler(Looper.getMainLooper())
-//    private fun searchDebounce() {
-//        handler.removeCallbacks(searchRunnable)
-//        handler.postDelayed(searchRunnable, 2000)
-//    }
-
 //************************************************************ ввод в поле поиска и обработка ввода
     private fun queryTextChangedListener() {
         queryInput.addTextChangedListener(object : TextWatcher {
@@ -190,6 +179,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun searchWhisDebounce() {
+        hideHistoryViewsAndClearTrackAdapter()
         twoSecondDebounceSearch.debounce()
     }
 

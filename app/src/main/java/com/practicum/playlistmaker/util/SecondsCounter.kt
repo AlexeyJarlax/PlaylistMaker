@@ -3,6 +3,7 @@ package com.practicum.playlistmaker.util
 import android.os.Handler
 import android.os.Looper
 
+//****************************************** секундный счетчик на обработку времени проигрывания
 class SecondsCounter(private val updateCallback: (Long) -> Unit) {
 
     private val mainThreadHandler = Handler(Looper.getMainLooper())

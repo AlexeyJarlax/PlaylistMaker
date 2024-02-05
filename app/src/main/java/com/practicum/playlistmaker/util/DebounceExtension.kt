@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 
+//****************************************** дебаунсер для поиска во время ввода и защиты от лишних кликов
 class DebounceExtension(private val delayMillis: Long, private val action: () -> Unit) {
     private val handler = Handler(Looper.getMainLooper())
 
