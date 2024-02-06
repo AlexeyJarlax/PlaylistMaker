@@ -8,26 +8,30 @@
     <color name="yp_light_gray">#E6E8EB</color>              <!-- █   █  ███  █  █  ████ -->
     <color name="yp_black">#1A1B22</color>
     <color name="black">#FF000000</color>
+    <color name="progress_bar">#6200EE</color>
 
 
     <!-- ЦВЕТОВЫЕ ПАРЫ ДЛЯ ТЕМ И СТИЛЕЙ (день)-->
     <!-- цвет фона главного меню -->
-    <color name="yp_blue__yp_black">@color/yp_blue</color>
+    <color name="yp_blue_and_yp_black">@color/yp_blue</color>
     <!-- цвет кнопок главного меню -->
-    <color name="yp_white__yp_white">@color/yp_white</color>
+    <color name="yp_white_and_yp_white">@color/yp_white</color>
     <!-- цвет шрифта главного меню, иконок главного меню -->
-    <color name="yp_black__yp_black">@color/yp_black</color>
+    <color name="yp_black_and_yp_black">@color/yp_black</color>
     <!-- цвет иконок с ошибкой, цвет шрифта вторичного меню, название песен-->
-    <color name="yp_black__yp_white">@color/yp_black</color>
+    <color name="yp_black_and_yp_white">@color/yp_black</color>
     <!-- цвет кнопок вторичного меню, фон вторичного меню -->
-    <color name="yp_white__yp_black">@color/yp_white</color>
+    <color name="yp_white_and_yp_black">@color/yp_white</color>
     <!-- цвет иконок вторичного меню, имени автора и продолжительности трека -->
-    <color name="yp_text_gray__yp_white">@color/yp_text_gray</color>
+    <color name="yp_text_gray_and_yp_white">@color/yp_text_gray</color>
     <!-- цвет тумблера свитч, цвет поисковой строки и текста в ней -->
-    <color name="yp_text_gray__yp_blue">@color/yp_text_gray</color>
-    <color name="yp_light_gray__yp_blue_light">@color/yp_light_gray</color>
+    <color name="yp_text_gray_and_yp_blue">@color/yp_text_gray</color>
+    <!-- цвет строк в проигрывателе-->
+    <color name="yp_text_gray_and_yp_text_gray">@color/yp_text_gray</color>
+
+    <color name="yp_light_gray_and_yp_blue_light">@color/yp_light_gray</color>
     <!-- цвет поисковой строки с текстом и иконками -->
-    <color name="yp_text_gray__yp_black">@color/yp_text_gray</color>
+    <color name="yp_text_gray_and_yp_black">@color/yp_text_gray</color>
     <!-- цвет подложки для закругления углов поисковой строки -->
-    <color name="yp_light_gray__yp_white">@color/yp_light_gray</color>
+    <color name="yp_light_gray_and_yp_white">@color/yp_light_gray</color>
 </resources>

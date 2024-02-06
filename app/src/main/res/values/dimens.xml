@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="text_size_sp11">11sp</dimen>
+    <dimen name="text_size_sp13">13sp</dimen>
     <dimen name="text_size_sp14">14sp</dimen>
     <dimen name="text_size_sp16">16sp</dimen>
     <dimen name="text_size_sp19">19sp</dimen>
@@ -8,13 +9,25 @@
 
     <dimen name="button_weight">1</dimen>
     <dimen name="z">0dp</dimen>
+    <dimen name="dp1">1dp</dimen>
+    <dimen name="dp4">4dp</dimen>
+    <dimen name="dp5">5dp</dimen>
+    <dimen name="dp6">6dp</dimen>
     <dimen name="dp8">8dp</dimen>
     <dimen name="dp12">12dp</dimen>
     <dimen name="dp16">16dp</dimen>
     <dimen name="dp24">24dp</dimen>
     <dimen name="dp36">36dp</dimen>
     <dimen name="dp44">44dp</dimen>
+
+    <dimen name="dp51">51dp</dimen>
     <dimen name="dp60">60dp</dimen>
     <dimen name="dp77">77dp</dimen>
     <dimen name="dp91">91dp</dimen>
+
+    <dimen name="dp100">100dp</dimen>
+    <dimen name="dp248">248dp</dimen>
+    <dimen name="maxEms">50</dimen>
+    <dimen name="dp108">108dp</dimen>
+
 </resources>

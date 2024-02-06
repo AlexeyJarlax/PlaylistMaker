@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp60"
-    android:background="@color/yp_white__yp_black"
+    android:background="@color/yp_white_and_yp_black"
     android:gravity="center"
+    android:id="@+id/util_item_track"
     android:orientation="horizontal"
     android:paddingStart="@dimen/dp12">
 
@@ -70,6 +71,6 @@
         style="@style/TrackStyleCustom"
         android:layout_width="@dimen/dp24"
         android:layout_height="@dimen/dp24"
-        android:src="@drawable/ic_arrow_forward" />
+        android:src="@drawable/ic_btn_arrow_forward" />
 
 </LinearLayout>
