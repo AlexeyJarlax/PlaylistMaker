@@ -92,7 +92,7 @@ class SearchActivity : AppCompatActivity() {
         Timber.plant(Timber.DebugTree()) // для логирования ошибок
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-        setupOneLineViews()
+        initViews()
         clearButton()
         backToMain()
         callAdapterForHistoryTracks()
@@ -103,7 +103,7 @@ class SearchActivity : AppCompatActivity() {
         killTheHistory()
     }
 
-    private fun setupOneLineViews() {
+    private fun initViews() {
         backButton = findViewById(R.id.button_back_from_search_activity)
         clearButton = findViewById(R.id.clearButton)
         queryInput = findViewById(R.id.search_edit_text)

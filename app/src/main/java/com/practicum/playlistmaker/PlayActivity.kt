@@ -1,14 +1,13 @@
 package com.practicum.playlistmaker
 
-import android.media.MediaPlayer
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import android.media.MediaPlayer
 import android.widget.ImageView
-import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.snackbar.Snackbar
+import com.practicum.playlistmaker.databinding.ActivityPlayBinding
 import com.practicum.playlistmaker.util.AppPreferencesKeys
 import com.practicum.playlistmaker.util.SecondsCounter
 import com.practicum.playlistmaker.util.setDebouncedClickListener
@@ -19,21 +18,17 @@ import kotlinx.serialization.json.Json
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
-
 class PlayActivity : AppCompatActivity() {
 
-    private lateinit var btnBackFromSettings: Button
-    private lateinit var btnPlay: ImageView
-    private lateinit var btnAddToPlaylist: ImageView
-    private lateinit var btnLike: ImageView
+    private lateinit var binding: ActivityPlayBinding
+    private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var secondsCounter: SecondsCounter
+
     private var isPlaying: Boolean = false
     private var isAddedToPlaylist: Boolean = false
     private var isLiked: Boolean = false
-    private lateinit var trackTime: TextView
     private var playerState = STATE_DEFAULT
-    private var mediaPlayer = MediaPlayer()
     private var url: String? = null
-    private lateinit var secondsCounter: SecondsCounter
 
     companion object {
         private const val STATE_DEFAULT = 0
@@ -44,37 +39,35 @@ class PlayActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_play)
+        binding = ActivityPlayBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         val trackJson = intent.getStringExtra("trackJson")
         val track = Json.decodeFromString(Track.serializer(), trackJson!!)
         url = track.previewUrl
-        findViewById<TextView>(R.id.track_name).text = track.trackName
-        findViewById<TextView>(R.id.artist_name).text = track.artistName
-        findViewById<TextView>(R.id.content1).text = formatTrackDuration(track.trackTimeMillis ?: 0)
-        findViewById<TextView>(R.id.content2).text = track.collectionName
-        findViewById<TextView>(R.id.content3).text = track.releaseDate
-        findViewById<TextView>(R.id.content4).text = track.primaryGenreName
-        findViewById<TextView>(R.id.content5).text = track.country
-        track.artworkUrl100?.replace("100x100bb.jpg", "512x512bb.jpg")?.let {
-            loadImage(it, findViewById(R.id.track_cover))
-        }
-        trackTime = findViewById(R.id.track_time)
-        trackTime.text = formatTrackDuration(track.trackTimeMillis ?: 0)
-        btnBackFromSettings = findViewById(R.id.button_back_from_settings)
-        btnPlay = findViewById(R.id.btn_play)
-        btnAddToPlaylist = findViewById(R.id.btn_add_to_playlist)
-        btnLike = findViewById(R.id.btn_like)
-
-        secondsCounter = SecondsCounter { seconds ->
-            trackTime.text = formatTrackDuration(seconds * 1000)
-        }
+        loadImage(track.artworkUrl100?.replace("100x100bb.jpg", "512x512bb.jpg"), binding.trackCover)
+        bindingView(track)
         setupBackButton()
         setupAddToPlaylistButton()
         setupLikeButton()
         preparePlayer()
         setupPlayButton()
-    } // конец onCreate
+    }
+
+    fun bindingView(track: Track) {
+        binding.trackName.text = track.trackName
+        binding.artistName.text = track.artistName
+        binding.contentDuration.text = formatTrackDuration(track.trackTimeMillis ?: 0)
+        binding.contentAlbum.text = track.collectionName
+        binding.contentYear.text = track.releaseDate
+        binding.contentGenre.text = track.primaryGenreName
+        binding.contentCountry.text = track.country
+        binding.trackTime.text = formatTrackDuration(track.trackTimeMillis ?: 0)
+        secondsCounter = SecondsCounter { seconds ->
+            binding.trackTime.text = formatTrackDuration(seconds * 1000)
+        }
+    }
 
     override fun onPause() {
         super.onPause()
@@ -97,7 +90,7 @@ class PlayActivity : AppCompatActivity() {
 
             STATE_PREPARED, STATE_PAUSED -> {
                 startPlayer()
-                secondsCounter.handlerRepeater { // цикл повторов с обновлением индикатора времени
+                secondsCounter.handlerRepeater {
                     if (playerState == STATE_PLAYING) {
                         updatePlaybackTime(mediaPlayer.currentPosition.toLong())
                     }
@@ -109,12 +102,12 @@ class PlayActivity : AppCompatActivity() {
     private fun updatePlaybackTime(duration: Long) {
         if (mediaPlayer.isPlaying) {
             val formattedTime = formatTrackDuration(duration)
-            trackTime.text = formattedTime
+            binding.trackTime.text = formattedTime
         }
     }
 
     private fun setupPlayButton() {
-        btnPlay.setDebouncedClickListener {
+        binding.btnPlay.setDebouncedClickListener {
             playbackControl()
 
             if (isPlaying) {
@@ -135,18 +128,19 @@ class PlayActivity : AppCompatActivity() {
     private fun preparePlayer() {
         startLoadingIndicator()
         try {
+            mediaPlayer = MediaPlayer()
             mediaPlayer.setDataSource(url)
             mediaPlayer.prepareAsync()
             mediaPlayer.setOnPreparedListener {
                 runOnUiThread {
-                    btnPlay.isEnabled = true
+                    binding.btnPlay.isEnabled = true
                     playerState = STATE_PREPARED
                     stopLoadingIndicator()
                 }
             }
             mediaPlayer.setOnCompletionListener {
                 runOnUiThread {
-                    btnPlay.setImageResource(R.drawable.ic_btn_play)
+                    binding.btnPlay.setImageResource(R.drawable.ic_btn_play)
                     playerState = STATE_PREPARED
                 }
             }
@@ -162,22 +156,21 @@ class PlayActivity : AppCompatActivity() {
                 stopLoadingIndicator()
             }
         }
-
     }
 
     private fun startPlayer() {
         mediaPlayer.start()
-        btnPlay.setImageResource(R.drawable.ic_btn_play_done)
+        binding.btnPlay.setImageResource(R.drawable.ic_btn_play_done)
         playerState = STATE_PLAYING
     }
 
     private fun pausePlayer() {
         mediaPlayer.pause()
-        btnPlay.setImageResource(R.drawable.ic_btn_play)
+        binding.btnPlay.setImageResource(R.drawable.ic_btn_play)
         playerState = STATE_PAUSED
     }
 
-    private fun loadImage(imageUrl: String, imageView: ImageView) {
+    private fun loadImage(imageUrl: String?, imageView: ImageView) {
         Glide.with(imageView).load(imageUrl).placeholder(R.drawable.ic_placeholder)
             .transform(RoundedCorners(AppPreferencesKeys.ALBUM_ROUNDED_CORNERS))
             .error(R.drawable.ic_placeholder)
@@ -185,39 +178,39 @@ class PlayActivity : AppCompatActivity() {
     }
 
     private fun setupBackButton() {
-        btnBackFromSettings.setDebouncedClickListener {
+        binding.buttonBackFromSettings.setDebouncedClickListener {
             finish()
         }
     }
 
     private fun setupAddToPlaylistButton() {
-        btnAddToPlaylist.setDebouncedClickListener {
+        binding.btnAddToPlaylist.setDebouncedClickListener {
             val newImageResource = if (isAddedToPlaylist) {
                 R.drawable.ic_btn_add_to_playlist
             } else {
                 showSnackbar("Плейлист «BeSt SoNg EvEr!» создан")
                 R.drawable.ic_btn_add_to_playlist_done
             }
-            btnAddToPlaylist.setImageResource(newImageResource)
+            binding.btnAddToPlaylist.setImageResource(newImageResource)
             isAddedToPlaylist = !isAddedToPlaylist
         }
     }
 
     private fun setupLikeButton() {
-        btnLike.setDebouncedClickListener {
+        binding.btnLike.setDebouncedClickListener {
             val newImageResource = if (isLiked) {
                 R.drawable.ic_btn_like_done
             } else {
                 R.drawable.ic_btn_like
             }
-            btnLike.setImageResource(newImageResource)
+            binding.btnLike.setImageResource(newImageResource)
             isLiked = !isLiked
         }
     }
 
     private fun showSnackbar(message: String) {
         val snackbar = Snackbar.make(
-            findViewById(R.id.title3),
+            binding.titleYear,
             message,
             Snackbar.LENGTH_SHORT
         )

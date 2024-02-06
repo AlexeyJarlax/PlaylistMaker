@@ -19,7 +19,7 @@ class SettingsActivity : AppCompatActivity() {
         UtilThemeManager.applyTheme(this)
         setContentView(R.layout.activity_settings)
 
-        val back = findViewById<Button>(R.id.button_back_from_settings) // КНОПКА НАЗАД
+        val back = findViewById<Button>(R.id.buttonBackFromSettings) // КНОПКА НАЗАД
         back.setDebouncedClickListener {
             finish()
         }

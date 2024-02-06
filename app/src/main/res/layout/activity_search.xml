@@ -81,7 +81,7 @@
             android:layout_width="@dimen/dp44"
             android:layout_height="@dimen/dp44"
             android:layout_marginTop="@dimen/dp248"
-            android:indeterminateTint="@color/progress_bar"
+            android:indeterminateTint="@color/yp_blue_and_yp_blue"
             app:layout_constraintEnd_toEndOf="@+id/track_recycler_view"
             app:layout_constraintStart_toStartOf="@+id/track_recycler_view"
             app:layout_constraintTop_toTopOf="parent"
