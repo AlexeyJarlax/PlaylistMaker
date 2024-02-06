@@ -399,7 +399,7 @@ class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         trackTimeTextView.text = track.trackTimeMillis?.let { formatTrackDuration(it) } ?: ""
         track.artworkUrl100?.let { loadImage(it, artworkImageView) }
 
-        playButton.setOnClickListener {
+        playButton.setDebouncedClickListener {
             trackItemClickListener.onTrackItemClick(track)
             val intent = Intent(itemView.context, PlayActivity::class.java)
             val trackJson = Json.encodeToString(Track.serializer(), track)
