@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.util
+package com.practicum.playlistmaker.domain.models
 
 // темы и стили
 

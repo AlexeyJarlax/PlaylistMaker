@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -7,13 +7,15 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.snackbar.Snackbar
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayBinding
-import com.practicum.playlistmaker.util.AppPreferencesKeys
-import com.practicum.playlistmaker.util.SecondsCounter
-import com.practicum.playlistmaker.util.setDebouncedClickListener
-import com.practicum.playlistmaker.util.startLoadingIndicator
-import com.practicum.playlistmaker.util.stopLoadingIndicator
-import com.practicum.playlistmaker.util.toast
+import com.practicum.playlistmaker.domain.models.AppPreferencesKeys
+import com.practicum.playlistmaker.domain.impl.SecondsCounter
+import com.practicum.playlistmaker.domain.impl.setDebouncedClickListener
+import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.presentation.startLoadingIndicator
+import com.practicum.playlistmaker.presentation.stopLoadingIndicator
+import com.practicum.playlistmaker.presentation.toast
 import kotlinx.serialization.json.Json
 import java.util.Locale
 import java.util.concurrent.TimeUnit

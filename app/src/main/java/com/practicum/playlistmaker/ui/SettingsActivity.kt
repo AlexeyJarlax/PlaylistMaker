@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -7,8 +7,9 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import com.practicum.playlistmaker.util.UtilThemeManager
-import com.practicum.playlistmaker.util.setDebouncedClickListener
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.domain.models.UtilThemeManager
+import com.practicum.playlistmaker.domain.impl.setDebouncedClickListener
 
 class SettingsActivity : AppCompatActivity() {
 

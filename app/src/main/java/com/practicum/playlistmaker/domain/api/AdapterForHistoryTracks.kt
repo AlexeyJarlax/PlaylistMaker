@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.util
+package com.practicum.playlistmaker.domain.api
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -6,9 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.practicum.playlistmaker.OnTrackItemClickListener
-import com.practicum.playlistmaker.AdapterForAPITracks
-import com.practicum.playlistmaker.Track
+import com.practicum.playlistmaker.domain.models.AppPreferencesKeys
+import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.ui.OnTrackItemClickListener
+import com.practicum.playlistmaker.ui.AdapterForAPITracks
 
 
 class AdapterForHistoryTracks(

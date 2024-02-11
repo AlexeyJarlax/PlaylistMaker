@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.ui
 
 import android.content.Intent
 import android.os.Build
@@ -6,8 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
-import com.practicum.playlistmaker.util.UtilThemeManager
-import com.practicum.playlistmaker.util.setDebouncedClickListener
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.domain.models.UtilThemeManager
+import com.practicum.playlistmaker.domain.impl.setDebouncedClickListener
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

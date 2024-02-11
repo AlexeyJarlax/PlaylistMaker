@@ -28,24 +28,24 @@
         tools:targetApi="31">
 
         <activity
-            android:name=".PlayActivity"
+            android:name=".ui.PlayActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SearchActivity"
+            android:name=".ui.SearchActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MedialabActivity"
+            android:name=".ui.MedialabActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".ui.SettingsActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MyApp" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>

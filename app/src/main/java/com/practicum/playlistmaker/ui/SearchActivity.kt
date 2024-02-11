@@ -1,14 +1,14 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.ui
 
 /* === Памятка о содержании файла:
 SearchActivity - активити и вся обработка поискового запроса юзера.
 UtilTrackViewHolder - холдер для RecyclerView, отображающий информацию о треках.
  AdapterForAPITracks - адаптер для RecyclerView, отображающий информацию о треках.
-iTunesApiService - интерфейс для iTunes Search API.
+
 TrackResponse - класс данных, представляющий ответ от iTunes Search API.
 ITunesTrack - класс данных для преобразования ответа iTunes Search API в список объектов TrackData.
 OnTrackItemClickListener - интерфейс для обработки истории
-Track@Serializable - класс моделью данных, представляющей информацию о музыкальном треке одним объектом c возможностью упаковываться в джейсончики
+
 
 === Этапы поиска:
 1. этап: считываем поле поиска
@@ -17,18 +17,8 @@ Track@Serializable - класс моделью данных, представл�
 2. этап: передаем searchText в searchStep1 => searchStep2, для активации progressBar ===> запуск 3 этапа
 3. этап: передаем searchText в searchStep3 => вызываем TrackResponse => заполняем Track  ===> вывод списка песен, соответствующих запросу
 3.1 : performSearch => [возникла ошибка с вызовом TrackResponse] => Запускаем метод solvingConnectionProblem() ===> Запускаем повторно 2 этап
-
-=== Объект track содержит:
-val trackName: String?          // Название
-val artistName: String?         // Исполнитель
-val trackTimeMillis: Long?      // Продолжительность
-val artworkUrl100: String?      // Пикча на обложку
-val collectionName: String?     // Название альбома
-val releaseDate: String?        // Год
-val primaryGenreName: String?   // Жанр
-val country: String?            // Страна
-val previewUrl: String?         // ссылка на 30 сек. фрагмент
 */
+
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -45,35 +35,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.practicum.playlistmaker.util.AdapterForHistoryTracks
-import com.practicum.playlistmaker.util.AppPreferencesKeys
-import com.practicum.playlistmaker.util.DebounceExtension
-import com.practicum.playlistmaker.util.openThread
-import com.practicum.playlistmaker.util.setDebouncedClickListener
-import com.practicum.playlistmaker.util.stopLoadingIndicator
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Query
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.data.dto.ITunesTrack
+import com.practicum.playlistmaker.data.network.searchStep3iTunesAPI
+import com.practicum.playlistmaker.domain.api.AdapterForHistoryTracks
+import com.practicum.playlistmaker.domain.models.AppPreferencesKeys
+import com.practicum.playlistmaker.domain.impl.DebounceExtension
+import com.practicum.playlistmaker.presentation.openThread
+import com.practicum.playlistmaker.domain.impl.setDebouncedClickListener
+import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.presentation.stopLoadingIndicator
 import timber.log.Timber
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import java.time.format.DateTimeParseException
 
 class SearchActivity : AppCompatActivity() {
 
-    private val iTunesSearch = "https://itunes.apple.com"
-    private val retrofit =
-        Retrofit.Builder().baseUrl(iTunesSearch).addConverterFactory(GsonConverterFactory.create())
-            .build()
-    private val iTunesSearchAPI = retrofit.create(iTunesApiService::class.java)
     private var hasFocus = true
     private lateinit var queryInput: EditText
     private lateinit var clearButton: ImageButton
@@ -92,6 +69,7 @@ class SearchActivity : AppCompatActivity() {
         Timber.plant(Timber.DebugTree()) // для логирования ошибок
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+//        val apiService = NetworkService.iTunesApiService
         initViews()
         clearButton()
         backToMain()
@@ -101,6 +79,7 @@ class SearchActivity : AppCompatActivity() {
         queryInputListener()
         fillTrackAdapter()
         killTheHistory()
+
     }
 
     private fun initViews() {
@@ -242,11 +221,12 @@ class SearchActivity : AppCompatActivity() {
     clearTrackAdapter()
     searchStep2Thread(searchText)
     }
-    
+
     private fun searchStep2Thread(searchText: String) {
         openThread {
+//            val apiService = NetworkService.iTunesApiService // DATA LAYER
             Timber.d("===preparingForSearch начинаем в потоке: ${Thread.currentThread().name}")
-            searchStep3iTunesAPI(searchText) { trackItems ->
+            searchStep3iTunesAPI(searchText, this) { trackItems ->
                 Timber.d("=== performSearch в потоке: ${Thread.currentThread().name}")
                 adapterForAPITracks.updateList(trackItems)
                 runOnUiThread {
@@ -257,115 +237,6 @@ class SearchActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-//************************************************************************************** iTunes API
-    private var lastQuery: String? = null
-    private var lastCallback: ((List<Track>) -> Unit)? = null
-
-    private fun searchStep3iTunesAPI(query: String, callback: (List<Track>) -> Unit) {
-        lastQuery = query        // Сохраняем последний запрос и колбэк
-        lastCallback = callback
-        Timber.d("Запускаем метод performSearch с параметрами Query: $query и Callback")
-
-        iTunesSearchAPI.search(query).enqueue(object : Callback<TrackResponse> {
-            override fun onResponse(call: Call<TrackResponse>, response: Response<TrackResponse>) {
-                if (response.isSuccessful) {
-                    val trackResponse = response.body()
-                    val trackData = if (trackResponse?.results?.isNotEmpty() == true) {
-                        // Преобразуем результаты в список объектов TrackData
-                        trackResponse.results.map { track ->
-                            Timber.d("Метод performSearch => response.isSuccessful! track.trackName:${track.trackName}")
-                            val releaseDateTime = try {
-                                track.releaseDate?.let {
-                                    LocalDateTime.parse(it, DateTimeFormatter.ISO_DATE_TIME)
-                                } ?: LocalDateTime.MIN // Если releaseDate == null, используем минимальное значение LocalDateTime
-                            } catch (e: DateTimeParseException) {
-                                Timber.e(e, "Ошибка при разборе даты: ${track.releaseDate}")
-                                LocalDateTime.MIN
-                            }
-
-                            Track(
-                                track.trackName ?: "",
-                                track.artistName ?: "",
-                                track.trackTimeMillis ?: 0,
-                                track.artworkUrl100 ?: "",
-                                track.collectionName ?: "",
-                                releaseDateTime.year.toString(),
-                                track.primaryGenreName ?: "",
-                                track.country ?: "",
-                                track.previewUrl ?: ""
-                            )
-                        }
-                    } else {
-                        Timber.d("Метод performSearch => response.isSuccessful! => emptyList() таких песен нет")
-                        solvingAbsentProblem() // вызываем заглушку о пустом листе запроса
-                        emptyList()
-                    }
-
-                    callback(trackData)         // Вызываем колбэк с полученными данными
-                    Timber.d("Метод performSearch => response.isSuccessful! => callback(trackData): $trackData")
-                } else {
-                    val error = when (response.code()) {
-                        400 -> getString(R.string.error400)
-                        401 -> getString(R.string.error401)
-                        403 -> getString(R.string.error403)
-                        404 -> getString(R.string.error404)
-                        500 -> getString(R.string.error500)
-                        503 -> getString(R.string.error503)
-                        else -> getString(R.string.error0)
-                    }
-                    Timber.d(error)
-                    toastIt(error)
-                    onFailure(call, Throwable(error))
-                }
-            }
-
-            override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                solvingConnectionProblem()
-                val trackData = emptyList<Track>()
-                callback(trackData)
-            }
-        })
-    }
-
-    private fun solvingAbsentProblem() {
-//        loadingIndicator.visibility = View.GONE
-        val errorIcon = findViewById<ImageView>(R.id.error_icon)
-        val errorTextWeb = findViewById<TextView>(R.id.error_text_web)
-        errorIcon.setImageResource(R.drawable.ic_error_notfound)
-        errorTextWeb.text = resources.getString(R.string.nothing_was_found)
-        val retryButton = findViewById<Button>(R.id.retry_button)
-        retryButton.visibility = View.GONE // тут кнопка не нужна
-        utilErrorBox.visibility = View.VISIBLE
-        utilErrorBox.setDebouncedClickListener {
-            utilErrorBox.visibility = View.GONE
-        }
-    }
-
-    private fun solvingConnectionProblem() {
-//        loadingIndicator.visibility = View.GONE
-        val errorIcon = findViewById<ImageView>(R.id.error_icon)
-        val errorTextWeb = findViewById<TextView>(R.id.error_text_web)
-        errorIcon.setImageResource(R.drawable.ic_error_internet)
-        errorTextWeb.text = resources.getString(R.string.error_text_web)
-        val retryButton = findViewById<Button>(R.id.retry_button)
-        retryButton.visibility = View.VISIBLE
-        utilErrorBox.visibility = View.VISIBLE
-
-        retryButton.setDebouncedClickListener {
-            lastQuery?.let { query ->
-                lastCallback?.let { callback ->
-                    searchStep2Thread(query)
-                }
-            }
-            utilErrorBox.visibility = View.GONE
-        }
-    }
-
-    interface iTunesApiService {
-        @GET("search?entity=song")
-        fun search(@Query("term") text: String): Call<TrackResponse>
     }
 
     private fun clearButton() {
@@ -380,9 +251,6 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun toastIt(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
 }
 
 //******************************************************************************* Adapter и Recycler
@@ -460,46 +328,9 @@ class AdapterForAPITracks(
     }
 }
 
-data class ITunesTrack(
-    val trackName: String?,
-    val artistName: String?,
-    val trackTimeMillis: Long?,
-    val artworkUrl100: String?,
-    val collectionName: String?,
-    val releaseDate: String?,
-    val primaryGenreName: String?,
-    val country: String?,
-    val previewUrl: String?
-)
-
 data class TrackResponse(val results: List<ITunesTrack>)
 
 interface OnTrackItemClickListener {
     fun onTrackItemClick(track: Track)
-}
-
-@Serializable
-data class Track(
-    @SerialName("trackName") val trackName: String?,
-    @SerialName("artistName") val artistName: String?,
-    @SerialName("trackTimeMillis") val trackTimeMillis: Long?,
-    @SerialName("artworkUrl100") val artworkUrl100: String?,
-    @SerialName("collectionName") val collectionName: String?,
-    @SerialName("releaseDate") val releaseDate: String?,
-    @SerialName("primaryGenreName") val primaryGenreName: String?,
-    @SerialName("country") val country: String?,
-    @SerialName("previewUrl") val previewUrl: String?
-) {
-    fun toTrackData() = Track(
-        trackName,
-        artistName,
-        trackTimeMillis,
-        artworkUrl100,
-        collectionName,
-        releaseDate,
-        primaryGenreName,
-        country,
-        previewUrl
-    )
 }
 

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/FrontMenuLayout"
-    tools:context=".MainActivity">
+    tools:context=".ui.MainActivity">
 
     <TextView
         android:id="@+id/title"
