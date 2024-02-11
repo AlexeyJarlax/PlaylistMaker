@@ -4,8 +4,6 @@ package com.practicum.playlistmaker.ui
 SearchActivity - активити и вся обработка поискового запроса юзера.
 UtilTrackViewHolder - холдер для RecyclerView, отображающий информацию о треках.
  AdapterForAPITracks - адаптер для RecyclerView, отображающий информацию о треках.
-TrackResponse - класс данных, представляющий ответ от iTunes Search API.
-ITunesTrack - класс данных для преобразования ответа iTunes Search API в список объектов TrackData.
 OnTrackItemClickListener - интерфейс для обработки истории
 
 
@@ -34,16 +32,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.practicum.playlistmaker.Creator
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.data.dto.ITunesTrack
-import com.practicum.playlistmaker.data.network.searchStep3iTunesAPI
 import com.practicum.playlistmaker.domain.api.AdapterForHistoryTracks
+import com.practicum.playlistmaker.domain.api.TrackInteractor
 import com.practicum.playlistmaker.domain.models.AppPreferencesKeys
 import com.practicum.playlistmaker.domain.impl.DebounceExtension
 import com.practicum.playlistmaker.presentation.openThread
 import com.practicum.playlistmaker.domain.impl.setDebouncedClickListener
 import com.practicum.playlistmaker.domain.models.Track
 import com.practicum.playlistmaker.presentation.buttonBack
+import com.practicum.playlistmaker.presentation.startLoadingIndicator
 import com.practicum.playlistmaker.presentation.stopLoadingIndicator
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -108,7 +107,7 @@ class SearchActivity : AppCompatActivity() {
         trackRecyclerView.adapter = adapterForAPITracks
     }
 
-//************************************************************ ввод в поле поиска и обработка ввода
+    //************************************************************ ввод в поле поиска и обработка ввода
     private fun queryTextChangedListener() {
         queryInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
@@ -133,6 +132,7 @@ class SearchActivity : AppCompatActivity() {
                     searchWhisDebounce() // пытаемся искать песни во время паузы 2 секунды ввода
                 }
             }
+
             override fun afterTextChanged(editable: Editable?) {
             }
         })
@@ -147,9 +147,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     // задержка в 2 сек для поиска во время ввода
-    private val twoSecondDebounceSearch = DebounceExtension(AppPreferencesKeys.SEARCH_DEBOUNCE_DELAY) {
-        searchStep1Preparation(queryInput.text.toString().trim())
-    }
+    private val twoSecondDebounceSearch =
+        DebounceExtension(AppPreferencesKeys.SEARCH_DEBOUNCE_DELAY) {
+            searchStep1Preparation(queryInput.text.toString().trim())
+        }
 
     private fun searchWhisDebounce() {
         hideHistoryViewsAndClearTrackAdapter()
@@ -209,27 +210,38 @@ class SearchActivity : AppCompatActivity() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(queryInput.windowToken, 0)
     }
-    
+
     private fun searchStep1Preparation(searchText: String) {
-    utilErrorBox.visibility = View.GONE
-    clearTrackAdapter()
-    searchStep2Thread(searchText)
+        utilErrorBox.visibility = View.GONE
+        clearTrackAdapter()
+        searchStep2Thread(searchText)
     }
 
     private fun searchStep2Thread(searchText: String) {
         openThread {
-//            val apiService = NetworkService.iTunesApiService // DATA LAYER
             Timber.d("===preparingForSearch начинаем в потоке: ${Thread.currentThread().name}")
-            searchStep3iTunesAPI(searchText, this) { trackItems ->
-                Timber.d("=== performSearch в потоке: ${Thread.currentThread().name}")
-                adapterForAPITracks.updateList(trackItems)
-                runOnUiThread {
-                    adapterForAPITracks.setRecyclerView(trackRecyclerView)
-                    trackRecyclerView.visibility = View.VISIBLE
-                    Timber.d("=== adapter и Recycler в потоке: ${Thread.currentThread().name}")
-                    stopLoadingIndicator()
+            val trackInteractor = Creator.provideTrackInteractor()
+            trackInteractor.searchTrack(searchText, object : TrackInteractor.TrackConsumer {
+                override fun consume(foundTrack: List<Track>) {
+                    Timber.d("=== performSearch в потоке: ${Thread.currentThread().name}")
+
+                    runOnUiThread {
+                        // Обновляем список треков в адаптере
+                        adapterForAPITracks.updateList(foundTrack)
+
+                        // Устанавливаем обновленный RecyclerView
+                        adapterForAPITracks.setRecyclerView(trackRecyclerView)
+
+                        // Делаем RecyclerView видимым
+                        trackRecyclerView.visibility = View.VISIBLE
+
+                        Timber.d("=== adapter и Recycler в потоке: ${Thread.currentThread().name}")
+
+                        // Останавливаем индикатор загрузки
+                        stopLoadingIndicator()
+                    }
                 }
-            }
+            })
         }
     }
 
@@ -315,8 +327,6 @@ class AdapterForAPITracks(
         notifyDataSetChanged()
     }
 }
-
-data class TrackResponse(val results: List<ITunesTrack>)
 
 interface OnTrackItemClickListener {
     fun onTrackItemClick(track: Track)

@@ -196,9 +196,9 @@ class PlayActivity : AppCompatActivity() {
     private fun setupLikeButton() {
         binding.btnLike.setDebouncedClickListener {
             val newImageResource = if (isLiked) {
-                R.drawable.ic_btn_like_done
-            } else {
                 R.drawable.ic_btn_like
+            } else {
+                R.drawable.ic_btn_like_done
             }
             binding.btnLike.setImageResource(newImageResource)
             isLiked = !isLiked
