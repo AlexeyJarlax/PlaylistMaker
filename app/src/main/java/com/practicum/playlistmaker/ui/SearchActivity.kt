@@ -4,7 +4,6 @@ package com.practicum.playlistmaker.ui
 SearchActivity - активити и вся обработка поискового запроса юзера.
 UtilTrackViewHolder - холдер для RecyclerView, отображающий информацию о треках.
  AdapterForAPITracks - адаптер для RecyclerView, отображающий информацию о треках.
-
 TrackResponse - класс данных, представляющий ответ от iTunes Search API.
 ITunesTrack - класс данных для преобразования ответа iTunes Search API в список объектов TrackData.
 OnTrackItemClickListener - интерфейс для обработки истории
@@ -44,6 +43,7 @@ import com.practicum.playlistmaker.domain.impl.DebounceExtension
 import com.practicum.playlistmaker.presentation.openThread
 import com.practicum.playlistmaker.domain.impl.setDebouncedClickListener
 import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.presentation.buttonBack
 import com.practicum.playlistmaker.presentation.stopLoadingIndicator
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -54,10 +54,7 @@ class SearchActivity : AppCompatActivity() {
     private var hasFocus = true
     private lateinit var queryInput: EditText
     private lateinit var clearButton: ImageButton
-    private lateinit var backButton: Button
     private lateinit var trackRecyclerView: RecyclerView
-
-    //    private lateinit var loadingIndicator: ProgressBar
     private lateinit var adapterForAPITracks: AdapterForAPITracks
     private val cleanTrackList = ArrayList<Track>()
     private lateinit var utilErrorBox: View
@@ -69,21 +66,18 @@ class SearchActivity : AppCompatActivity() {
         Timber.plant(Timber.DebugTree()) // для логирования ошибок
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-//        val apiService = NetworkService.iTunesApiService
         initViews()
         clearButton()
-        backToMain()
         callAdapterForHistoryTracks()
         setupRecyclerViewAndAdapter()
         queryTextChangedListener()
         queryInputListener()
         fillTrackAdapter()
         killTheHistory()
-
+        buttonBack()
     }
 
     private fun initViews() {
-        backButton = findViewById(R.id.button_back_from_search_activity)
         clearButton = findViewById(R.id.clearButton)
         queryInput = findViewById(R.id.search_edit_text)
         trackRecyclerView = findViewById(R.id.track_recycler_view)
@@ -242,12 +236,6 @@ class SearchActivity : AppCompatActivity() {
     private fun clearButton() {
         clearButton.setDebouncedClickListener {
             queryInput.text.clear()
-        }
-    }
-
-    private fun backToMain() {
-        backButton.setDebouncedClickListener {
-                finish()
         }
     }
 

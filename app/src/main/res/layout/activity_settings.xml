@@ -6,7 +6,7 @@
     tools:context=".ui.SettingsActivity">
 
     <Button
-        android:id="@+id/buttonBackFromSettings"
+        android:id="@+id/buttonBack"
         style="@style/GoBackButtons"
         android:text="@string/button_settings" />
 

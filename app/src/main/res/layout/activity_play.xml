@@ -18,7 +18,7 @@
         app:layout_constraintGuide_percent="0.067" />
 
     <Button
-        android:id="@+id/buttonBackFromSettings"
+        android:id="@+id/buttonBack"
         style="@style/GoBackButtons"
         android:layout_height="52dp"
         android:contentDescription="@string/button_back"
@@ -33,7 +33,7 @@
         android:layout_height="@dimen/dp1"
         app:layout_constraintBottom_toTopOf="@id/track_cover"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonBackFromSettings"
+        app:layout_constraintTop_toBottomOf="@id/buttonBack"
         tools:background="@color/yp_blue_light" />
 
     <ImageView

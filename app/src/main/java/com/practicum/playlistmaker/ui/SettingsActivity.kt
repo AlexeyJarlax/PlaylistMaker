@@ -10,6 +10,7 @@ import androidx.appcompat.widget.SwitchCompat
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.models.UtilThemeManager
 import com.practicum.playlistmaker.domain.impl.setDebouncedClickListener
+import com.practicum.playlistmaker.presentation.buttonBack
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -19,11 +20,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         UtilThemeManager.applyTheme(this)
         setContentView(R.layout.activity_settings)
-
-        val back = findViewById<Button>(R.id.buttonBackFromSettings) // КНОПКА НАЗАД
-        back.setDebouncedClickListener {
-            finish()
-        }
+        buttonBack()
 
         // КНОПКА НОЧНОЙ И ДНЕВНОЙ ТЕМЫ (РЕАЛИЗАЦИЯ ВЫНЕСЕНА В UtilThemeManager)
         val switchDarkMode: SwitchCompat = findViewById(R.id.switch_dark_mode)
@@ -31,7 +28,6 @@ class SettingsActivity : AppCompatActivity() {
         switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
             UtilThemeManager.setNightModeEnabled(this, isChecked)
         }
-
 
         // КНОПКА ПОДЕЛИТЬСЯ
         val shareButton = findViewById<Button>(R.id.button_settings_share)

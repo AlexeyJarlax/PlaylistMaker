@@ -13,6 +13,7 @@ import com.practicum.playlistmaker.domain.models.AppPreferencesKeys
 import com.practicum.playlistmaker.domain.impl.SecondsCounter
 import com.practicum.playlistmaker.domain.impl.setDebouncedClickListener
 import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.presentation.buttonBack
 import com.practicum.playlistmaker.presentation.startLoadingIndicator
 import com.practicum.playlistmaker.presentation.stopLoadingIndicator
 import com.practicum.playlistmaker.presentation.toast
@@ -50,11 +51,11 @@ class PlayActivity : AppCompatActivity() {
         url = track.previewUrl
         loadImage(track.artworkUrl100?.replace("100x100bb.jpg", "512x512bb.jpg"), binding.trackCover)
         bindingView(track)
-        setupBackButton()
         setupAddToPlaylistButton()
         setupLikeButton()
         preparePlayer()
         setupPlayButton()
+        buttonBack()
     }
 
     fun bindingView(track: Track) {
@@ -177,12 +178,6 @@ class PlayActivity : AppCompatActivity() {
             .transform(RoundedCorners(AppPreferencesKeys.ALBUM_ROUNDED_CORNERS))
             .error(R.drawable.ic_placeholder)
             .into(imageView)
-    }
-
-    private fun setupBackButton() {
-        binding.buttonBackFromSettings.setDebouncedClickListener {
-            finish()
-        }
     }
 
     private fun setupAddToPlaylistButton() {

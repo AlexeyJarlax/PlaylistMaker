@@ -14,7 +14,7 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/button_back_from_search_activity"
+            android:id="@+id/buttonBack"
             style="@style/GoBackButtons"
             android:text="@string/search"
             app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp36"
             android:layout_marginTop="@dimen/dp60"
-            app:layout_constraintTop_toTopOf="@id/button_back_from_search_activity"
+            app:layout_constraintTop_toTopOf="@id/buttonBack"
             tools:layout_editor_absoluteX="@dimen/z" />
 
         <TextView

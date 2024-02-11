@@ -17,6 +17,13 @@ fun Activity.toast(text: String) {
     Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 }
 
+fun Activity.buttonBack() { // КНОПКА НАЗАД
+    val back = findViewById<Button>(R.id.buttonBack)
+    back.setDebouncedClickListener {
+        finish()
+    }
+}
+
 //****************************************** индикатор загрузки и поток на продолжительные операции
 fun Activity.startLoadingIndicator() {
     val loadingIndicator = findViewById<ProgressBar>(R.id.loading_indicator)
