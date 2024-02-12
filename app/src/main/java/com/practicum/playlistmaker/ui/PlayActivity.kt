@@ -1,13 +1,5 @@
 package com.practicum.playlistmaker.ui
 
-/*
-PlayActivity.kt (главный файл с основной логикой)
-PlayActivityUI.kt (файл с методами для работы с пользовательским интерфейсом)
-PlayActivityPlayer.kt (файл с методами для работы с плеером)
-PlayActivityImageLoader.kt (файл с методами для загрузки изображений)
-PlayActivityControls.kt (файл с методами для управления воспроизведением и контроля плейлиста)
- */
-
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.media.MediaPlayer
@@ -16,16 +8,19 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.snackbar.Snackbar
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.ActivityPlayBinding
 import com.practicum.playlistmaker.data.preferences.AppPreferencesKeys
+import com.practicum.playlistmaker.databinding.ActivityPlayBinding
+import com.practicum.playlistmaker.domain.api.TrackUseCase
+import com.practicum.playlistmaker.domain.api.TrackUseCaseProvider
 import com.practicum.playlistmaker.domain.impl.SecondsCounter
 import com.practicum.playlistmaker.domain.impl.setDebouncedClickListener
-import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.domain.models.TracksList
 import com.practicum.playlistmaker.presentation.buttonBack
 import com.practicum.playlistmaker.presentation.startLoadingIndicator
 import com.practicum.playlistmaker.presentation.stopLoadingIndicator
 import com.practicum.playlistmaker.presentation.toast
-import kotlinx.serialization.json.Json
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -34,6 +29,7 @@ class PlayActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlayBinding
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var secondsCounter: SecondsCounter
+    private lateinit var trackUseCase: TrackUseCase
 
     private var isPlaying: Boolean = false
     private var isAddedToPlaylist: Boolean = false
@@ -51,12 +47,15 @@ class PlayActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
+
+        // Получение TrackUseCase через интерфейс
+        trackUseCase = (application as TrackUseCaseProvider).provideTrackUseCase()
 
         val trackJson = intent.getStringExtra("trackJson")
-        val track = Json.decodeFromString(Track.serializer(), trackJson!!)
+        val track = TracksList.serializer().decodeFromString(intent.getStringExtra("trackJson"))
         url = track.previewUrl
+
         loadImage(track.artworkUrl100?.replace("100x100bb.jpg", "512x512bb.jpg"), binding.trackCover)
         bindingView(track)
         setupAddToPlaylistButton()
@@ -64,9 +63,10 @@ class PlayActivity : AppCompatActivity() {
         preparePlayer()
         setupPlayButton()
         buttonBack()
-    }
+        }
 
-    fun bindingView(track: Track) {
+
+    private fun bindingView(track: TracksList) {
         binding.trackName.text = track.trackName
         binding.artistName.text = track.artistName
         binding.contentDuration.text = formatTrackDuration(track.trackTimeMillis ?: 0)

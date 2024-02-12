@@ -3,15 +3,15 @@ package com.practicum.playlistmaker.presentation
 import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.data.OnTrackItemClickListener
+import com.practicum.playlistmaker.data.HistoryTrackClickListener
 import com.practicum.playlistmaker.data.preferences.AppPreferencesKeys
 import com.practicum.playlistmaker.data.preferences.SharedPreferencesMethods
-import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.domain.models.TracksList
 import com.practicum.playlistmaker.ui.AdapterForAPITracks
 
 class AdapterForHistoryTracks(
     private val context: Context,
-    private val trackItemClickListener: OnTrackItemClickListener
+    private val trackItemClickListener: HistoryTrackClickListener
 ) {
     private val adapterForHistoryTracks: AdapterForAPITracks =
         AdapterForAPITracks(context, mutableListOf(), trackItemClickListener)
@@ -21,7 +21,7 @@ class AdapterForHistoryTracks(
         recyclerView.layoutManager = LinearLayoutManager(context)
     }
 
-    fun saveTrack(track: Track) {
+    fun saveTrack(track: TracksList) {
         val trackList = SharedPreferencesMethods(context).getTrackListFromSP()
         trackList.removeAll { it.trackName == track.trackName && it.artistName == track.artistName }
         trackList.add(0, track)

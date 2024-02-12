@@ -1,22 +1,22 @@
 package com.practicum.playlistmaker.data
 
-import com.practicum.playlistmaker.data.dto.TrackSearchRequest
-import com.practicum.playlistmaker.data.dto.TrackSearchResponse
-import com.practicum.playlistmaker.domain.api.TrackRepository
-import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.data.dto.SearchRequestForTracksList
+import com.practicum.playlistmaker.data.dto.SearchResponseForTracksList
+import com.practicum.playlistmaker.domain.api.RepositoryForTracksList
+import com.practicum.playlistmaker.domain.models.TracksList
 import timber.log.Timber
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
-class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepository {
+class RepositoryImplForTracksList(private val networkClientForTracksList: NetworkClientForTracksList) : RepositoryForTracksList {
 
-    override fun searchTrack(query: String): List<Track> {
+    override fun searchTracksList(query: String): List<TracksList> {
         try {
-            val response = networkClient.doRequest(TrackSearchRequest(query))
+            val response = networkClientForTracksList.doRequest(SearchRequestForTracksList(query))
 
             if (response.resultCode == 200) {
-                return (response as TrackSearchResponse).results.map { track ->
+                return (response as SearchResponseForTracksList).results.map { track ->
                     val releaseDateTime = try {
                         track.releaseDate?.let {
                             LocalDateTime.parse(it, DateTimeFormatter.ISO_DATE_TIME)
@@ -25,7 +25,7 @@ class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepos
                         Timber.e(e, "=== fun searchTrack, class TrackRepositoryImpl => Ошибка при разборе даты: ${track.releaseDate}")
                         LocalDateTime.MIN
                     }
-                    Track(
+                    TracksList(
                         track.trackName ?: "",
                         track.artistName ?: "",
                         track.trackTimeMillis ?: 0,

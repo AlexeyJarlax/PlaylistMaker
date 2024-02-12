@@ -32,28 +32,31 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.Creator
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.data.OnTrackItemClickListener
+import com.practicum.playlistmaker.data.HistoryTrackClickListener
 import com.practicum.playlistmaker.presentation.AdapterForHistoryTracks
-import com.practicum.playlistmaker.domain.api.TrackInteractor
+import com.practicum.playlistmaker.domain.api.InteractorForTracksList
 import com.practicum.playlistmaker.data.preferences.AppPreferencesKeys
+import com.practicum.playlistmaker.domain.api.TrackUseCase
+import com.practicum.playlistmaker.domain.api.TrackUseCaseProvider
 import com.practicum.playlistmaker.domain.impl.DebounceExtension
 import com.practicum.playlistmaker.presentation.openThread
 import com.practicum.playlistmaker.domain.impl.setDebouncedClickListener
-import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.domain.models.TracksList
 import com.practicum.playlistmaker.presentation.buttonBack
 import com.practicum.playlistmaker.presentation.stopLoadingIndicator
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import kotlinx.serialization.json.Json
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity(), TrackUseCaseProvider {
 
+    private lateinit var trackUseCase: TrackUseCase
     private var hasFocus = true
     private lateinit var queryInput: EditText
     private lateinit var clearButton: ImageButton
     private lateinit var trackRecyclerView: RecyclerView
     private lateinit var adapterForAPITracks: AdapterForAPITracks
-    private val cleanTrackList = ArrayList<Track>()
+    private val cleanTrackList = ArrayList<TracksList>()
     private lateinit var utilErrorBox: View
     private lateinit var adapterForHistoryTracks: AdapterForHistoryTracks
     private lateinit var searchHistoryNotification: TextView
@@ -83,9 +86,13 @@ class SearchActivity : AppCompatActivity() {
         killTheHistory = findViewById(R.id.kill_the_history)
     }
 
+    override fun provideTrackUseCase(): TrackUseCase {
+        return trackUseCase
+    }
+
     private fun callAdapterForHistoryTracks() {
-        adapterForHistoryTracks = AdapterForHistoryTracks(this, object : OnTrackItemClickListener {
-            override fun onTrackItemClick(track: Track) {
+        adapterForHistoryTracks = AdapterForHistoryTracks(this, object : HistoryTrackClickListener {
+            override fun onTrackItemClick(track: TracksList) {
                 adapterForHistoryTracks.saveTrack(track)
             }
         })
@@ -95,8 +102,8 @@ class SearchActivity : AppCompatActivity() {
     private fun setupRecyclerViewAndAdapter() {
         val layoutManager = LinearLayoutManager(this)
         adapterForAPITracks =
-            AdapterForAPITracks(this, cleanTrackList, object : OnTrackItemClickListener {
-                override fun onTrackItemClick(track: Track) {
+            AdapterForAPITracks(this, cleanTrackList, object : HistoryTrackClickListener {
+                override fun onTrackItemClick(track: TracksList) {
                     adapterForHistoryTracks.saveTrack(track)
                     Timber.d("historyAdapter.saveTrack:${track.trackName}${track.artistName}")
                 }
@@ -219,8 +226,8 @@ class SearchActivity : AppCompatActivity() {
         openThread {
             Timber.d("===preparingForSearch начинаем в потоке: ${Thread.currentThread().name}")
             val trackInteractor = Creator.provideTrackInteractor()
-            trackInteractor.searchStep3useAPI(searchText, object : TrackInteractor.TrackConsumer {
-                override fun consume(foundTrack: List<Track>) {
+            trackInteractor.searchStep3useAPI(searchText, object : InteractorForTracksList.TrackConsumer {
+                override fun consume(foundTrack: List<TracksList>) {
                     Timber.d("=== performSearch в потоке: ${Thread.currentThread().name}")
                     runOnUiThread {
                         adapterForAPITracks.updateList(foundTrack)
@@ -250,7 +257,7 @@ class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val artworkImageView: ImageView = itemView.findViewById(R.id.artwork_image_view)
     private val playButton: LinearLayout = itemView.findViewById(R.id.util_item_track)
 
-    fun bind(track: Track, trackItemClickListener: OnTrackItemClickListener) {
+    fun bind(track: TracksList, trackItemClickListener: HistoryTrackClickListener) {
         trackNameTextView.text = track.trackName ?: ""
         artistNameTextView.text = track.artistName ?: ""
         trackTimeTextView.text = track.trackTimeMillis?.let { formatTrackDuration(it) } ?: ""
@@ -259,7 +266,7 @@ class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         playButton.setDebouncedClickListener {
             trackItemClickListener.onTrackItemClick(track)
             val intent = Intent(itemView.context, PlayActivity::class.java)
-            val trackJson = Json.encodeToString(Track.serializer(), track)
+            val trackJson = Json.encodeToString(TracksList.serializer(), track)
             intent.putExtra("trackJson", trackJson)
             itemView.context.startActivity(intent)
         }
@@ -283,8 +290,8 @@ class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 class AdapterForAPITracks(
     private val context: Context,
-    private var trackData: List<Track>,
-    private val trackItemClickListener: OnTrackItemClickListener
+    private var trackData: List<TracksList>,
+    private val trackItemClickListener: HistoryTrackClickListener
 ) : RecyclerView.Adapter<UtilTrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UtilTrackViewHolder {
@@ -305,13 +312,13 @@ class AdapterForAPITracks(
         recyclerView.layoutManager = LinearLayoutManager(context)
     }
 
-    fun updateList(newList: List<Track>) {
+    fun updateList(newList: List<TracksList>) {
         trackData = newList
         notifyDataSetChanged()
     }
 
     fun clearList() {
-        val newList: MutableList<Track> = mutableListOf()
+        val newList: MutableList<TracksList> = mutableListOf()
         trackData = newList
         notifyDataSetChanged()
     }

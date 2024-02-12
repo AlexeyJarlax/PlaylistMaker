@@ -1,11 +1,11 @@
 package com.practicum.playlistmaker.domain.api
 
-import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.domain.models.TracksList
 
-interface TrackInteractor {
+interface InteractorForTracksList {
     fun searchStep3useAPI(query: String, consumer: TrackConsumer)
 
     interface TrackConsumer {
-        fun consume(foundTrack: List<Track>)
+        fun consume(foundTrack: List<TracksList>)
     }
 }

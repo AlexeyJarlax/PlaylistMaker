@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.data.preferences
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.domain.models.TracksList
 
 internal class SharedPreferencesMethods(private val context: Context) {
     private val sharedPreferences = getSharedPreferences()
@@ -11,13 +11,13 @@ internal class SharedPreferencesMethods(private val context: Context) {
         context.getSharedPreferences(AppPreferencesKeys.PREFS_NAME, Context.MODE_PRIVATE)
 
     // ------------------------------------------------------ json TrackList Object гетеры и сетеры
-    fun getTrackListFromSP(): MutableList<Track> {
+    fun getTrackListFromSP(): MutableList<TracksList> {
         val jsonString = sharedPreferences.getString(AppPreferencesKeys.KEY_HISTORY_LIST, null)
-        val type = object : TypeToken<List<Track>>() {}.type
+        val type = object : TypeToken<List<TracksList>>() {}.type
         return Gson().fromJson(jsonString, type) ?: mutableListOf()
     }
 
-    fun saveTrackListToSP(trackList: List<Track>) {
+    fun saveTrackListToSP(trackList: List<TracksList>) {
         val jsonString = Gson().toJson(trackList)
         sharedPreferences.edit().putString(AppPreferencesKeys.KEY_HISTORY_LIST, jsonString).apply()
     }

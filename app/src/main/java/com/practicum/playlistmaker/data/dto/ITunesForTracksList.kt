@@ -2,7 +2,7 @@ package com.practicum.playlistmaker.data.dto
 
 // ITunesTrack - DTO модель данных для преобразования ответа iTunes Search API в список объектов Track, запрашивается через TrackResponse
 
-data class ITunesTrack(
+data class ITunesForTracksList(
     val trackName: String?,
     val artistName: String?,
     val trackTimeMillis: Long?,

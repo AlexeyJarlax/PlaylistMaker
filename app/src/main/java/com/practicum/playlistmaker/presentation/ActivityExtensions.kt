@@ -10,7 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.impl.setDebouncedClickListener
-import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.domain.models.TracksList
 import kotlin.concurrent.thread
 
 fun Activity.toast(text: String) {
@@ -57,7 +57,7 @@ fun Activity.solvingAbsentProblem() {
     }
 }
 
-fun Activity.solvingConnectionProblem(lastQuery: String, lastCallback: ((List<Track>) -> Unit)?) {
+fun Activity.solvingConnectionProblem(lastQuery: String, lastCallback: ((List<TracksList>) -> Unit)?) {
     val utilErrorBox = findViewById<LinearLayout>(R.id.util_error_box)
     val errorIcon = findViewById<ImageView>(R.id.error_icon)
     val errorTextWeb = findViewById<TextView>(R.id.error_text_web)
