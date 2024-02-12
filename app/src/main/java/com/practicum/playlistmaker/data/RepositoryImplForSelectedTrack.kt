@@ -4,7 +4,6 @@ package com.practicum.playlistmaker.data
 
 import com.practicum.playlistmaker.domain.api.RepositoryForSelectedTrack
 import com.practicum.playlistmaker.domain.models.TracksList
-import timber.log.Timber
 
 class RepositoryImplForSelectedTrack : RepositoryForSelectedTrack {
     override suspend fun getTrack(url: String): TracksList {

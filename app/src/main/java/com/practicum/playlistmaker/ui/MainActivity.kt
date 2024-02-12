@@ -8,7 +8,7 @@ import android.widget.Button
 import android.widget.Toast
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.presentation.UtilThemeManager
-import com.practicum.playlistmaker.domain.impl.setDebouncedClickListener
+import com.practicum.playlistmaker.presentation.setDebouncedClickListener
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

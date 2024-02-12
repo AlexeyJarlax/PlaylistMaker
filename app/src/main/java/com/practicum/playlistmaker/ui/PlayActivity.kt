@@ -1,19 +1,16 @@
 package com.practicum.playlistmaker.ui
 
 import android.os.Bundle
-import android.widget.ImageView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.snackbar.Snackbar
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.data.preferences.AppPreferencesKeys
 import com.practicum.playlistmaker.databinding.ActivityPlayBinding
 import com.practicum.playlistmaker.domain.api.RepositoryForSelectedTrack
 import com.practicum.playlistmaker.domain.api.ProviderForSelectedTrack
-import com.practicum.playlistmaker.domain.impl.SecondsCounter
-import com.practicum.playlistmaker.domain.impl.setDebouncedClickListener
+import com.practicum.playlistmaker.presentation.SecondsCounter
+import com.practicum.playlistmaker.presentation.setDebouncedClickListener
 import com.practicum.playlistmaker.domain.models.TracksList
 import com.practicum.playlistmaker.presentation.FunctionsForPlayActivity
+import com.practicum.playlistmaker.data.network.ArtworkUrlLoader
 import com.practicum.playlistmaker.presentation.buttonBack
 import kotlinx.serialization.json.Json
 
@@ -33,7 +30,7 @@ class PlayActivity : FunctionsForPlayActivity() { //FunctionsForPlayActivity —Å–
         val track = Json.decodeFromString(TracksList.serializer(), trackJson!!)
         url = track.previewUrl
         trackUseCase = provideTrackUseCase()
-        loadImage(track.artworkUrl100?.replace("100x100bb.jpg", "512x512bb.jpg"), binding.trackCover)
+        ArtworkUrlLoader(this).loadImage(track.artworkUrl100?.replace("100x100bb.jpg", "512x512bb.jpg"), binding.trackCover)
         bindingView(track)
         setupAddToPlaylistButton()
         setupLikeButton()
@@ -82,13 +79,6 @@ class PlayActivity : FunctionsForPlayActivity() { //FunctionsForPlayActivity —Å–
                 secondsCounter.stop()
             }
         }
-    }
-
-    private fun loadImage(imageUrl: String?, imageView: ImageView) {
-        Glide.with(imageView).load(imageUrl).placeholder(R.drawable.ic_placeholder)
-            .transform(RoundedCorners(AppPreferencesKeys.ALBUM_ROUNDED_CORNERS))
-            .error(R.drawable.ic_placeholder)
-            .into(imageView)
     }
 
     private fun setupAddToPlaylistButton() {

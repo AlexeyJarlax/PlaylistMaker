@@ -10,7 +10,7 @@ import androidx.appcompat.widget.SwitchCompat
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.data.network.CommunicationButtons
 import com.practicum.playlistmaker.presentation.UtilThemeManager
-import com.practicum.playlistmaker.domain.impl.setDebouncedClickListener
+import com.practicum.playlistmaker.presentation.setDebouncedClickListener
 import com.practicum.playlistmaker.presentation.buttonBack
 
 class SettingsActivity : AppCompatActivity() {

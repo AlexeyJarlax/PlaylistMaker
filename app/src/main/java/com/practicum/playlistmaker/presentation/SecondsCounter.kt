@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.domain.impl
+package com.practicum.playlistmaker.presentation
 
 import android.os.Handler
 import android.os.Looper

@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayBinding
 import com.practicum.playlistmaker.domain.api.ProviderForSelectedTrack
-import com.practicum.playlistmaker.domain.impl.SecondsCounter
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 

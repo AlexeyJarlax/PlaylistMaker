@@ -9,7 +9,9 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
-class RepositoryImplForTracksList(private val networkClientForTracksList: NetworkClientForTracksList) : RepositoryForTracksList {
+class RepositoryImplForTracksList(
+    private val networkClientForTracksList: NetworkClientForTracksList
+) : RepositoryForTracksList {
 
     override fun searchTracksList(query: String): List<TracksList> {
         try {
@@ -22,7 +24,7 @@ class RepositoryImplForTracksList(private val networkClientForTracksList: Networ
                             LocalDateTime.parse(it, DateTimeFormatter.ISO_DATE_TIME)
                         } ?: LocalDateTime.MIN
                     } catch (e: DateTimeParseException) {
-                        Timber.e(e, "=== fun searchTrack, class TrackRepositoryImpl => Ошибка при разборе даты: ${track.releaseDate}")
+                        handleErrorResponse(1)
                         LocalDateTime.MIN
                     }
                     TracksList(
@@ -38,26 +40,22 @@ class RepositoryImplForTracksList(private val networkClientForTracksList: Networ
                     )
                 }
             } else {
-                Timber.d("=== fun searchMovies class MoviesRepositoryImpl => emptyList() таких песен нет")
-                handleErrorResponse(response.resultCode)
+                handleErrorResponse(2)
                 return emptyList()
             }
         } catch (e: Exception) {
-            Timber.e(e, "=== fun searchMovies class MoviesRepositoryImpl => непредвиденная ошибка")
+            handleErrorResponse(3)
             return emptyList()
         }
     }
 
     private fun handleErrorResponse(resultCode: Int) {
         val error = when (resultCode) {
-            400 -> "=== 400 Bad Request"
-            401 -> "=== 401 Unauthorized"
-            403 -> "=== 403 Forbidden"
-            404 -> "=== 404 Not Found"
-            500 -> "=== 500 Internal Server Error"
-            503 -> "=== 503 Service Unavailable"
-            else -> "=== Unknown Error"
+            1 -> "=== fun searchTracksList class RepositoryImplForTracksList => Ошибка при разборе даты"
+            2 -> "=== fun searchTracksList class RepositoryImplForTracksList => Таких песен нет"
+            else -> "=== Непредвиденная ошибка"
         }
         Timber.e(error)
+
     }
 }

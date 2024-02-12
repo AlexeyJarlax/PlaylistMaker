@@ -28,21 +28,21 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.Creator
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.data.HistoryTrackClickListener
+import com.practicum.playlistmaker.data.network.ArtworkUrlLoader
 import com.practicum.playlistmaker.presentation.AdapterForHistoryTracks
 import com.practicum.playlistmaker.domain.api.InteractorForTracksList
 import com.practicum.playlistmaker.data.preferences.AppPreferencesKeys
 import com.practicum.playlistmaker.domain.api.RepositoryForSelectedTrack
 import com.practicum.playlistmaker.domain.api.ProviderForSelectedTrack
-import com.practicum.playlistmaker.domain.impl.DebounceExtension
+import com.practicum.playlistmaker.presentation.DebounceExtension
 import com.practicum.playlistmaker.presentation.openThread
-import com.practicum.playlistmaker.domain.impl.setDebouncedClickListener
+import com.practicum.playlistmaker.presentation.setDebouncedClickListener
 import com.practicum.playlistmaker.domain.models.TracksList
 import com.practicum.playlistmaker.presentation.buttonBack
+import com.practicum.playlistmaker.presentation.solvingAbsentProblem
 import com.practicum.playlistmaker.presentation.stopLoadingIndicator
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -227,18 +227,23 @@ class SearchActivity : AppCompatActivity(), ProviderForSelectedTrack {
         openThread {
             Timber.d("===preparingForSearch начинаем в потоке: ${Thread.currentThread().name}")
             val trackInteractor = Creator.provideTrackInteractor()
-            trackInteractor.searchStep3useAPI(searchText, object : InteractorForTracksList.TrackConsumer {
-                override fun consume(foundTrack: List<TracksList>) {
-                    Timber.d("=== performSearch в потоке: ${Thread.currentThread().name}")
-                    runOnUiThread {
-                        adapterForAPITracks.updateList(foundTrack)
-                        adapterForAPITracks.setRecyclerView(trackRecyclerView)
-                        trackRecyclerView.visibility = View.VISIBLE
-                        Timber.d("=== adapter и Recycler в потоке: ${Thread.currentThread().name}")
-                        stopLoadingIndicator()
+            trackInteractor.searchStep3useAPI(
+                searchText,
+                object : InteractorForTracksList.TrackConsumer {
+                    override fun consume(foundTrack: List<TracksList>) {
+                        Timber.d("=== performSearch в потоке: ${Thread.currentThread().name}")
+                        runOnUiThread {
+                            if (foundTrack.isEmpty()) {
+                                    solvingAbsentProblem()
+                                }
+                            adapterForAPITracks.updateList(foundTrack)
+                            adapterForAPITracks.setRecyclerView(trackRecyclerView)
+                            trackRecyclerView.visibility = View.VISIBLE
+                            Timber.d("=== adapter и Recycler в потоке: ${Thread.currentThread().name}")
+                            stopLoadingIndicator()
+                        }
                     }
-                }
-            })
+                })
         }
     }
 
@@ -254,7 +259,8 @@ class SearchActivity : AppCompatActivity(), ProviderForSelectedTrack {
 class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val trackNameTextView: TextView = itemView.findViewById(R.id.track_name_text_view)
     private val artistNameTextView: TextView = itemView.findViewById(R.id.artist_name_text_view)
-    private val trackTimeTextView: TextView = itemView.findViewById(R.id.track_duration_text_view)
+    private val trackTimeTextView: TextView =
+        itemView.findViewById(R.id.track_duration_text_view)
     private val artworkImageView: ImageView = itemView.findViewById(R.id.artwork_image_view)
     private val playButton: LinearLayout = itemView.findViewById(R.id.util_item_track)
 
@@ -262,7 +268,12 @@ class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         trackNameTextView.text = track.trackName ?: ""
         artistNameTextView.text = track.artistName ?: ""
         trackTimeTextView.text = track.trackTimeMillis?.let { formatTrackDuration(it) } ?: ""
-        track.artworkUrl100?.let { loadImage(it, artworkImageView) }
+        track.artworkUrl100?.let {
+            ArtworkUrlLoader(context = itemView.context).loadImage(
+                it,
+                artworkImageView
+            )
+        }
 
         playButton.setDebouncedClickListener {
             trackItemClickListener.onTrackItemClick(track)
@@ -275,18 +286,13 @@ class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private fun formatTrackDuration(trackTimeMillis: Long): String {
         val minutes = TimeUnit.MILLISECONDS.toMinutes(trackTimeMillis)
-        val seconds = TimeUnit.MILLISECONDS.toSeconds(trackTimeMillis) - TimeUnit.MINUTES.toSeconds(
-            minutes
-        )
+        val seconds =
+            TimeUnit.MILLISECONDS.toSeconds(trackTimeMillis) - TimeUnit.MINUTES.toSeconds(
+                minutes
+            )
         return String.format("%02d:%02d", minutes, seconds)
     }
 
-    private fun loadImage(imageUrl: String, imageView: ImageView) {
-        Glide.with(imageView).load(imageUrl).placeholder(R.drawable.ic_placeholder)
-            .transform(RoundedCorners(AppPreferencesKeys.ALBUM_ROUNDED_CORNERS))
-            .error(R.drawable.ic_placeholder)
-            .into(imageView)
-    }
 }
 
 class AdapterForAPITracks(
