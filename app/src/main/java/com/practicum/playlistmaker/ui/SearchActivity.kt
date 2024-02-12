@@ -36,8 +36,8 @@ import com.practicum.playlistmaker.data.HistoryTrackClickListener
 import com.practicum.playlistmaker.presentation.AdapterForHistoryTracks
 import com.practicum.playlistmaker.domain.api.InteractorForTracksList
 import com.practicum.playlistmaker.data.preferences.AppPreferencesKeys
-import com.practicum.playlistmaker.domain.api.TrackUseCase
-import com.practicum.playlistmaker.domain.api.TrackUseCaseProvider
+import com.practicum.playlistmaker.domain.api.RepositoryForSelectedTrack
+import com.practicum.playlistmaker.domain.api.ProviderForSelectedTrack
 import com.practicum.playlistmaker.domain.impl.DebounceExtension
 import com.practicum.playlistmaker.presentation.openThread
 import com.practicum.playlistmaker.domain.impl.setDebouncedClickListener
@@ -48,9 +48,10 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import kotlinx.serialization.json.Json
 
-class SearchActivity : AppCompatActivity(), TrackUseCaseProvider {
+class SearchActivity : AppCompatActivity(), ProviderForSelectedTrack {
 
-    private lateinit var trackUseCase: TrackUseCase
+    private lateinit var trackUseCase: RepositoryForSelectedTrack  // TrackUseCase интерфейс
+
     private var hasFocus = true
     private lateinit var queryInput: EditText
     private lateinit var clearButton: ImageButton
@@ -86,7 +87,7 @@ class SearchActivity : AppCompatActivity(), TrackUseCaseProvider {
         killTheHistory = findViewById(R.id.kill_the_history)
     }
 
-    override fun provideTrackUseCase(): TrackUseCase {
+    override fun provideTrackUseCase(): RepositoryForSelectedTrack {  // TrackUseCase интерфейс
         return trackUseCase
     }
 

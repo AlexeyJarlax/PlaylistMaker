@@ -59,3 +59,4 @@ dependencies {
     implementation("com.jakewharton.timber:timber:4.7.1") // для логирования
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
 }
+

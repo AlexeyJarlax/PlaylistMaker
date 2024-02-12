@@ -4,6 +4,6 @@ package com.practicum.playlistmaker.domain.api
 
 import com.practicum.playlistmaker.domain.models.TracksList
 
-interface TrackUseCase {
+interface RepositoryForSelectedTrack {
     suspend fun getTrack(url: String): TracksList
 }
