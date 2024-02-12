@@ -12,6 +12,7 @@ import com.practicum.playlistmaker.data.preferences.AppPreferencesKeys
 import com.practicum.playlistmaker.databinding.ActivityPlayBinding
 import com.practicum.playlistmaker.domain.api.RepositoryForSelectedTrack
 import com.practicum.playlistmaker.domain.api.ProviderForSelectedTrack
+import com.practicum.playlistmaker.presentation.FunctionsForPlayActivity
 import com.practicum.playlistmaker.domain.impl.SecondsCounter
 import com.practicum.playlistmaker.domain.impl.setDebouncedClickListener
 import com.practicum.playlistmaker.domain.models.TracksList
@@ -23,7 +24,7 @@ import kotlinx.serialization.json.Json
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
-class PlayActivity : AppCompatActivity(), ProviderForSelectedTrack {
+class PlayActivity : AppCompatActivity(), FunctionsForPlayActivity, ProviderForSelectedTrack {
     private lateinit var trackUseCase: RepositoryForSelectedTrack  // TrackUseCase интерфейс
     private lateinit var binding: ActivityPlayBinding
     private lateinit var mediaPlayer: MediaPlayer
@@ -48,7 +49,6 @@ class PlayActivity : AppCompatActivity(), ProviderForSelectedTrack {
         setContentView(binding.root)
 
         trackUseCase = (application as ProviderForSelectedTrack).provideTrackUseCase() // TrackUseCase интерфейс
-
         val trackJson = intent.getStringExtra("trackJson")
         val track = Json.decodeFromString(TracksList.serializer(), trackJson!!)
         url = track.previewUrl
