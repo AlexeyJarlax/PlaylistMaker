@@ -21,6 +21,7 @@ import com.practicum.playlistmaker.presentation.stopLoadingIndicator
 import com.practicum.playlistmaker.presentation.toast
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -53,7 +54,7 @@ class PlayActivity : AppCompatActivity() {
         trackUseCase = (application as TrackUseCaseProvider).provideTrackUseCase()
 
         val trackJson = intent.getStringExtra("trackJson")
-        val track = TracksList.serializer().decodeFromString(intent.getStringExtra("trackJson"))
+        val track = Json.decodeFromString(TracksList.serializer(), trackJson!!)
         url = track.previewUrl
 
         loadImage(track.artworkUrl100?.replace("100x100bb.jpg", "512x512bb.jpg"), binding.trackCover)
