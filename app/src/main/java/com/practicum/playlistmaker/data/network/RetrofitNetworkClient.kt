@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.data.network
 import com.practicum.playlistmaker.data.NetworkClient
 import com.practicum.playlistmaker.data.dto.Response
 import com.practicum.playlistmaker.data.dto.TrackSearchRequest
-import com.practicum.playlistmaker.domain.models.AppPreferencesKeys
+import com.practicum.playlistmaker.data.preferences.AppPreferencesKeys
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

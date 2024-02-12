@@ -1,5 +1,13 @@
 package com.practicum.playlistmaker.ui
 
+/*
+PlayActivity.kt (главный файл с основной логикой)
+PlayActivityUI.kt (файл с методами для работы с пользовательским интерфейсом)
+PlayActivityPlayer.kt (файл с методами для работы с плеером)
+PlayActivityImageLoader.kt (файл с методами для загрузки изображений)
+PlayActivityControls.kt (файл с методами для управления воспроизведением и контроля плейлиста)
+ */
+
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.media.MediaPlayer
@@ -9,7 +17,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.snackbar.Snackbar
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayBinding
-import com.practicum.playlistmaker.domain.models.AppPreferencesKeys
+import com.practicum.playlistmaker.data.preferences.AppPreferencesKeys
 import com.practicum.playlistmaker.domain.impl.SecondsCounter
 import com.practicum.playlistmaker.domain.impl.setDebouncedClickListener
 import com.practicum.playlistmaker.domain.models.Track

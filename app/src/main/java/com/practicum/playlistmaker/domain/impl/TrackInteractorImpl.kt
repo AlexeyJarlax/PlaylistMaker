@@ -8,7 +8,7 @@ class TrackInteractorImpl(private val repository: TrackRepository) : TrackIntera
 
     private val executor = Executors.newCachedThreadPool()
 
-    override fun searchTrack(query: String, consumer: TrackInteractor.TrackConsumer) {
+    override fun searchStep3useAPI(query: String, consumer: TrackInteractor.TrackConsumer) {
         executor.execute {
             consumer.consume(repository.searchTrack(query))
         }

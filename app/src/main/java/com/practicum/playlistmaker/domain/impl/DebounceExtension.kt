@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.domain.impl
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import com.practicum.playlistmaker.domain.models.AppPreferencesKeys
+import com.practicum.playlistmaker.data.preferences.AppPreferencesKeys
 
 //********************************** дебаунсер для поиска во время ввода и защиты от лишних кликов
 class DebounceExtension(private val delayMillis: Long, private val action: () -> Unit) {

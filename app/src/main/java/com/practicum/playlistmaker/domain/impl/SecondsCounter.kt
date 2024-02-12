@@ -2,7 +2,7 @@ package com.practicum.playlistmaker.domain.impl
 
 import android.os.Handler
 import android.os.Looper
-import com.practicum.playlistmaker.domain.models.AppPreferencesKeys
+import com.practicum.playlistmaker.data.preferences.AppPreferencesKeys
 
 //****************************************** секундный счетчик на обработку времени проигрывания
 class SecondsCounter(private val updateCallback: (Long) -> Unit) {

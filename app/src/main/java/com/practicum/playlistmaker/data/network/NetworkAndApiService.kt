@@ -7,7 +7,7 @@
 //import android.app.Activity
 //import com.practicum.playlistmaker.R
 //import com.practicum.playlistmaker.data.dto.TrackResponse
-//import com.practicum.playlistmaker.domain.models.AppPreferencesKeys
+//import com.practicum.playlistmaker.data.preferences.AppPreferencesKeys
 //import com.practicum.playlistmaker.domain.models.Track
 //import com.practicum.playlistmaker.presentation.solvingAbsentProblem
 //import com.practicum.playlistmaker.presentation.solvingConnectionProblem

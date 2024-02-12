@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.domain.models.UtilThemeManager
+import com.practicum.playlistmaker.presentation.UtilThemeManager
 import com.practicum.playlistmaker.domain.impl.setDebouncedClickListener
 
 class MainActivity : AppCompatActivity() {
