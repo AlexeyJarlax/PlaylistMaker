@@ -1,8 +1,6 @@
 package com.practicum.playlistmaker.ui
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import android.media.MediaPlayer
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -17,39 +15,20 @@ import com.practicum.playlistmaker.domain.impl.setDebouncedClickListener
 import com.practicum.playlistmaker.domain.models.TracksList
 import com.practicum.playlistmaker.presentation.FunctionsForPlayActivity
 import com.practicum.playlistmaker.presentation.buttonBack
-import com.practicum.playlistmaker.presentation.startLoadingIndicator
-import com.practicum.playlistmaker.presentation.stopLoadingIndicator
-import com.practicum.playlistmaker.presentation.toast
 import kotlinx.serialization.json.Json
-import java.util.Locale
-import java.util.concurrent.TimeUnit
 
-class PlayActivity : AppCompatActivity(), ProviderForSelectedTrack, FunctionsForPlayActivity {
+class PlayActivity : FunctionsForPlayActivity() { //FunctionsForPlayActivity содержит функции проигрывания, PlayActivity - остальные функции вьюхи
+
     private lateinit var trackUseCase: RepositoryForSelectedTrack  // TrackUseCase интерфейс
-    private lateinit var binding: ActivityPlayBinding
-    private lateinit var mediaPlayer: MediaPlayer
-    private lateinit var secondsCounter: SecondsCounter
-
-    private var isPlaying: Boolean = false
     private var isAddedToPlaylist: Boolean = false
     private var isLiked: Boolean = false
-    private var playerState = STATE_DEFAULT
     private var url: String? = null
-
-    companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         trackUseCase = (application as ProviderForSelectedTrack).provideTrackUseCase() // TrackUseCase интерфейс
-
         val trackJson = intent.getStringExtra("trackJson")
         val track = Json.decodeFromString(TracksList.serializer(), trackJson!!)
         url = track.previewUrl
@@ -58,11 +37,10 @@ class PlayActivity : AppCompatActivity(), ProviderForSelectedTrack, FunctionsFor
         bindingView(track)
         setupAddToPlaylistButton()
         setupLikeButton()
-        preparePlayer()
+        url?.let { preparePlayer(it) }
         setupPlayButton()
         buttonBack()
     }
-
 
     private fun bindingView(track: TracksList) {
         binding.trackName.text = track.trackName
@@ -74,7 +52,7 @@ class PlayActivity : AppCompatActivity(), ProviderForSelectedTrack, FunctionsFor
         binding.contentCountry.text = track.country
         binding.trackTime.text = formatTrackDuration(track.trackTimeMillis ?: 0)
         secondsCounter = SecondsCounter { seconds ->
-            binding.trackTime.text = formatTrackDuration(seconds * 1000)
+        binding.trackTime.text = formatTrackDuration(seconds * 1000)
         }
     }
 
@@ -95,92 +73,15 @@ class PlayActivity : AppCompatActivity(), ProviderForSelectedTrack, FunctionsFor
         secondsCounter.stop()
     }
 
-    private fun playbackControl() {
-        when (playerState) {
-            STATE_PLAYING -> {
-                pausePlayer()
-            }
-
-            STATE_PREPARED, STATE_PAUSED -> {
-                startPlayer()
-                secondsCounter.handlerRepeater {
-                    if (playerState == STATE_PLAYING) {
-                        updatePlaybackTime(mediaPlayer.currentPosition.toLong())
-                    }
-                }
-            }
-        }
-    }
-
-    private fun updatePlaybackTime(duration: Long) {
-        if (mediaPlayer.isPlaying) {
-            val formattedTime = formatTrackDuration(duration)
-            binding.trackTime.text = formattedTime
-        }
-    }
-
     private fun setupPlayButton() {
         binding.btnPlay.setDebouncedClickListener {
             playbackControl()
-
             if (isPlaying) {
                 secondsCounter.start()
             } else {
                 secondsCounter.stop()
             }
         }
-    }
-
-    private fun formatTrackDuration(duration: Long): String {
-        val minutes = TimeUnit.MILLISECONDS.toMinutes(duration)
-        val seconds =
-            TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(minutes)
-        return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
-    }
-
-    private fun preparePlayer() {
-        startLoadingIndicator()
-        try {
-            mediaPlayer = MediaPlayer()
-            mediaPlayer.setDataSource(url)
-            mediaPlayer.prepareAsync()
-            mediaPlayer.setOnPreparedListener {
-                runOnUiThread {
-                    binding.btnPlay.isEnabled = true
-                    playerState = STATE_PREPARED
-                    stopLoadingIndicator()
-                }
-            }
-            mediaPlayer.setOnCompletionListener {
-                runOnUiThread {
-                    binding.btnPlay.setImageResource(R.drawable.ic_btn_play)
-                    playerState = STATE_PREPARED
-                }
-            }
-            mediaPlayer.setOnErrorListener { mp, what, extra ->
-                runOnUiThread {
-                    stopLoadingIndicator()
-                }
-                false
-            }
-        } catch (e: Exception) {
-            runOnUiThread {
-                toast(getString(R.string.error500))
-                stopLoadingIndicator()
-            }
-        }
-    }
-
-    private fun startPlayer() {
-        mediaPlayer.start()
-        binding.btnPlay.setImageResource(R.drawable.ic_btn_play_done)
-        playerState = STATE_PLAYING
-    }
-
-    private fun pausePlayer() {
-        mediaPlayer.pause()
-        binding.btnPlay.setImageResource(R.drawable.ic_btn_play)
-        playerState = STATE_PAUSED
     }
 
     private fun loadImage(imageUrl: String?, imageView: ImageView) {
