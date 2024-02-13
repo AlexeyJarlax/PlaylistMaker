@@ -7,14 +7,14 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".SearchActivity">
+    tools:context=".ui.SearchActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/button_back_from_search_activity"
+            android:id="@+id/buttonBack"
             style="@style/GoBackButtons"
             android:text="@string/search"
             app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp36"
             android:layout_marginTop="@dimen/dp60"
-            app:layout_constraintTop_toTopOf="@id/button_back_from_search_activity"
+            app:layout_constraintTop_toTopOf="@id/buttonBack"
             tools:layout_editor_absoluteX="@dimen/z" />
 
         <TextView
@@ -51,7 +51,7 @@
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/you_were_looking_for"
             app:tint="@color/yp_light_gray_and_yp_white"
-            tools:context=".MedialabActivity"
+            tools:context=".ui.MedialabActivity"
             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:layout_editor_absoluteX="0dp"
             tools:listitem="@layout/util_item_track"
@@ -81,7 +81,7 @@
             android:layout_width="@dimen/dp44"
             android:layout_height="@dimen/dp44"
             android:layout_marginTop="@dimen/dp248"
-            android:indeterminateTint="@color/progress_bar"
+            android:indeterminateTint="@color/yp_blue_and_yp_blue"
             app:layout_constraintEnd_toEndOf="@+id/track_recycler_view"
             app:layout_constraintStart_toStartOf="@+id/track_recycler_view"
             app:layout_constraintTop_toTopOf="parent"

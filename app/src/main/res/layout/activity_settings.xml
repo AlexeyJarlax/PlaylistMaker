@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/BackMenuLayout"
-    tools:context=".SettingsActivity">
+    tools:context=".ui.SettingsActivity">
 
     <Button
-        android:id="@+id/button_back_from_settings"
+        android:id="@+id/buttonBack"
         style="@style/GoBackButtons"
         android:text="@string/button_settings" />
 

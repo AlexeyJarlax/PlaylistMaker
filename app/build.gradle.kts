@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-//    kotlin("multiplatform") version "1.9.21" // or kotlin("multiplatform") or any other kotlin plugin
     kotlin("plugin.serialization") version "1.9.21"
 }
 
@@ -13,8 +12,8 @@ android {
         applicationId = "com.practicum.playlistmaker"
         minSdk = 29
         targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 15
+        versionName = "1.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -35,6 +34,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    buildFeatures{
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -52,6 +55,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
-    implementation("com.jakewharton.timber:timber:4.7.1") // для логирования серверных ошибок
+    implementation("com.jakewharton.timber:timber:4.7.1") // для логирования
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
 }
+

@@ -1,10 +1,11 @@
-package com.practicum.playlistmaker.util
+package com.practicum.playlistmaker.presentation
 
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import com.practicum.playlistmaker.data.preferences.AppPreferencesKeys
 
-//****************************************** дебаунсер для поиска во время ввода и защиты от лишних кликов
+//********************************** дебаунсер для поиска во время ввода и защиты от лишних кликов
 class DebounceExtension(private val delayMillis: Long, private val action: () -> Unit) {
     private val handler = Handler(Looper.getMainLooper())
 

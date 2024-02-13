@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -7,8 +7,11 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import com.practicum.playlistmaker.util.UtilThemeManager
-import com.practicum.playlistmaker.util.setDebouncedClickListener
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.data.network.CommunicationButtons
+import com.practicum.playlistmaker.presentation.UtilThemeManager
+import com.practicum.playlistmaker.presentation.setDebouncedClickListener
+import com.practicum.playlistmaker.presentation.buttonBack
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -18,42 +21,26 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         UtilThemeManager.applyTheme(this)
         setContentView(R.layout.activity_settings)
-
-        val back = findViewById<Button>(R.id.button_back_from_settings) // КНОПКА НАЗАД
-        back.setDebouncedClickListener {
-            finish()
-        }
+        buttonBack()
 
         // КНОПКА НОЧНОЙ И ДНЕВНОЙ ТЕМЫ (РЕАЛИЗАЦИЯ ВЫНЕСЕНА В UtilThemeManager)
         val switchDarkMode: SwitchCompat = findViewById(R.id.switch_dark_mode)
         switchDarkMode.isChecked = UtilThemeManager.isNightModeEnabled(this)
         switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
             UtilThemeManager.setNightModeEnabled(this, isChecked)
+            UtilThemeManager.applyTheme(this)
         }
-
 
         // КНОПКА ПОДЕЛИТЬСЯ
         val shareButton = findViewById<Button>(R.id.button_settings_share)
         shareButton.setDebouncedClickListener {
-            val appId = "com.Practicum.PlaylistMaker"
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain"
-            intent.putExtra(
-                Intent.EXTRA_TEXT,
-                getString(R.string.share_app_text, appId)
-            )
-            startActivity(Intent.createChooser(intent, getString(R.string.share_app_title)))
+            CommunicationButtons(this).buttonShare()
         }
 
         // КНОПКА ТЕХПОДДЕРЖКИ
         val helpButton = findViewById<Button>(R.id.button_settings_write_to_supp)
         helpButton.setDebouncedClickListener {
-            Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse(getString(R.string.support_email))
-                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_email_subject))
-                putExtra(Intent.EXTRA_TEXT, getString(R.string.support_email_text))
-                startActivity(this)
-            }
+            CommunicationButtons(this).buttonHelp()
         }
 
         // КНОПКА ПОЛЬЗОВАТЕЛЬСКОГО СОГЛАШЕНИЯ
