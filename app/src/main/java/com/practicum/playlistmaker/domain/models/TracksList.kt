@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.domain.models
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-/* Модель трека c возможностью упаковываться в джейсончики
+/* Модель данных: трек c возможностью упаковываться в джейсончики
    Объект содержит:
 val trackName: String?          // Название
 val artistName: String?         // Исполнитель

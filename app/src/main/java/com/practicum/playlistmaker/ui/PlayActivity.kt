@@ -30,7 +30,7 @@ class PlayActivity : FunctionsForPlayActivity() { //FunctionsForPlayActivity —Å–
         val track = Json.decodeFromString(TracksList.serializer(), trackJson!!)
         url = track.previewUrl
         trackUseCase = provideTrackUseCase()
-        ArtworkUrlLoader(this).loadImage(track.artworkUrl100?.replace("100x100bb.jpg", "512x512bb.jpg"), binding.trackCover)
+        ArtworkUrlLoader().loadImage(track.artworkUrl100?.replace("100x100bb.jpg", "512x512bb.jpg"), binding.trackCover)
         bindingView(track)
         setupAddToPlaylistButton()
         setupLikeButton()

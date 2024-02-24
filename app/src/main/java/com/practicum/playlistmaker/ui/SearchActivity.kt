@@ -269,7 +269,7 @@ class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         artistNameTextView.text = track.artistName ?: ""
         trackTimeTextView.text = track.trackTimeMillis?.let { formatTrackDuration(it) } ?: ""
         track.artworkUrl100?.let {
-            ArtworkUrlLoader(context = itemView.context).loadImage(
+            ArtworkUrlLoader().loadImage(
                 it,
                 artworkImageView
             )
