@@ -9,12 +9,12 @@ import com.practicum.playlistmaker.domain.api.ProviderForSelectedTrack
 import com.practicum.playlistmaker.presentation.SecondsCounter
 import com.practicum.playlistmaker.presentation.setDebouncedClickListener
 import com.practicum.playlistmaker.domain.models.TracksList
-import com.practicum.playlistmaker.presentation.FunctionsForPlayActivity
+import com.practicum.playlistmaker.presentation.OLDFunctionsForPlayActivity
 import com.practicum.playlistmaker.data.network.ArtworkUrlLoader
 import com.practicum.playlistmaker.presentation.buttonBack
 import kotlinx.serialization.json.Json
 
-class PlayActivity : FunctionsForPlayActivity() { //FunctionsForPlayActivity содержит функции проигрывания, PlayActivity - остальные функции вьюхи
+class OLDPlayActivity : OLDFunctionsForPlayActivity() { //FunctionsForPlayActivity содержит функции проигрывания, PlayActivity - остальные функции вьюхи
 
     private lateinit var trackUseCase: RepositoryForSelectedTrack  // TrackUseCase интерфейс
     private var isAddedToPlaylist: Boolean = false

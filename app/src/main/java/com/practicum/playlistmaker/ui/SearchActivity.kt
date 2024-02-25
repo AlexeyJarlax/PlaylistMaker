@@ -277,7 +277,7 @@ class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         playButton.setDebouncedClickListener {
             trackItemClickListener.onTrackItemClick(track)
-            val intent = Intent(itemView.context, PlayActivity::class.java)
+            val intent = Intent(itemView.context, OLDPlayActivity::class.java)
             val trackJson = Json.encodeToString(TracksList.serializer(), track)
             intent.putExtra("trackJson", trackJson)
             itemView.context.startActivity(intent)

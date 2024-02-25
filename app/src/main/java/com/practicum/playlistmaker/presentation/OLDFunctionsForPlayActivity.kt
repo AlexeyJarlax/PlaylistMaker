@@ -10,7 +10,7 @@ import com.practicum.playlistmaker.domain.api.ProviderForSelectedTrack
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
-abstract class FunctionsForPlayActivity : AppCompatActivity(), ProviderForSelectedTrack {
+abstract class OLDFunctionsForPlayActivity : AppCompatActivity(), ProviderForSelectedTrack {
 
     lateinit var secondsCounter: SecondsCounter
     lateinit var mediaPlayer: MediaPlayer
