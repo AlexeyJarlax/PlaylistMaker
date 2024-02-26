@@ -9,22 +9,34 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import com.practicum.playlistmaker.MyApplication
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 
 class TrackViewModel(
     private val trackId: String,
     private val tracksInteractor: TracksInteractor,
 ) : ViewModel() {
 
+    private var loadingLiveData = MutableLiveData(true)
+
+    // 1
     init {
-        Log.d("TEST", "init!: $trackId")
+        tracksInteractor.loadSomeData(
+            onComplete = {
+                // 2
+                loadingLiveData.postValue(false)
+                // или
+                // 3
+                loadingLiveData.value = false
+            }
+        )
     }
 
+    fun getLoadingLiveData(): LiveData<Boolean> = loadingLiveData
+
     companion object {
-        // 1
         fun getViewModelFactory(trackId: String): ViewModelProvider.Factory = viewModelFactory {
-            // 2
             initializer {
-                // 3
                 val interactor = (this[APPLICATION_KEY] as MyApplication).provideTracksInteractor()
 
                 TrackViewModel(

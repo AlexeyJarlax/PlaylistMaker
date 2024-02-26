@@ -47,11 +47,13 @@ import com.practicum.playlistmaker.presentation.stopLoadingIndicator
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import kotlinx.serialization.json.Json
+import com.practicum.playlistmaker.databinding.ActivityTrackBinding
+import com.practicum.playlistmaker.databinding.UtilItemTrackBinding
 
 class SearchActivity : AppCompatActivity(), ProviderForSelectedTrack {
 
     private lateinit var trackUseCase: RepositoryForSelectedTrack  // TrackUseCase интерфейс
-
+    private lateinit var binding: ActivityTrackBinding
     private var hasFocus = true
     private lateinit var queryInput: EditText
     private lateinit var clearButton: ImageButton
@@ -79,6 +81,8 @@ class SearchActivity : AppCompatActivity(), ProviderForSelectedTrack {
     }
 
     private fun initViews() {
+        binding = ActivityTrackBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         clearButton = findViewById(R.id.clearButton)
         queryInput = findViewById(R.id.search_edit_text)
         trackRecyclerView = findViewById(R.id.track_recycler_view)
@@ -256,13 +260,15 @@ class SearchActivity : AppCompatActivity(), ProviderForSelectedTrack {
 }
 
 //******************************************************************************* Adapter и Recycler
-class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+//class UtilTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class UtilTrackViewHolder(private val binding: UtilItemTrackBinding) : RecyclerView.ViewHolder(binding.root) {
     private val trackNameTextView: TextView = itemView.findViewById(R.id.track_name_text_view)
     private val artistNameTextView: TextView = itemView.findViewById(R.id.artist_name_text_view)
     private val trackTimeTextView: TextView =
         itemView.findViewById(R.id.track_duration_text_view)
     private val artworkImageView: ImageView = itemView.findViewById(R.id.artwork_image_view)
     private val playButton: LinearLayout = itemView.findViewById(R.id.util_item_track)
+
 
     fun bind(track: TracksList, trackItemClickListener: HistoryTrackClickListener) {
         trackNameTextView.text = track.trackName ?: ""
@@ -302,8 +308,10 @@ class AdapterForAPITracks(
 ) : RecyclerView.Adapter<UtilTrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UtilTrackViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.util_item_track, parent, false)
-        return UtilTrackViewHolder(view)
+//        val view = LayoutInflater.from(context).inflate(R.layout.util_item_track, parent, false)
+//        return UtilTrackViewHolder(view)
+        val layoutInspector = LayoutInflater.from(parent.context)
+        return UtilTrackViewHolder(UtilItemTrackBinding.inflate(layoutInspector, parent, false))
     }
 
     override fun onBindViewHolder(holder: UtilTrackViewHolder, position: Int) {
