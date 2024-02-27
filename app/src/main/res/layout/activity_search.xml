@@ -91,19 +91,26 @@
             app:layout_constraintTop_toBottomOf="@id/search_input_layout"
             tools:visibility="visible" />
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/searchHistoryNotification"
+            android:id="@+id/ScrollView">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/SearchRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp8"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/searchHistoryNotification"
             app:tint="@color/yp_light_gray_and_yp_white"
             tools:context=".mediateka.MedialabActivity"
             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:layout_editor_absoluteX="0dp"
             tools:listitem="@layout/util_item_track"
             tools:visibility="visible" />
+
+        </ScrollView>
 
         <Button
             android:id="@+id/kill_the_history"
@@ -120,7 +127,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/SearchRecyclerView"
+            app:layout_constraintTop_toBottomOf="@id/ScrollView"
             tools:visibility="visible" />
 
         <ProgressBar
@@ -131,8 +138,8 @@
             android:indeterminateTint="@color/yp_blue_and_yp_blue"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/SearchRecyclerView"
-            app:layout_constraintStart_toStartOf="@+id/SearchRecyclerView"
+            app:layout_constraintEnd_toEndOf="@+id/ScrollView"
+            app:layout_constraintStart_toStartOf="@+id/ScrollView"
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
 
