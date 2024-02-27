@@ -1,10 +1,10 @@
 package com.practicum.playlistmaker.creator
 
-import com.practicum.playlistmaker.data.RepositoryImplForTracksList
-import com.practicum.playlistmaker.data.network.RetrofitNetworkClientForTracksList
-import com.practicum.playlistmaker.domain.api.InteractorForTracksList
-import com.practicum.playlistmaker.domain.api.RepositoryForTracksList
-import com.practicum.playlistmaker.domain.impl.InteractorImplForTracksList
+import com.practicum.playlistmaker.garbage__data.RepositoryImplForTracksList
+import com.practicum.playlistmaker.garbage__data.network.RetrofitNetworkClientForTracksList
+import com.practicum.playlistmaker.garbage__domain.api.InteractorForTracksList
+import com.practicum.playlistmaker.garbage__domain.api.RepositoryForTracksList
+import com.practicum.playlistmaker.garbage__domain.impl.InteractorImplForTracksList
 
 object Creator {
     //для сёрчАктивити
@@ -16,10 +16,10 @@ object Creator {
     }
 
     // для плейАкивити
-    fun getRepository(): TracksRepositoryImpl {
-        return TracksRepositoryImpl(NetworkClientImpl())
-    }
-    fun provideTracksInteractor(): TrackInteractor {
-        return TracksInteractorImpl(getRepository())
-    }
+//    fun getRepository(): TracksRepositoryImpl {
+//        return TracksRepositoryImpl(NetworkClientImpl())
+//    }
+//    fun provideTracksInteractor(): TrackInteractor {
+//        return TracksInteractorImpl(getRepository())
+//    }
 }

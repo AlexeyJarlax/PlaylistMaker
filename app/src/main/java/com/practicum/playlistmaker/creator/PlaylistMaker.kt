@@ -1,9 +1,9 @@
 package com.practicum.playlistmaker.creator
 //
 import android.app.Application
-import com.practicum.playlistmaker.domain.api.RepositoryForSelectedTrack
-import com.practicum.playlistmaker.data.RepositoryImplForSelectedTrack
-import com.practicum.playlistmaker.domain.api.ProviderForSelectedTrack
+import com.practicum.playlistmaker.garbage__domain.api.RepositoryForSelectedTrack
+import com.practicum.playlistmaker.garbage__data.RepositoryImplForSelectedTrack
+import com.practicum.playlistmaker.garbage__domain.api.ProviderForSelectedTrack
 
 class PlaylistMaker : Application(), ProviderForSelectedTrack {
     private lateinit var trackUseCase: RepositoryForSelectedTrack

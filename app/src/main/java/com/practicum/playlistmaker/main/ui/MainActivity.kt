@@ -7,10 +7,11 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.presentation.UtilThemeManager
-import com.practicum.playlistmaker.presentation.setDebouncedClickListener
-import com.practicum.playlistmaker.search.SearchActivity
-import com.practicum.playlistmaker.settings.activity.SettingsActivity
+import com.practicum.playlistmaker.mediateka.MedialabActivity
+import com.practicum.playlistmaker.settings.UtilThemeManager
+import com.practicum.playlistmaker.utils.setDebouncedClickListener
+import com.practicum.playlistmaker.search.ui.SearchActivity
+import com.practicum.playlistmaker.settings.ui.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/BackMenuLayout"
@@ -7,7 +8,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".search.SearchActivity">
+    tools:context=".search.ui.SearchActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,17 +21,64 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <include
-            android:id="@+id/search_box_include"
-            layout="@layout/util_search_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp36"
-            android:layout_marginTop="@dimen/dp60"
-            app:layout_constraintTop_toTopOf="@id/buttonBack"
-            tools:layout_editor_absoluteX="@dimen/z" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/search_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:imeOptions="actionDone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buttonBack">
+
+            <RelativeLayout
+                style="@style/SearchButtons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone">
+
+                <ImageButton
+                    android:id="@+id/search_icon"
+                    style="@style/SearchIconStyle"
+                    android:layout_width="@dimen/dp16"
+                    android:layout_height="@dimen/dp16"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:contentDescription="@string/todo"
+                    android:src="@drawable/ic_search" />
+
+                <EditText
+                    android:id="@+id/search_edit_text"
+                    style="@style/SearchButtons"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="0dp"
+                    android:layout_toStartOf="@id/clearButton"
+                    android:background="@android:color/transparent"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:paddingVertical="0dp"
+                    android:paddingStart="@dimen/dp24"
+                    android:text="" />
+
+                <ImageButton
+                    android:id="@+id/clearButton"
+                    style="@style/SearchIconStyle"
+                    android:layout_width="@dimen/dp16"
+                    android:layout_height="@dimen/dp16"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:src="@drawable/ic_btn_clear"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+            </RelativeLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:id="@+id/you_were_looking_for"
+            android:id="@+id/searchHistoryNotification"
             style="@style/ErrorTextBig"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,18 +88,18 @@
             android:text="@string/you_were_looking_for"
             android:textSize="@dimen/text_size_sp19"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/search_box_include"
+            app:layout_constraintTop_toBottomOf="@id/search_input_layout"
             tools:visibility="visible" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/track_recycler_view"
+            android:id="@+id/SearchRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp8"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/you_were_looking_for"
+            app:layout_constraintTop_toBottomOf="@id/searchHistoryNotification"
             app:tint="@color/yp_light_gray_and_yp_white"
-            tools:context=".main.ui.MedialabActivity"
+            tools:context=".mediateka.MedialabActivity"
             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:layout_editor_absoluteX="0dp"
             tools:listitem="@layout/util_item_track"
@@ -72,7 +120,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/track_recycler_view"
+            app:layout_constraintTop_toBottomOf="@id/SearchRecyclerView"
             tools:visibility="visible" />
 
         <ProgressBar
@@ -80,16 +128,16 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="@dimen/dp44"
             android:layout_height="@dimen/dp44"
-            android:layout_marginTop="@dimen/dp248"
             android:indeterminateTint="@color/yp_blue_and_yp_blue"
-            app:layout_constraintEnd_toEndOf="@+id/track_recycler_view"
-            app:layout_constraintStart_toStartOf="@+id/track_recycler_view"
-            app:layout_constraintTop_toTopOf="parent"
             android:visibility="gone"
-            tools:visibility="visible"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/SearchRecyclerView"
+            app:layout_constraintStart_toStartOf="@+id/SearchRecyclerView"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
 
         <include
-            android:id="@+id/util_error_box"
+            android:id="@+id/utilErrorBox"
             layout="@layout/util_error_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -97,4 +145,5 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+

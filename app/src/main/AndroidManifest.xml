@@ -29,19 +29,19 @@
         tools:targetApi="31">
 
         <activity
-            android:name=".player.OLDPlayActivity"
+            android:name=".player.ui.PlayActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".search.SearchActivity"
+            android:name=".search.ui.SearchActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".main.ui.MedialabActivity"
+            android:name=".mediateka.MedialabActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".settings.activity.SettingsActivity"
+            android:name=".settings.ui.SettingsActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MyApp" />
