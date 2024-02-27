@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.ui
+package com.practicum.playlistmaker.player
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar

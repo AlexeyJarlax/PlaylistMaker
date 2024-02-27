@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.ui
+package com.practicum.playlistmaker.main.ui
 
 import android.content.Intent
 import android.os.Build
@@ -9,6 +9,8 @@ import android.widget.Toast
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.presentation.UtilThemeManager
 import com.practicum.playlistmaker.presentation.setDebouncedClickListener
+import com.practicum.playlistmaker.search.SearchActivity
+import com.practicum.playlistmaker.settings.activity.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.creator
 
 import android.app.Application
 import com.practicum.playlistmaker.domain.api.RepositoryForSelectedTrack

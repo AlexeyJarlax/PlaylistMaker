@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/BackMenuLayout"
-    tools:context=".ui.SettingsActivity">
+    tools:context=".settings.activity.SettingsActivity">
 
     <Button
         android:id="@+id/buttonBack"

@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.ui
+package com.practicum.playlistmaker.search
 
 /* === Памятка о содержании файла:
 SearchActivity - активити и вся обработка поискового запроса юзера.
@@ -28,7 +28,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.Creator
+import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.data.HistoryTrackClickListener
 import com.practicum.playlistmaker.data.network.ArtworkUrlLoader
@@ -49,6 +49,7 @@ import java.util.concurrent.TimeUnit
 import kotlinx.serialization.json.Json
 import com.practicum.playlistmaker.databinding.ActivityTrackBinding
 import com.practicum.playlistmaker.databinding.UtilItemTrackBinding
+import com.practicum.playlistmaker.player.OLDPlayActivity
 
 class SearchActivity : AppCompatActivity(), ProviderForSelectedTrack {
 

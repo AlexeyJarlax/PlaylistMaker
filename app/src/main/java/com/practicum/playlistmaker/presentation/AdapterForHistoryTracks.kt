@@ -7,7 +7,7 @@ import com.practicum.playlistmaker.data.HistoryTrackClickListener
 import com.practicum.playlistmaker.data.preferences.AppPreferencesKeys
 import com.practicum.playlistmaker.data.preferences.SharedPreferencesMethods
 import com.practicum.playlistmaker.domain.models.TracksList
-import com.practicum.playlistmaker.ui.AdapterForAPITracks
+import com.practicum.playlistmaker.search.AdapterForAPITracks
 
 class AdapterForHistoryTracks(
     private val context: Context,
