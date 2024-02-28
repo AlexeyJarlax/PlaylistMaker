@@ -8,7 +8,7 @@ import android.widget.Button
 import android.widget.Toast
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.mediateka.MedialabActivity
-import com.practicum.playlistmaker.settings.UtilThemeManager
+//import com.practicum.playlistmaker.settings.UtilThemeManager
 import com.practicum.playlistmaker.utils.setDebouncedClickListener
 import com.practicum.playlistmaker.search.ui.SearchActivity
 import com.practicum.playlistmaker.settings.ui.SettingsActivity
@@ -16,7 +16,7 @@ import com.practicum.playlistmaker.settings.ui.SettingsActivity
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        UtilThemeManager.applyTheme(this) // Применяю тему сразу при запуске 12 СПРИНТ
+//        UtilThemeManager.applyTheme(this) // Применяю тему сразу при запуске 12 СПРИНТ
         setContentView(R.layout.activity_main)
 
         val buttonSearch = findViewById<Button>(R.id.button_search)

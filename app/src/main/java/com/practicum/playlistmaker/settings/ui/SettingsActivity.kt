@@ -1,55 +1,48 @@
 package com.practicum.playlistmaker.settings.ui
 
-import android.annotation.SuppressLint
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
-import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.settings.CommunicationButtons
-import com.practicum.playlistmaker.settings.UtilThemeManager
+import androidx.lifecycle.ViewModelProvider
+import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 import com.practicum.playlistmaker.utils.setDebouncedClickListener
-import com.practicum.playlistmaker.utils.buttonBack
+import com.practicum.playlistmaker.utils.buttonToGoBack
 
 class SettingsActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivitySettingsBinding
+    private lateinit var viewModelProvider: SettingsViewModel
 
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        UtilThemeManager.applyTheme(this)
-        setContentView(R.layout.activity_settings)
-        buttonBack()
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        viewModelProvider = ViewModelProvider(
+            this,
+            SettingsViewModel.getViewModelFactory()
+        )[SettingsViewModel::class.java]
+        buttonToGoBack()
 
-        // КНОПКА НОЧНОЙ И ДНЕВНОЙ ТЕМЫ (РЕАЛИЗАЦИЯ ВЫНЕСЕНА В UtilThemeManager)
-        val switchDarkMode: SwitchCompat = findViewById(R.id.switch_dark_mode)
-        switchDarkMode.isChecked = UtilThemeManager.isNightModeEnabled(this)
-        switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
-            UtilThemeManager.setNightModeEnabled(this, isChecked)
-            UtilThemeManager.applyTheme(this)
+        // КНОПКА НОЧНОЙ И ДНЕВНОЙ ТЕМЫ
+        viewModelProvider.isNightMode.observe(this) { binding.switchDarkMode.isChecked = it }
+        binding.switchDarkMode.setOnCheckedChangeListener { _, value ->
+            viewModelProvider.changeNightMode(
+                value
+            )
         }
 
         // КНОПКА ПОДЕЛИТЬСЯ
-        val shareButton = findViewById<Button>(R.id.button_settings_share)
-        shareButton.setDebouncedClickListener {
-            CommunicationButtons(this).buttonShare()
+        binding.buttonSettingsShare.setDebouncedClickListener {
+            viewModelProvider.shareApp()
         }
 
         // КНОПКА ТЕХПОДДЕРЖКИ
-        val helpButton = findViewById<Button>(R.id.button_settings_write_to_supp)
-        helpButton.setDebouncedClickListener {
-            CommunicationButtons(this).buttonHelp()
+        binding.buttonSettingsWriteToSupp.setDebouncedClickListener {
+            viewModelProvider.goToHelp()
         }
 
         // КНОПКА ПОЛЬЗОВАТЕЛЬСКОГО СОГЛАШЕНИЯ
-        val userAgreementButton = findViewById<Button>(R.id.button_settings_user_agreement)
-        userAgreementButton.setDebouncedClickListener {
-            val url = getString(R.string.user_agreement_url)
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(url)
-            startActivity(intent)
+        binding.buttonSettingsUserAgreement.setDebouncedClickListener {
+            viewModelProvider.seeUserAgreement()
         }
     }
 }

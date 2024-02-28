@@ -1,4 +1,6 @@
 package com.practicum.playlistmaker.settings.domain
 
-class SettingsInteractor {
+interface SettingsInteractor {
+    fun loadNightMode(): Boolean
+    fun saveNightMode(value: Boolean)
 }

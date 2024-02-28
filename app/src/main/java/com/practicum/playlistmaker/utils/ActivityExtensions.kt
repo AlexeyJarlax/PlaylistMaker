@@ -9,14 +9,13 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import kotlin.concurrent.thread
 
 fun Activity.toast(text: String) {
     Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 }
 
-fun Activity.buttonBack() { // КНОПКА НАЗАД
+fun Activity.buttonToGoBack() { // КНОПКА НАЗАД
     val back = findViewById<Button>(R.id.buttonBack)
     back.setDebouncedClickListener {
         finish()

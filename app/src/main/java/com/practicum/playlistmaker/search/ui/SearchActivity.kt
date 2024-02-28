@@ -18,7 +18,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
-import android.text.Layout
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
@@ -42,7 +41,7 @@ import com.practicum.playlistmaker.utils.DebounceExtension
 import com.practicum.playlistmaker.utils.openThread
 import com.practicum.playlistmaker.utils.setDebouncedClickListener
 import com.practicum.playlistmaker.garbage__domain.models.TracksList
-import com.practicum.playlistmaker.utils.buttonBack
+import com.practicum.playlistmaker.utils.buttonToGoBack
 import com.practicum.playlistmaker.utils.solvingAbsentProblem
 import com.practicum.playlistmaker.utils.stopLoadingIndicator
 import timber.log.Timber
@@ -79,7 +78,7 @@ class SearchActivity : AppCompatActivity(), ProviderForSelectedTrack {
         queryInputListener()
         fillTrackAdapter()
         killTheHistory()
-        buttonBack()
+        buttonToGoBack()
     }
 
     private fun initViews() {

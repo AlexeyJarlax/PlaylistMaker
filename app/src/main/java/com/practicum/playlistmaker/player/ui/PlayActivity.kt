@@ -10,7 +10,7 @@ import com.practicum.playlistmaker.player.SecondsCounter
 import com.practicum.playlistmaker.utils.setDebouncedClickListener
 import com.practicum.playlistmaker.garbage__domain.models.TracksList
 import com.practicum.playlistmaker.utils.ArtworkUrlLoader
-import com.practicum.playlistmaker.utils.buttonBack
+import com.practicum.playlistmaker.utils.buttonToGoBack
 import kotlinx.serialization.json.Json
 
 class PlayActivity : FunctionsForPlayActivity() { //FunctionsForPlayActivity содержит функции проигрывания, PlayActivity - остальные функции вьюхи
@@ -35,7 +35,7 @@ class PlayActivity : FunctionsForPlayActivity() { //FunctionsForPlayActivity с�
         setupLikeButton()
         url?.let { preparePlayer(it) }
         setupPlayButton()
-        buttonBack()
+        buttonToGoBack()
     }
 
     private fun bindingView(track: TracksList) {
