@@ -1,46 +1,33 @@
 package com.practicum.playlistmaker.main.ui
 
-import android.content.Intent
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.Toast
-import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.mediateka.MedialabActivity
-//import com.practicum.playlistmaker.settings.UtilThemeManager
+import androidx.lifecycle.ViewModelProvider
+import com.practicum.playlistmaker.databinding.ActivityMainBinding
 import com.practicum.playlistmaker.utils.setDebouncedClickListener
-import com.practicum.playlistmaker.search.ui.SearchActivity
-import com.practicum.playlistmaker.settings.ui.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: MainViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        UtilThemeManager.applyTheme(this) // Применяю тему сразу при запуске 12 СПРИНТ
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val buttonSearch = findViewById<Button>(R.id.button_search)
-        val buttonMedialib = findViewById<Button>(R.id.button_media_lib)
-        val buttonSettings = findViewById<Button>(R.id.button_settings)
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
-        buttonSearch.setDebouncedClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                // для Android (API 24) и выше
-                val displayIntent = Intent(this, SearchActivity::class.java)
-                startActivity(displayIntent)
-            } else {
-                Toast.makeText(this, "Недоступно на версии Android ниже API 24", Toast.LENGTH_SHORT).show()
-            }
+        binding.buttonSearch.setDebouncedClickListener {
+            viewModel.onSearchButtonClicked(this)
         }
 
-        buttonMedialib.setDebouncedClickListener {
-            val displayIntent = Intent(this, MedialabActivity::class.java)
-            startActivity(displayIntent)
+        binding.buttonMediaLib.setDebouncedClickListener {
+            viewModel.onMediaLibButtonClicked(this)
         }
 
-        buttonSettings.setDebouncedClickListener {
-            val displayIntent = Intent(this, SettingsActivity::class.java)
-            startActivity(displayIntent)
+        binding.buttonSettings.setDebouncedClickListener {
+            viewModel.onSettingsButtonClicked(this)
         }
     }
 }
