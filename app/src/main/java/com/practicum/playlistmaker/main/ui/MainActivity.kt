@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.databinding.ActivityMainBinding
+import com.practicum.playlistmaker.main.domain.ThemeManager
 import com.practicum.playlistmaker.utils.setDebouncedClickListener
 
 class MainActivity : AppCompatActivity() {
@@ -13,6 +14,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ThemeManager.applyTheme(this)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
