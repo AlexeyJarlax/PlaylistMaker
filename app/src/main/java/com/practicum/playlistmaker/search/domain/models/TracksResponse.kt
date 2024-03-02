@@ -1,4 +1,3 @@
 package com.practicum.playlistmaker.search.domain.models
 
-class TracksResponse {
-}
+data class TracksResponse(val results: List<Track>, val resultCode: Int)

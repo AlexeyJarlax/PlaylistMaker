@@ -40,44 +40,39 @@ fun Activity.openThread(onThreadComplete: () -> Unit) {
     }
 }
 
-//****************************************** решаем проблемы с загрузкой треков
+//****************************************** решаем проблемы с загрузкой и списком треков
 
-    fun Activity.solvingAbsentProblem() {
-        val utilErrorBox = findViewById<LinearLayout>(R.id.utilErrorBox)
-        val errorIcon = findViewById<ImageView>(R.id.error_icon)
-        val errorTextWeb = findViewById<TextView>(R.id.error_text_web)
-        errorIcon.setImageResource(R.drawable.ic_error_notfound)
-        errorTextWeb.text = resources.getString(R.string.nothing_was_found)
-        val retryButton = findViewById<Button>(R.id.retry_button)
-        retryButton.visibility = View.GONE // тут кнопка не нужна
-        utilErrorBox.visibility = View.VISIBLE
-        utilErrorBox.setDebouncedClickListener {
-            utilErrorBox.visibility = View.GONE
+fun Activity.solvingThisProblemWith(problemTipo: String, sendRequestForDoReserch: () -> Unit) {
+    val utilErrorBox = findViewById<LinearLayout>(R.id.utilErrorBox)
+    val errorIcon = findViewById<ImageView>(R.id.error_icon)
+    val errorTextWeb = findViewById<TextView>(R.id.error_text_web)
+    val retryButton = findViewById<Button>(R.id.retry_button)
+
+    when (problemTipo) {
+        AppPreferencesKeys.INTERNET -> {
+            errorIcon.setImageResource(R.drawable.ic_error_internet)
+            errorTextWeb.text = resources.getString(R.string.error_text_web)
+            retryButton.visibility = View.VISIBLE
+            retryButton.setDebouncedClickListener {
+                sendRequestForDoReserch() // тут отправляем на повторный поиск
+                utilErrorBox.visibility = View.GONE
+            }
+        }
+        AppPreferencesKeys.RESULTS -> {
+            errorIcon.setImageResource(R.drawable.ic_error_notfound)
+            errorTextWeb.text = resources.getString(R.string.nothing_was_found)
+            retryButton.visibility = View.GONE
+        }
+        else -> {
+            retryButton.visibility = View.GONE
         }
     }
 
-//    fun Activity.solvingConnectionProblem() {
-//        val utilErrorBox = findViewById<LinearLayout>(R.id.util_error_box)
-//        val errorIcon = findViewById<ImageView>(R.id.error_icon)
-//        val errorTextWeb = findViewById<TextView>(R.id.error_text_web)
-//        errorIcon.setImageResource(R.drawable.ic_error_internet)
-//        errorTextWeb.text = resources.getString(R.string.error_text_web)
-//        val retryButton = findViewById<Button>(R.id.retry_button)
-//        retryButton.visibility = View.VISIBLE
-//        utilErrorBox.visibility = View.VISIBLE
-//        retryButton.setDebouncedClickListener {
-//        lastQuery?.let { query ->
-//            lastCallback?.let { callback ->
-//                searchStep2Thread(query)
-//            }
-//        }
-//            toast("функция в разработке")
-//            utilErrorBox.visibility = View.GONE
-//        }
-//    }
-
-
-
+    utilErrorBox.visibility = View.VISIBLE
+    utilErrorBox.setDebouncedClickListener {
+        utilErrorBox.visibility = View.GONE
+    }
+}
 
 
 

@@ -6,7 +6,6 @@ import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayBinding
-import com.practicum.playlistmaker.garbage__domain.api.ProviderForSelectedTrack
 import com.practicum.playlistmaker.player.SecondsCounter
 import com.practicum.playlistmaker.utils.startLoadingIndicator
 import com.practicum.playlistmaker.utils.stopLoadingIndicator
@@ -14,7 +13,7 @@ import com.practicum.playlistmaker.utils.toast
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
-abstract class FunctionsForPlayActivity : AppCompatActivity(), ProviderForSelectedTrack {
+abstract class FunctionsForPlayActivity : AppCompatActivity() {
 
     lateinit var secondsCounter: SecondsCounter
     lateinit var mediaPlayer: MediaPlayer

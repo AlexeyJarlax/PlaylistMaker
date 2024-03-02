@@ -3,36 +3,36 @@ package com.practicum.playlistmaker.creator
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
-import com.practicum.playlistmaker.garbage__data.RepositoryImplForTracksList
-import com.practicum.playlistmaker.garbage__data.network.RetrofitNetworkClientForTracksList
-import com.practicum.playlistmaker.garbage__domain.api.InteractorForTracksList
-import com.practicum.playlistmaker.garbage__domain.api.RepositoryForTracksList
-import com.practicum.playlistmaker.garbage__domain.impl.InteractorImplForTracksList
 import com.practicum.playlistmaker.settings.data.SettingsRepositoryImpl
 import com.practicum.playlistmaker.settings.domain.SettingsInteractor
 import com.practicum.playlistmaker.settings.domain.SettingsInteractorImpl
 import com.practicum.playlistmaker.communication_buttons.data.CommunicationButtonsDataImpl
 import com.practicum.playlistmaker.communication_buttons.domain.CommunicationButtonsInteractor
 import com.practicum.playlistmaker.communication_buttons.domain.CommunicationButtonsInteractorImpl
+import com.practicum.playlistmaker.search.data.RepositoryImplForHistoryTrack
+import com.practicum.playlistmaker.search.data.RepositoryImplForTracksList
+import com.practicum.playlistmaker.search.data.network.RetrofitNetworkClientForTracksList
+import com.practicum.playlistmaker.search.domain.TracksInteractor
+import com.practicum.playlistmaker.search.domain.TracksInteractorImpl
 import com.practicum.playlistmaker.utils.AppPreferencesKeys
 
 object Creator {
     //старые функции
-    private fun getTrackRepository(): RepositoryForTracksList {
-        return RepositoryImplForTracksList(RetrofitNetworkClientForTracksList())
-    }
-    fun provideTrackInteractor(): InteractorForTracksList {
-        return InteractorImplForTracksList(getTrackRepository())
-    }
+//    private fun getTrackRepository(): RepositoryForTracksList {
+//        return RepositoryImplForTracksList(RetrofitNetworkClientForTracksList())
+//    }
+//    fun provideTrackInteractor(): InteractorForTracksList {
+//        return InteractorImplForTracksList(getTrackRepository())
+//    }
 
     // новые функции
-//    fun provideTracksInteractor(context: Context): TracksInteractor {
-//        val sp = provideSharedPreferences(context)
-//        return TracksInteractorImpl(
-//            repository = TracksRepositoryImpl(RetrofitNetworkClient()),
-//            history = TracksHistoryRepositoryImpl(sp)
-//        )
-//    }
+    fun provideTracksInteractor(context: Context): TracksInteractor {
+        val sp = provideSharedPreferences(context)
+        return TracksInteractorImpl(
+            repository = RepositoryImplForTracksList(RetrofitNetworkClientForTracksList()),
+            history = RepositoryImplForHistoryTrack(sp)
+        )
+    }
 //
 //    fun provideMediaPlayerInteractor(url: String): MediaPlayerInteractor {
 //        return MediaPlayerInteractorImpl(
