@@ -12,9 +12,8 @@ internal object AppPreferencesKeys { // глобальные объекты
     const val ALBUM_ROUNDED_CORNERS = 8
     const val HISTORY_TRACK_LIST_SIZE = 10
     const val CLICK_DEBOUNCE_DELAY = 500L // кулдаун для клика / милисекунда
-    const val SEARCH_DEBOUNCE_DELAY = 2000L // отложенный поисковый запрос
+    const val TWO_SECONDS = 2000L // отложенный поисковый запрос
     const val ONE_SECOND = 1000L // одна секунда
-    const val PREFERENCES_TITLE = "PlayList_Maker_preferences"
     const val SEARCH_HISTORY = "search_history"
     const val AN_INSTANCE_OF_THE_TRACK_CLASS = "an instance of the Track class"
     const val INTERNET = "problems_with_internet"

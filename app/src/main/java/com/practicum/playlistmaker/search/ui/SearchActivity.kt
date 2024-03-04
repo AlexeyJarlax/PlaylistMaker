@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.search.ui
 
-import android.annotation.SuppressLint
 import timber.log.Timber
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.databinding.UtilErrorLayoutBinding
-import com.practicum.playlistmaker.player.ui.PlayerActivity
+import com.practicum.playlistmaker.player.ui.PlayActivity
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.utils.buttonToGoBack
 import com.practicum.playlistmaker.utils.setDebouncedClickListener
@@ -77,7 +77,7 @@ class SearchActivity : AppCompatActivity() {
     private fun setupAdapterForAPITracks() {
         adapterForAPITracks = AdapterForAPITracks {
             viewModel.saveToHistory(it)
-            val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
+            val intent = Intent(this@SearchActivity, PlayActivity::class.java)
             intent.putExtra(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS, it)
             startActivity(intent)
         }
@@ -88,7 +88,7 @@ class SearchActivity : AppCompatActivity() {
     private fun setupAdapterForHistoryTracks() {
         adapterForHistoryTracks = AdapterForHistoryTracks {
             viewModel.saveToHistoryAndRefresh(it)
-            val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
+            val intent = Intent(this@SearchActivity, PlayActivity::class.java)
             intent.putExtra(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS, it)
             startActivity(intent)
         }
@@ -261,7 +261,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private val twoSecondDebounceSearch =  // обработка задержки в 2 сек
-        DebounceExtension(AppPreferencesKeys.SEARCH_DEBOUNCE_DELAY) {
+        DebounceExtension(AppPreferencesKeys.TWO_SECONDS) {
             viewModel.searchRequestFromViewModel((queryInput.text.toString().trim()), false)
         }
 

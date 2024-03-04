@@ -1,4 +1,11 @@
 package com.practicum.playlistmaker.player.domain
 
-class MediaPlayerInteractor {
+interface MediaPlayerInteractor {
+
+    fun getState(): PlayerState
+    fun getPlayerReady()
+
+    fun play()
+    fun pause()
+    fun stop()
 }

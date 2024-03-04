@@ -9,6 +9,9 @@ import com.practicum.playlistmaker.settings.domain.SettingsInteractorImpl
 import com.practicum.playlistmaker.communication_buttons.data.CommunicationButtonsDataImpl
 import com.practicum.playlistmaker.communication_buttons.domain.CommunicationButtonsInteractor
 import com.practicum.playlistmaker.communication_buttons.domain.CommunicationButtonsInteractorImpl
+import com.practicum.playlistmaker.player.data.MediaPlayerDataImpl
+import com.practicum.playlistmaker.player.domain.MediaPlayerInteractor
+import com.practicum.playlistmaker.player.domain.MediaPlayerInteractorImpl
 import com.practicum.playlistmaker.search.data.RepositoryImplForHistoryTrack
 import com.practicum.playlistmaker.search.data.RepositoryImplForTracksList
 import com.practicum.playlistmaker.search.data.network.RetrofitNetworkClientForTracksList
@@ -17,15 +20,14 @@ import com.practicum.playlistmaker.search.domain.TracksInteractorImpl
 import com.practicum.playlistmaker.utils.AppPreferencesKeys
 
 object Creator {
-    //старые функции
-//    private fun getTrackRepository(): RepositoryForTracksList {
-//        return RepositoryImplForTracksList(RetrofitNetworkClientForTracksList())
-//    }
-//    fun provideTrackInteractor(): InteractorForTracksList {
-//        return InteractorImplForTracksList(getTrackRepository())
-//    }
 
-    // новые функции
+    fun provideSettingsInteractor(context: Context): SettingsInteractor {
+        val sharedPreferences = provideSharedPreferences(context)
+        return SettingsInteractorImpl(
+            settingsRepository = SettingsRepositoryImpl(sharedPreferences)
+        )
+    }
+
     fun provideTracksInteractor(context: Context): TracksInteractor {
         val sp = provideSharedPreferences(context)
         return TracksInteractorImpl(
@@ -33,17 +35,10 @@ object Creator {
             history = RepositoryImplForHistoryTrack(sp)
         )
     }
-//
-//    fun provideMediaPlayerInteractor(url: String): MediaPlayerInteractor {
-//        return MediaPlayerInteractorImpl(
-//            mediaPlayer = MediaPlayerDataImpl(url)
-//        )
-//    }
 
-    fun provideSettingsInteractor(context: Context): SettingsInteractor {
-        val sharedPreferences = provideSharedPreferences(context)
-        return SettingsInteractorImpl(
-            settingsRepository = SettingsRepositoryImpl(sharedPreferences)
+    fun provideMediaPlayerInteractor(url: String): MediaPlayerInteractor {
+        return MediaPlayerInteractorImpl(
+            mediaPlayer = MediaPlayerDataImpl(url)
         )
     }
 
