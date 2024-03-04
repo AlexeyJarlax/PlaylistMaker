@@ -31,6 +31,7 @@ class PlayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         track =
             (intent?.getSerializableExtra(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS) as? Track)!!
         viewModel = ViewModelProvider(

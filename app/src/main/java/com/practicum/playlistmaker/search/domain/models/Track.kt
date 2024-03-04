@@ -1,10 +1,25 @@
 package com.practicum.playlistmaker.search.domain.models
 
+/* Модель данных: трек c возможностью упаковываться в джейсончики
+   Объект содержит:
+val trackId: Int?               // Id
+val trackName: String?          // Название
+val artistName: String?         // Исполнитель
+val trackTimeMillis: Long?      // Продолжительность
+val artworkUrl100: String?      // Пикча на обложку
+val collectionName: String?     // Название альбома
+val releaseDate: String?        // Год
+val primaryGenreName: String?   // Жанр
+val country: String?            // Страна
+val previewUrl: String?         // ссылка на 30 сек. фрагмент
+*/
+
 import kotlinx.serialization.SerialName
 import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+@kotlinx.serialization.Serializable
 data class Track(
     @SerialName("trackId") val trackId: Int?,
     @SerialName("trackName") val trackName: String?,

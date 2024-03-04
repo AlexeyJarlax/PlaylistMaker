@@ -20,6 +20,9 @@ class AdapterForAPITracks(val onClick: (Track) -> Unit) : RecyclerView.Adapter<T
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracks[position])
-        holder.itemView.setDebouncedClickListener { onClick(tracks[position]) }
+        holder.itemView.setDebouncedClickListener {
+            onClick(tracks[position])
+
+        }
     }
 }
