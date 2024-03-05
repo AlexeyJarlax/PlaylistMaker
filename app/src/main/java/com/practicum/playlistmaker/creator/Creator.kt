@@ -3,12 +3,15 @@ package com.practicum.playlistmaker.creator
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
+import com.practicum.playlistmaker.main.data.MainRepositoryImpl
+import com.practicum.playlistmaker.main.domain.MainInteractor
+import com.practicum.playlistmaker.main.domain.MainInteractorImpl
 import com.practicum.playlistmaker.settings.data.SettingsRepositoryImpl
 import com.practicum.playlistmaker.settings.domain.SettingsInteractor
 import com.practicum.playlistmaker.settings.domain.SettingsInteractorImpl
-import com.practicum.playlistmaker.communication_buttons.data.CommunicationButtonsDataImpl
-import com.practicum.playlistmaker.communication_buttons.domain.CommunicationButtonsInteractor
-import com.practicum.playlistmaker.communication_buttons.domain.CommunicationButtonsInteractorImpl
+import com.practicum.playlistmaker.settings.data.CommunicationButtonsRepositoryImpl
+import com.practicum.playlistmaker.settings.domain.CommunicationButtonsInteractor
+import com.practicum.playlistmaker.settings.domain.CommunicationButtonsInteractorImpl
 import com.practicum.playlistmaker.player.data.MediaPlayerDataImpl
 import com.practicum.playlistmaker.player.domain.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.MediaPlayerInteractorImpl
@@ -20,6 +23,13 @@ import com.practicum.playlistmaker.search.domain.TracksInteractorImpl
 import com.practicum.playlistmaker.utils.AppPreferencesKeys
 
 object Creator {
+
+    fun provideGetMainInteractor(context: Context): MainInteractor {
+        val sharedPreferences = provideSharedPreferences(context)
+        return MainInteractorImpl(
+            mainRepository = MainRepositoryImpl(context, sharedPreferences)
+        )
+    }
 
     fun provideSettingsInteractor(context: Context): SettingsInteractor {
         val sharedPreferences = provideSharedPreferences(context)
@@ -44,7 +54,7 @@ object Creator {
 
     fun provideCommunicationButtonsInteractor(context: Context): CommunicationButtonsInteractor {
         return CommunicationButtonsInteractorImpl(
-            communicationButtonsData = CommunicationButtonsDataImpl(context)
+            communicationButtonsData = CommunicationButtonsRepositoryImpl(context)
         )
     }
 

@@ -15,9 +15,10 @@ fun Activity.toast(text: String) {
     Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 }
 
+
 fun Activity.buttonToGoBack() { // КНОПКА НАЗАД
     val back = findViewById<Button>(R.id.buttonBack)
-    back.setDebouncedClickListener {
+    back?.setDebouncedClickListener {
         finish()
     }
 }
@@ -58,11 +59,13 @@ fun Activity.solvingThisProblemWith(problemTipo: String, sendRequestForDoReserch
                 utilErrorBox.visibility = View.GONE
             }
         }
+
         AppPreferencesKeys.RESULTS -> {
             errorIcon.setImageResource(R.drawable.ic_error_notfound)
             errorTextWeb.text = resources.getString(R.string.nothing_was_found)
             retryButton.visibility = View.GONE
         }
+
         else -> {
             retryButton.visibility = View.GONE
         }

@@ -32,8 +32,6 @@ data class Track(
     @SerialName("country") val country: String?,
     @SerialName("previewUrl") val previewUrl: String?
 ) : Serializable {
-    val bigCoverUrl: String?
-        get() = artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg")
     val releaseYear: String?
         get() = releaseDate?.substringBefore('-')
     val trackTime: String

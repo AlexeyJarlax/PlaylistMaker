@@ -1,16 +1,16 @@
-package com.practicum.playlistmaker.communication_buttons.data
+package com.practicum.playlistmaker.settings.data
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.communication_buttons.domain.CommunicationButtonsData
+import com.practicum.playlistmaker.settings.domain.CommunicationButtonsData
 
 
-class CommunicationButtonsDataImpl(private val context: Context) : CommunicationButtonsData {
+class CommunicationButtonsRepositoryImpl(private val context: Context) : CommunicationButtonsData {
 
     override fun buttonToShareApp() {
-        val appId = "com.Practicum.PlaylistMaker"
+        val appId = ""
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
         intent.putExtra(

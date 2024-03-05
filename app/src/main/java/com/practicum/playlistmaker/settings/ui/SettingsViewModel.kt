@@ -10,7 +10,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.settings.domain.SettingsInteractor
-import com.practicum.playlistmaker.communication_buttons.domain.CommunicationButtonsInteractor
+import com.practicum.playlistmaker.settings.domain.CommunicationButtonsInteractor
 
 
 class SettingsViewModel(

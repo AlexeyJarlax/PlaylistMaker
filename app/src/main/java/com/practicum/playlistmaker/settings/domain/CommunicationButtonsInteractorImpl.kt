@@ -1,6 +1,7 @@
-package com.practicum.playlistmaker.communication_buttons.domain
+package com.practicum.playlistmaker.settings.domain
 
-class CommunicationButtonsInteractorImpl(private val communicationButtonsData: CommunicationButtonsData) : CommunicationButtonsInteractor {
+class CommunicationButtonsInteractorImpl(private val communicationButtonsData: CommunicationButtonsData) :
+    CommunicationButtonsInteractor {
 
     override fun buttonToShareApp() {
         communicationButtonsData.buttonToShareApp()

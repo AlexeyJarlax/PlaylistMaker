@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.communication_buttons.domain
+package com.practicum.playlistmaker.settings.domain
 
 interface CommunicationButtonsInteractor {
     fun buttonToShareApp()

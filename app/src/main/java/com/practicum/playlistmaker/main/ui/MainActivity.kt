@@ -4,32 +4,34 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.databinding.ActivityMainBinding
-import com.practicum.playlistmaker.main.domain.ThemeManager
 import com.practicum.playlistmaker.utils.setDebouncedClickListener
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModelProvider: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ThemeManager.applyTheme(this)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        viewModelProvider = ViewModelProvider(
+            this,
+            MainViewModel.getViewModelFactory()
+        )[MainViewModel::class.java]
+
 
         binding.buttonSearch.setDebouncedClickListener {
-            viewModel.onSearchButtonClicked(this)
+            viewModelProvider.onSearchButtonClicked()
         }
 
         binding.buttonMediaLib.setDebouncedClickListener {
-            viewModel.onMediaLibButtonClicked(this)
+            viewModelProvider.onMediaLibButtonClicked()
         }
 
         binding.buttonSettings.setDebouncedClickListener {
-            viewModel.onSettingsButtonClicked(this)
+            viewModelProvider.onSettingsButtonClicked()
         }
     }
 }
