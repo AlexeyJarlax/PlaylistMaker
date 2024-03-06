@@ -1,5 +1,7 @@
 package com.practicum.playlistmaker.settings.ui
+
 import android.app.Application
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +13,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.settings.domain.SettingsInteractor
 import com.practicum.playlistmaker.settings.domain.CommunicationButtonsInteractor
-
+import timber.log.Timber
 
 class SettingsViewModel(
     private val settingsInteractor: SettingsInteractor,
@@ -29,33 +31,45 @@ class SettingsViewModel(
         if (_isNightMode.value != value) {
             _isNightMode.value = value
             settingsInteractor.saveNightMode(value)
-            if (value) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
-    }
-
-    fun shareApp() {
-        communicationButtonsInteractor.buttonToShareApp()
-    }
-
-    fun goToHelp() {
-        communicationButtonsInteractor.buttonToHelp()
-    }
-
-    fun seeUserAgreement() {
-        communicationButtonsInteractor.buttonToSeeUserAgreement()
-    }
-
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application = this[APPLICATION_KEY] as Application
-                SettingsViewModel(
-                    settingsInteractor = Creator.provideSettingsInteractor(application),
-                    communicationButtonsInteractor = Creator.provideCommunicationButtonsInteractor(application)
-                )
+            if (value) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
         }
     }
+        fun applyTheme() { // функция, применяющая настройки день/ночь на все приложение, передаю в расширение Application()
+            val nightModeEnabled = settingsInteractor.loadNightMode()
+            if (nightModeEnabled) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
 
-}
+        fun shareApp() {
+            communicationButtonsInteractor.buttonToShareApp()
+        }
+
+        fun goToHelp() {
+            communicationButtonsInteractor.buttonToHelp()
+        }
+
+        fun seeUserAgreement() {
+            communicationButtonsInteractor.buttonToSeeUserAgreement()
+        }
+
+        companion object {
+            fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
+                initializer {
+                    val application = this[APPLICATION_KEY] as Application
+                    SettingsViewModel(
+                        settingsInteractor = Creator.provideSettingsInteractor(application),
+                        communicationButtonsInteractor = Creator.provideCommunicationButtonsInteractor(
+                            application
+                        )
+                    )
+                }
+            }
+        }
+    }
