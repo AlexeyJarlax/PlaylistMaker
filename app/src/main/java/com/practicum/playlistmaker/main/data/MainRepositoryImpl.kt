@@ -9,10 +9,7 @@ import com.practicum.playlistmaker.mediateka.MedialabActivity
 import com.practicum.playlistmaker.search.ui.SearchActivity
 import com.practicum.playlistmaker.settings.ui.SettingsActivity
 
-class MainRepositoryImpl(private val context: Context, private val sharedPreferences: SharedPreferences) : MainRepository {
-    override fun loadNightMode(): Boolean {
-        return sharedPreferences.getBoolean(KEY_NIGHT_MODE, false)
-    }
+class MainRepositoryImpl(private val context: Context) : MainRepository {
 
     override fun navigateToSearch() {
         val intent = Intent(context, SearchActivity::class.java)

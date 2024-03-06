@@ -12,18 +12,19 @@ import com.practicum.playlistmaker.utils.ArtworkUrlLoader
 import com.practicum.playlistmaker.player.domain.PlayerState
 import com.practicum.playlistmaker.utils.AppPreferencesKeys
 import com.practicum.playlistmaker.utils.DebounceExtension
-import com.practicum.playlistmaker.utils.buttonToGoBack
+import com.practicum.playlistmaker.utils.bindGoBackButton
 import com.practicum.playlistmaker.utils.setDebouncedClickListener
 import com.practicum.playlistmaker.utils.startLoadingIndicator
 import com.practicum.playlistmaker.utils.stopLoadingIndicator
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PlayActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayBinding
     private lateinit var track: Track
     private lateinit var viewModel: PlayViewModel
-    private lateinit var secondsCounter: SecondsCounter
     private var isAddedToPlaylist: Boolean = false
     private var isLiked: Boolean = false
 
@@ -31,7 +32,7 @@ class PlayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        startLoadingIndicator()
         track =
             (intent?.getSerializableExtra(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS) as? Track)!!
         viewModel = ViewModelProvider(
@@ -41,10 +42,10 @@ class PlayActivity : AppCompatActivity() {
         viewModel.screenState.observe(this@PlayActivity) { screenState ->
             setupScreenState(screenState)
         }
-        secondsCounter = SecondsCounter({ elapsedTime -> }, binding)
-        setTrackData(track)
-        setupBtnsAndClickListeners()
-    }
+            setTrackData(track)
+            setupBtnsAndClickListeners()
+        }
+
 
     private fun setTrackData(track: Track) {
         with(binding) {
@@ -64,56 +65,72 @@ class PlayActivity : AppCompatActivity() {
     }
 
     private fun setupBtnsAndClickListeners() {
-        startLoadingIndicator()
-        buttonToGoBack()
+        bindGoBackButton()
         binding.btnPlay.setDebouncedClickListener { viewModel.playBtnClick() }
         setupLikeButton()
         setupAddToPlaylistButton()
-        val indicatorDelay = DebounceExtension(AppPreferencesKeys.TWO_SECONDS) {stopLoadingIndicator()}
+        val indicatorDelay =
+            DebounceExtension(AppPreferencesKeys.ONE_SECOND) { stopLoadingIndicator() }
         indicatorDelay.debounce()
     }
 
     private fun setupScreenState(screenState: ScreenState) {
-            when (screenState) {
-            ScreenState.Error -> {
-                setupPlayerState(PlayerState.ERROR)
-            }
+        Timber.d("=== class PlayActivity => setupScreenState ${screenState}")
+
+        when (screenState) {
             ScreenState.Initial -> {
-                setupPlayerState(PlayerState.INITIAL)
+                val playerState: PlayerState = viewModel.getState()
+                setupPlayerState(playerState, 0)
             }
+
+            is ScreenState.Error -> {
+                setupPlayerState(screenState.playerState, 0)
+            }
+
             is ScreenState.Ready -> {
-                setupPlayerState(PlayerState.READY)
+                setupPlayerState(screenState.playerState, screenState.playbackPosition)
             }
+
             is ScreenState.Content -> {
-                setupPlayerState(screenState.playerState)
+                setupPlayerState(screenState.playerState, screenState.playbackPosition)
             }
         }
     }
 
-    private fun setupPlayerState(playerState: PlayerState) {
+    private fun setupPlayerState(playerState: PlayerState, playbackPosition: Int) {
+        Timber.d("=== class PlayActivity => setupPlayerState ${playerState}")
         when (playerState) {
             PlayerState.INITIAL -> {
-                Timber.d("PlayerState.INITIAL")
+                Timber.d("=== PlayerState.INITIAL")
             }
+
             PlayerState.READY -> {
-                Timber.d("PlayerState.READY")
+                Timber.d("=== PlayerState.READY")
+                binding.trackTime.text =
+                    SimpleDateFormat("mm:ss", Locale.getDefault()).format(playbackPosition)
             }
+
             PlayerState.PLAYING -> {
-                Timber.d("PlayerState.PLAYING")
+                Timber.d("=== PlayerState.PLAYING")
                 binding.btnPlay.setImageResource(R.drawable.ic_btn_play_done)
-                secondsCounter.start()
+                binding.trackTime.text =
+                    SimpleDateFormat("mm:ss", Locale.getDefault()).format(playbackPosition)
             }
+
             PlayerState.PAUSED -> {
-                Timber.d("PlayerState.PAUSED")
+                Timber.d("=== PlayerState.PAUSED")
                 binding.btnPlay.setImageResource(R.drawable.ic_btn_play)
-                secondsCounter.stop()
+                binding.trackTime.text =
+                    SimpleDateFormat("mm:ss", Locale.getDefault()).format(playbackPosition)
             }
+
             PlayerState.KILL -> {
-                Timber.d("PlayerState.KILL")
+                Timber.d("=== PlayerState.KILL")
                 binding.btnPlay.setImageResource(R.drawable.ic_btn_play)
             }
+
             PlayerState.ERROR -> {
-                Timber.d("PlayerState.ERROR")
+                Timber.d("=== PlayerState.ERROR")
                 binding.btnPlay.setImageResource(R.drawable.ic_error_notfound)
             }
         }
@@ -158,12 +175,12 @@ class PlayActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         viewModel.onActivityPaused()
-        secondsCounter.stop()
+//        secondsCounter.stop()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        secondsCounter.reset()
-        secondsCounter.stop()
+//        secondsCounter.reset()
+//        secondsCounter.stop()
     }
 }

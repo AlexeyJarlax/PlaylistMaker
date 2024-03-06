@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.player.domain
 
-interface MediaPlayerData {
+interface MediaPlayerRepository {
     fun getPlayerState(): PlayerState
     fun getPlaybackPosition(): Int
     fun getPlayerReady()

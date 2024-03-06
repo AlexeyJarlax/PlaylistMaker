@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 import com.practicum.playlistmaker.utils.setDebouncedClickListener
-import com.practicum.playlistmaker.utils.buttonToGoBack
+import com.practicum.playlistmaker.utils.bindGoBackButton
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -20,7 +20,7 @@ class SettingsActivity : AppCompatActivity() {
             this,
             SettingsViewModel.getViewModelFactory()
         )[SettingsViewModel::class.java]
-        buttonToGoBack()
+        bindGoBackButton()
 
         // КНОПКА НОЧНОЙ И ДНЕВНОЙ ТЕМЫ
         viewModelProvider.isNightMode.observe(this) { binding.switchDarkMode.isChecked = it }

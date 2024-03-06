@@ -12,7 +12,7 @@ import com.practicum.playlistmaker.settings.domain.SettingsInteractorImpl
 import com.practicum.playlistmaker.settings.data.CommunicationButtonsRepositoryImpl
 import com.practicum.playlistmaker.settings.domain.CommunicationButtonsInteractor
 import com.practicum.playlistmaker.settings.domain.CommunicationButtonsInteractorImpl
-import com.practicum.playlistmaker.player.data.MediaPlayerDataImpl
+import com.practicum.playlistmaker.player.data.MediaPlayerRepositoryImpl
 import com.practicum.playlistmaker.player.domain.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.MediaPlayerInteractorImpl
 import com.practicum.playlistmaker.search.data.RepositoryImplForHistoryTrack
@@ -24,10 +24,9 @@ import com.practicum.playlistmaker.utils.AppPreferencesKeys
 
 object Creator {
 
-    fun provideGetMainInteractor(context: Context): MainInteractor {
-        val sharedPreferences = provideSharedPreferences(context)
+    fun provideMainInteractor(context: Context): MainInteractor {
         return MainInteractorImpl(
-            mainRepository = MainRepositoryImpl(context, sharedPreferences)
+            mainRepository = MainRepositoryImpl(context)
         )
     }
 
@@ -48,7 +47,7 @@ object Creator {
 
     fun provideMediaPlayerInteractor(url: String): MediaPlayerInteractor {
         return MediaPlayerInteractorImpl(
-            mediaPlayer = MediaPlayerDataImpl(url)
+            mediaPlayer = MediaPlayerRepositoryImpl(url)
         )
     }
 

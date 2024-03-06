@@ -31,9 +31,15 @@ class PlayViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : 
         updatePlayerInfo()
     }
 
+    fun getState(): PlayerState {
+        val state = mediaPlayerInteractor.getState()
+        return state
+    }
+
     private fun updatePlayerInfo() {
-        val tmpPlayerState = mediaPlayerInteractor.getState()
-        _screenState.value = ScreenState.Content(tmpPlayerState)
+        val playerState = mediaPlayerInteractor.getState()
+        val playbackPosition = mediaPlayerInteractor.getPlaybackPosition()
+        _screenState.value = ScreenState.Content(playerState, playbackPosition)
     }
 
     fun playBtnClick() {

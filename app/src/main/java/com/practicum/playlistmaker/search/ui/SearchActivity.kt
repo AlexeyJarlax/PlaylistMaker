@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.search.ui
 
 import timber.log.Timber
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -16,16 +17,16 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.practicum.playlistmaker.R
 
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.databinding.UtilErrorLayoutBinding
 import com.practicum.playlistmaker.player.ui.PlayActivity
 import com.practicum.playlistmaker.search.domain.models.Track
-import com.practicum.playlistmaker.utils.buttonToGoBack
+import com.practicum.playlistmaker.utils.bindGoBackButton
 import com.practicum.playlistmaker.utils.setDebouncedClickListener
 import com.practicum.playlistmaker.utils.AppPreferencesKeys
 import com.practicum.playlistmaker.utils.DebounceExtension
-import com.practicum.playlistmaker.utils.solvingThisProblemWith
 import com.practicum.playlistmaker.utils.startLoadingIndicator
 import com.practicum.playlistmaker.utils.stopLoadingIndicator
 
@@ -58,7 +59,7 @@ class SearchActivity : AppCompatActivity() {
         queryTextChangedListener()
         killTheHistory()
         viewModel.setInitialState()
-        buttonToGoBack()
+        bindGoBackButton()
     }
 
     private fun initViews() { // вызовы вьюх
@@ -271,5 +272,41 @@ class SearchActivity : AppCompatActivity() {
 
     private fun startToSearchTrackRightAway() { // ищем трек сразу
         viewModel.searchRequestFromViewModel((queryInput.text.toString().trim()), false)
+    }
+
+    //****************************************** решаем проблемы с отсутствием результата поиска треков или интернета
+
+    fun solvingThisProblemWith(problemTipo: String, sendRequestForDoReserch: () -> Unit) {
+        val utilErrorBox = findViewById<LinearLayout>(R.id.utilErrorBox)
+        val errorIcon = findViewById<ImageView>(R.id.error_icon)
+        val errorTextWeb = findViewById<TextView>(R.id.error_text_web)
+        val retryButton = findViewById<Button>(R.id.retry_button)
+
+        when (problemTipo) {
+            AppPreferencesKeys.INTERNET -> {
+                errorIcon.setImageResource(R.drawable.ic_error_internet)
+                errorTextWeb.text = resources.getString(R.string.error_text_web)
+                retryButton.visibility = View.VISIBLE
+                retryButton.setDebouncedClickListener {
+                    sendRequestForDoReserch() // тут отправляем на повторный поиск
+                    utilErrorBox.visibility = View.GONE
+                }
+            }
+
+            AppPreferencesKeys.RESULTS -> {
+                errorIcon.setImageResource(R.drawable.ic_error_notfound)
+                errorTextWeb.text = resources.getString(R.string.nothing_was_found)
+                retryButton.visibility = View.GONE
+            }
+
+            else -> {
+                retryButton.visibility = View.GONE
+            }
+        }
+
+        utilErrorBox.visibility = View.VISIBLE
+        utilErrorBox.setDebouncedClickListener {
+            utilErrorBox.visibility = View.GONE
+        }
     }
 }
