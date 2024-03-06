@@ -14,10 +14,9 @@ val country: String?            // Страна
 val previewUrl: String?         // ссылка на 30 сек. фрагмент
 */
 
+import com.practicum.playlistmaker.utils.mmss
 import kotlinx.serialization.SerialName
 import java.io.Serializable
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 @kotlinx.serialization.Serializable
 data class Track(
@@ -38,4 +37,3 @@ data class Track(
         get() = mmss(trackTimeMillis)
 }
 
-fun mmss(ms: Long?): String = SimpleDateFormat("mm:ss", Locale.getDefault()).format(ms)

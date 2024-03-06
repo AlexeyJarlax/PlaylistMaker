@@ -27,9 +27,7 @@ class RepositoryImplForTracksList(private val networkClientForTracksList: Networ
                     previewUrl = it.previewUrl ?: ""
                 )
             }
-
-            val limitedTrackList = trackList.take(2) // два трека как образец для лога
-            Timber.d("=== class TracksRepositoryImpl => return TracksResponse(${limitedTrackList})")
+            Timber.d("=== class TracksRepositoryImpl => return TracksResponse(${trackList})")
             return TracksResponse(trackList, response.resultCode)
         } else return TracksResponse(emptyList(), response.resultCode)
     }

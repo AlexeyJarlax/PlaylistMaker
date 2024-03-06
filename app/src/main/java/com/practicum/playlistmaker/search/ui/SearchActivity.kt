@@ -2,7 +2,6 @@ package com.practicum.playlistmaker.search.ui
 
 import timber.log.Timber
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -182,7 +181,6 @@ class SearchActivity : AppCompatActivity() {
             trackListFromAPI.addAll(resultsList)
             adapterForAPITracks.notifyDataSetChanged()
             unitedRecyclerView.adapter = adapterForAPITracks
-//            viewModel.showActiveList()
         } else {
                 viewModel.setNoResultsState()
         }
@@ -236,7 +234,6 @@ class SearchActivity : AppCompatActivity() {
             if (hasFocus && queryInput.text.isEmpty()) {
                 showToUserHistoryOfOldTracks()
             } else if (queryInput.text.isNotEmpty()) {
-//                hideHistoryViewsAndClearTrackAdapter()
             }
         }
         // обработка ввода с нажатием DONE
@@ -252,8 +249,6 @@ class SearchActivity : AppCompatActivity() {
                 false
             }
         }
-//     }
-
     }
 
     //************************************** отправляем реакции на клик, ввод, и тп. во viewModel

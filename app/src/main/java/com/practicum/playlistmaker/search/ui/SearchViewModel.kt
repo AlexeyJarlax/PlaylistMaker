@@ -21,6 +21,8 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
     val screenState: LiveData<SearchScreenState> = _screenState
     private var oldSearchText: String = ""
     private val historyTrackList = ArrayList<Track>()
+
+
     init {showHistoryFromViewModel()}
 
     fun showHistoryFromViewModel() {
@@ -77,6 +79,8 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
     }
 
     companion object {
+        var isLoadingPlayer = false
+
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = this[APPLICATION_KEY] as Application

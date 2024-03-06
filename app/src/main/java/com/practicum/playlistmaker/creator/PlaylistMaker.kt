@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import com.practicum.playlistmaker.utils.AppPreferencesKeys
-import com.practicum.playlistmaker.utils.SharedPreferencesMethods
+import com.practicum.playlistmaker.utils.UtilMethods
 
 class PlaylistMaker : Application()  {
     override fun onCreate() {
@@ -13,7 +13,7 @@ class PlaylistMaker : Application()  {
     }
 
     private fun applyTheme(context: Context) {
-        val nightModeEnabled = SharedPreferencesMethods(context).getBooleanFromSP(
+        val nightModeEnabled = UtilMethods(context).getBooleanFromSP(
             AppPreferencesKeys.KEY_NIGHT_MODE, false)
         if (nightModeEnabled) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)

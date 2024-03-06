@@ -1,12 +1,10 @@
 package com.practicum.playlistmaker.utils
 
 import android.content.Context
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.practicum.playlistmaker.search.domain.models.Track
-import com.practicum.playlistmaker.utils.AppPreferencesKeys
+import java.text.SimpleDateFormat
+import java.util.Locale
 
-internal class SharedPreferencesMethods(private val context: Context) {
+internal class UtilMethods(private val context: Context) {
     private val sharedPreferences = getSharedPreferences()
     private fun getSharedPreferences() =
         context.getSharedPreferences(AppPreferencesKeys.PREFS_NAME, Context.MODE_PRIVATE)
@@ -18,3 +16,5 @@ internal class SharedPreferencesMethods(private val context: Context) {
         )
     }
 }
+
+internal fun mmss(ms: Long?): String = SimpleDateFormat("mm:ss", Locale.getDefault()).format(ms)
