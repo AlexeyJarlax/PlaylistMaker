@@ -17,7 +17,7 @@
         tools:ignore="ScopedStorage" />
 
     <application
-        android:name=".PlaylistMaker"
+        android:name=".creator.PlaylistMaker"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -29,24 +29,24 @@
         tools:targetApi="31">
 
         <activity
-            android:name=".ui.PlayActivity"
+            android:name=".player.ui.PlayActivity"
+            android:exported="false"
+            android:screenOrientation="fullSensor" />
+        <activity
+            android:name=".search.ui.SearchActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.SearchActivity"
+            android:name=".mediateka.MedialabActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.MedialabActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.SettingsActivity"
+            android:name=".settings.ui.SettingsActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MyApp" />
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".main.ui.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
