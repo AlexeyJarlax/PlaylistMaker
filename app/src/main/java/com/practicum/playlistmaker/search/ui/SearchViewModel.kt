@@ -1,15 +1,9 @@
 package com.practicum.playlistmaker.search.ui
 
-import android.app.Application
 import androidx.core.util.Consumer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.search.domain.TracksInteractor
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.domain.models.TracksResponse
@@ -51,7 +45,6 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
 
     fun saveToHistory(track: Track) {
         tracksInteractor.saveToHistory(track)
-//        showActiveList()
     }
 
     fun saveToHistoryAndRefresh(track: Track) {
@@ -77,19 +70,5 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
     fun setNoResultsState() {
         _screenState.value = SearchScreenState.NoResults
     }
-
-    companion object {
-        var isLoadingPlayer = false
-
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application = this[APPLICATION_KEY] as Application
-                SearchViewModel(
-                    tracksInteractor = Creator.provideTracksInteractor(application)
-                )
-            }
-        }
-    }
-
 }
 

@@ -3,17 +3,16 @@ package com.practicum.playlistmaker.player.data
 import android.media.MediaPlayer
 import com.practicum.playlistmaker.player.domain.MediaPlayerRepository
 import com.practicum.playlistmaker.player.domain.PlayerState
-import com.practicum.playlistmaker.player.ui.ScreenState
 import timber.log.Timber
 
-class MediaPlayerRepositoryImpl(url: String) : MediaPlayerRepository {
+class MediaPlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : MediaPlayerRepository {
 
-    private val mediaPlayer = MediaPlayer()
     private var playerState = PlayerState.INITIAL
 
-    init {
+    override fun setDataURL(url: String) {
+        Timber.d("=== class MediaPlayerRepositoryImpl => setDataURL(url: String) ${url}")
         mediaPlayer.setDataSource(url)
-//            mediaPlayer.setOnCompletionListener { onPlayerCompletion() }
+            mediaPlayer.setOnCompletionListener { onPlayerCompletion() }
     }
 
     override fun getPlayerState(): PlayerState {
@@ -64,7 +63,7 @@ class MediaPlayerRepositoryImpl(url: String) : MediaPlayerRepository {
 
     }
 
-//        private fun onPlayerCompletion() {
-//            playerState = PlayerState.READY
-//        }
+        private fun onPlayerCompletion() {
+            playerState = PlayerState.READY
+        }
 }
