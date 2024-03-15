@@ -1,19 +1,19 @@
 package com.practicum.playlistmaker.search.data
 
-import com.practicum.playlistmaker.search.data.network.NetworkClientForTracksList
-import com.practicum.playlistmaker.search.data.dto.SearchRequestForTracksList
-import com.practicum.playlistmaker.search.data.dto.SearchResponseForTracksList
+import com.practicum.playlistmaker.search.data.network.NetworkClient
+import com.practicum.playlistmaker.search.data.dto.SearchRequest
+import com.practicum.playlistmaker.search.data.dto.SearchResponse
 import com.practicum.playlistmaker.search.domain.TracksSearchRepository
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.domain.models.TracksResponse
 import timber.log.Timber
 
-class RepositoryImplForTracksList(private val networkClientForTracksList: NetworkClientForTracksList): TracksSearchRepository {
+class RepositoryImplForTracksList(private val networkClient: NetworkClient): TracksSearchRepository {
 
     override fun searchTracks(expression: String): TracksResponse {
-        val response = networkClientForTracksList.doRequest(SearchRequestForTracksList(expression))
+        val response = networkClient.doRequest(SearchRequest(expression))
         if (response.resultCode == 200) {
-            val trackList = (response as SearchResponseForTracksList).results.map {
+            val trackList = (response as SearchResponse).results.map {
                 Track(
                     trackId = it.trackId,
                     trackName = it.trackName ?: "",

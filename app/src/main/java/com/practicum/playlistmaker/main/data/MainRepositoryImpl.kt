@@ -1,8 +1,6 @@
 package com.practicum.playlistmaker.main.data
 
-import android.content.SharedPreferences
 import com.practicum.playlistmaker.main.domain.MainRepository
-import com.practicum.playlistmaker.utils.AppPreferencesKeys.KEY_NIGHT_MODE
 import android.content.Context
 import android.content.Intent
 import com.practicum.playlistmaker.mediateka.MedialabActivity

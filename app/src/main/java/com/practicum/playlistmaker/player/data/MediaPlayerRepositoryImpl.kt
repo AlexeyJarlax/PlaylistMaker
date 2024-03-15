@@ -13,7 +13,7 @@ class MediaPlayerRepositoryImpl(url: String) : MediaPlayerRepository {
 
     init {
         mediaPlayer.setDataSource(url)
-//            mediaPlayer.setOnCompletionListener { onPlayerCompletion() }
+            mediaPlayer.setOnCompletionListener { onPlayerCompletion() }
     }
 
     override fun getPlayerState(): PlayerState {
@@ -64,7 +64,7 @@ class MediaPlayerRepositoryImpl(url: String) : MediaPlayerRepository {
 
     }
 
-//        private fun onPlayerCompletion() {
-//            playerState = PlayerState.READY
-//        }
+        private fun onPlayerCompletion() {
+            playerState = PlayerState.READY
+        }
 }

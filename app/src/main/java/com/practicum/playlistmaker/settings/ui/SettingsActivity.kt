@@ -6,43 +6,46 @@ import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 import com.practicum.playlistmaker.utils.setDebouncedClickListener
 import com.practicum.playlistmaker.utils.bindGoBackButton
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
-    private lateinit var viewModelProvider: SettingsViewModel
+//    private lateinit var viewModelProvider: SettingsViewModel
+private val viewModel: SettingsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModelProvider = ViewModelProvider(
-            this,
-            SettingsViewModel.getViewModelFactory()
-        )[SettingsViewModel::class.java]
+
+//        viewModelProvider = ViewModelProvider(
+//            this,
+//            SettingsViewModel.getViewModelFactory()
+//        )[SettingsViewModel::class.java]
         bindGoBackButton()
 
         // КНОПКА НОЧНОЙ И ДНЕВНОЙ ТЕМЫ
-        viewModelProvider.isNightMode.observe(this) { binding.switchDarkMode.isChecked = it }
+        viewModel.isNightMode.observe(this) { binding.switchDarkMode.isChecked = it }
         binding.switchDarkMode.setOnCheckedChangeListener { _, value ->
-            viewModelProvider.changeNightMode(
+            viewModel.changeNightMode(
                 value
             )
         }
 
         // КНОПКА ПОДЕЛИТЬСЯ
         binding.buttonSettingsShare.setDebouncedClickListener {
-            viewModelProvider.shareApp()
+            viewModel.shareApp()
         }
 
         // КНОПКА ТЕХПОДДЕРЖКИ
         binding.buttonSettingsWriteToSupp.setDebouncedClickListener {
-            viewModelProvider.goToHelp()
+            viewModel.goToHelp()
         }
 
         // КНОПКА ПОЛЬЗОВАТЕЛЬСКОГО СОГЛАШЕНИЯ
         binding.buttonSettingsUserAgreement.setDebouncedClickListener {
-            viewModelProvider.seeUserAgreement()
+            viewModel.seeUserAgreement()
         }
     }
 }

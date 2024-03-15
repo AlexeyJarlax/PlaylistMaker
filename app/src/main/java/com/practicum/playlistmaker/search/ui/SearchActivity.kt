@@ -28,6 +28,7 @@ import com.practicum.playlistmaker.utils.AppPreferencesKeys
 import com.practicum.playlistmaker.utils.DebounceExtension
 import com.practicum.playlistmaker.utils.startLoadingIndicator
 import com.practicum.playlistmaker.utils.stopLoadingIndicator
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
@@ -37,19 +38,21 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var queryInput: EditText
     private lateinit var clearButton: ImageButton
     private lateinit var unitedRecyclerView: RecyclerView
-    private lateinit var viewModel: SearchViewModel
+//    private lateinit var viewModel: SearchViewModel
+private val viewModel: SearchViewModel by viewModel()
     private val trackListFromAPI = ArrayList<Track>()
     private val historyTrackList = ArrayList<Track>()
     private lateinit var adapterForHistoryTracks: AdapterForHistoryTracks
     private lateinit var adapterForAPITracks: AdapterForAPITracks
     private val layoutManager = LinearLayoutManager(this)
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.plant(Timber.DebugTree()) // для логирования
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(
-            this, SearchViewModel.getViewModelFactory()
-        )[SearchViewModel::class.java]
+//        viewModel = ViewModelProvider(
+//            this, SearchViewModel.getViewModelFactory()
+//        )[SearchViewModel::class.java]
         initViews()
         setupAdapterForHistoryTracks()
         setupAdapterForAPITracks()

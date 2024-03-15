@@ -16,6 +16,7 @@ import com.practicum.playlistmaker.utils.bindGoBackButton
 import com.practicum.playlistmaker.utils.setDebouncedClickListener
 import com.practicum.playlistmaker.utils.startLoadingIndicator
 import com.practicum.playlistmaker.utils.stopLoadingIndicator
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -24,7 +25,8 @@ class PlayActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayBinding
     private lateinit var track: Track
-    private lateinit var viewModel: PlayViewModel
+//    private lateinit var viewModel: PlayViewModel
+private val viewModel: PlayViewModel by viewModel()
     private var isAddedToPlaylist: Boolean = false
     private var isLiked: Boolean = false
 
@@ -35,10 +37,10 @@ class PlayActivity : AppCompatActivity() {
         startLoadingIndicator()
         track =
             (intent?.getSerializableExtra(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS) as? Track)!!
-        viewModel = ViewModelProvider(
-            this,
-            PlayViewModel.getViewModelFactory(track.previewUrl)
-        )[PlayViewModel::class.java]
+//        viewModel = ViewModelProvider(
+//            this,
+//            PlayViewModel.getViewModelFactory(track.previewUrl)
+//        )[PlayViewModel::class.java]
         viewModel.screenState.observe(this@PlayActivity) { screenState ->
             setupScreenState(screenState)
         }
@@ -106,8 +108,9 @@ class PlayActivity : AppCompatActivity() {
 
             PlayerState.READY -> {
                 Timber.d("=== PlayerState.READY")
+                binding.btnPlay.setImageResource(R.drawable.ic_btn_play)
                 binding.trackTime.text =
-                    SimpleDateFormat("mm:ss", Locale.getDefault()).format(playbackPosition)
+                    SimpleDateFormat("mm:ss", Locale.getDefault()).format(0)
             }
 
             PlayerState.PLAYING -> {
