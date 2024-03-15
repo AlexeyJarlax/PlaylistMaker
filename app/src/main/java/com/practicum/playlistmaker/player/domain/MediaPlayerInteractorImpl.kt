@@ -14,6 +14,10 @@ class MediaPlayerInteractorImpl(private val mediaPlayer: MediaPlayerRepository) 
         mediaPlayer.getPlayerReady()
     }
 
+    override fun setDataSource(url: String) {
+        mediaPlayer.setDataSource(url)
+    }
+
     override fun play() {
         mediaPlayer.play()
     }

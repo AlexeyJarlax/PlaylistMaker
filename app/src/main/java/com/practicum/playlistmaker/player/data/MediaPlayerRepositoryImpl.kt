@@ -6,12 +6,12 @@ import com.practicum.playlistmaker.player.domain.PlayerState
 import com.practicum.playlistmaker.player.ui.ScreenState
 import timber.log.Timber
 
-class MediaPlayerRepositoryImpl(url: String) : MediaPlayerRepository {
+class MediaPlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : MediaPlayerRepository {
 
-    private val mediaPlayer = MediaPlayer()
     private var playerState = PlayerState.INITIAL
 
-    init {
+    override fun setDataSource(url: String) {
+        Timber.d("=== class MediaPlayerRepositoryImpl => setDataSource(url: String) ${url}")
         mediaPlayer.setDataSource(url)
             mediaPlayer.setOnCompletionListener { onPlayerCompletion() }
     }

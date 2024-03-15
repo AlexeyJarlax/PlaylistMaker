@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.creator
+package com.practicum.playlistmaker
 
 import android.app.Application
 import org.koin.android.ext.koin.androidContext
@@ -14,8 +14,8 @@ class PlaylistMaker : Application()  {
 
     override fun onCreate() {
         super.onCreate()
-        applyDayNightTheme()
         runKoinDependencies()
+        applyDayNightTheme()
     }
 
     private fun runKoinDependencies() {

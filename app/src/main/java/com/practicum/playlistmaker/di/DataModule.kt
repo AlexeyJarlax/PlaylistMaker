@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.di
 
 import android.content.Context
+import android.media.MediaPlayer
 import com.google.gson.Gson
 import com.practicum.playlistmaker.player.data.MediaPlayerRepositoryImpl
 import com.practicum.playlistmaker.player.domain.MediaPlayerRepository
@@ -31,6 +32,7 @@ import retrofit2.Retrofit
         }
 
         factory { Gson() }
+        factory { MediaPlayer() }
 
         factory<MediaPlayerRepository> {
             MediaPlayerRepositoryImpl(get())

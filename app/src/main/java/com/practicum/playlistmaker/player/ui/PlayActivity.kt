@@ -2,8 +2,10 @@ package com.practicum.playlistmaker.player.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
+import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayBinding
@@ -17,9 +19,7 @@ import com.practicum.playlistmaker.utils.setDebouncedClickListener
 import com.practicum.playlistmaker.utils.startLoadingIndicator
 import com.practicum.playlistmaker.utils.stopLoadingIndicator
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
-import java.text.SimpleDateFormat
-import java.util.Locale
+
 
 class PlayActivity : AppCompatActivity() {
 
@@ -41,6 +41,8 @@ private val viewModel: PlayViewModel by viewModel()
 //            this,
 //            PlayViewModel.getViewModelFactory(track.previewUrl)
 //        )[PlayViewModel::class.java]
+
+        track.previewUrl?.let { viewModel.setDataSource(it) }
         viewModel.screenState.observe(this@PlayActivity) { screenState ->
             setupScreenState(screenState)
         }

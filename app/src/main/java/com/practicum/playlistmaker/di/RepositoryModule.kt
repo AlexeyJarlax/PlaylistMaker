@@ -30,7 +30,7 @@ import org.koin.dsl.module
             RepositoryImplForTracksList(get())
         }
 
-        single<MediaPlayerRepository> {
-            MediaPlayerRepositoryImpl(get())
-        }
+//        single<MediaPlayerRepository> {
+//            MediaPlayerRepositoryImpl(get())
+//        }
     }

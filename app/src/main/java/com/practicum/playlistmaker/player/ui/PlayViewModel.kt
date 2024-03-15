@@ -15,7 +15,7 @@ class PlayViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : 
     val screenState: LiveData<ScreenState> = _screenState
 
     init {
-      mediaPlayerInteractor.getPlayerReady()
+//      mediaPlayerInteractor.getPlayerReady()
     }
     private fun playerPlay() {
         mediaPlayerInteractor.play()
@@ -59,6 +59,9 @@ class PlayViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : 
         }
     }
 
+    fun setDataSource(url: String) {
+        mediaPlayerInteractor.setDataSource(url)
+    }
 //    companion object {
 //            fun getViewModelFactory(previewUrl: String?): ViewModelProvider.Factory = viewModelFactory {
 //                initializer {

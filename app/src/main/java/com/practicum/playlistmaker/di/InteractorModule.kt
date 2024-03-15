@@ -12,19 +12,19 @@ import org.koin.dsl.module
 
 val interactorModule = module {
 
-    single<MainInteractor> {
+    factory<MainInteractor> {
         MainInteractorImpl(get())
     }
 
-    single<SettingsInteractor> {
+    factory<SettingsInteractor> {
         SettingsInteractorImpl(get())
     }
 
-    single<MediaPlayerInteractor> {
+    factory<MediaPlayerInteractor> {
         MediaPlayerInteractorImpl(get())
     }
 
-    single<TracksInteractor> {
+    factory<TracksInteractor> {
         TracksInteractorImpl(get(), get())
     }
 }
