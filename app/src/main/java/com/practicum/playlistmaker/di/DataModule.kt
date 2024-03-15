@@ -31,13 +31,6 @@ import retrofit2.Retrofit
                 .getSharedPreferences(AppPreferencesKeys.PREFS_NAME, Context.MODE_PRIVATE)
         }
 
-        factory { Gson() }
-        factory { MediaPlayer() }
-
-        factory<MediaPlayerRepository> {
-            MediaPlayerRepositoryImpl(get())
-        }
-
         single<SettingsRepository> {
             SettingsRepositoryImpl(get(), get())
         }
@@ -46,4 +39,10 @@ import retrofit2.Retrofit
             RetrofitNetworkClient(get())
         }
 
+        factory<MediaPlayerRepository> {
+            MediaPlayerRepositoryImpl(get())
+        }
+
+        factory { Gson() }
+        factory { MediaPlayer() }
     }

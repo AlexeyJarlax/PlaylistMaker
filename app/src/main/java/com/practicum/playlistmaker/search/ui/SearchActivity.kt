@@ -13,7 +13,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
@@ -38,7 +37,6 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var queryInput: EditText
     private lateinit var clearButton: ImageButton
     private lateinit var unitedRecyclerView: RecyclerView
-//    private lateinit var viewModel: SearchViewModel
 private val viewModel: SearchViewModel by viewModel()
     private val trackListFromAPI = ArrayList<Track>()
     private val historyTrackList = ArrayList<Track>()
@@ -50,9 +48,6 @@ private val viewModel: SearchViewModel by viewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.plant(Timber.DebugTree()) // для логирования
         super.onCreate(savedInstanceState)
-//        viewModel = ViewModelProvider(
-//            this, SearchViewModel.getViewModelFactory()
-//        )[SearchViewModel::class.java]
         initViews()
         setupAdapterForHistoryTracks()
         setupAdapterForAPITracks()

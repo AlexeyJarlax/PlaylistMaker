@@ -20,12 +20,10 @@ import com.practicum.playlistmaker.utils.startLoadingIndicator
 import com.practicum.playlistmaker.utils.stopLoadingIndicator
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class PlayActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayBinding
     private lateinit var track: Track
-//    private lateinit var viewModel: PlayViewModel
 private val viewModel: PlayViewModel by viewModel()
     private var isAddedToPlaylist: Boolean = false
     private var isLiked: Boolean = false
@@ -37,12 +35,7 @@ private val viewModel: PlayViewModel by viewModel()
         startLoadingIndicator()
         track =
             (intent?.getSerializableExtra(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS) as? Track)!!
-//        viewModel = ViewModelProvider(
-//            this,
-//            PlayViewModel.getViewModelFactory(track.previewUrl)
-//        )[PlayViewModel::class.java]
-
-        track.previewUrl?.let { viewModel.setDataSource(it) }
+        track.previewUrl?.let { viewModel.setDataURL(it) }
         viewModel.screenState.observe(this@PlayActivity) { screenState ->
             setupScreenState(screenState)
         }
@@ -180,12 +173,5 @@ private val viewModel: PlayViewModel by viewModel()
     override fun onPause() {
         super.onPause()
         viewModel.onActivityPaused()
-//        secondsCounter.stop()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-//        secondsCounter.reset()
-//        secondsCounter.stop()
     }
 }

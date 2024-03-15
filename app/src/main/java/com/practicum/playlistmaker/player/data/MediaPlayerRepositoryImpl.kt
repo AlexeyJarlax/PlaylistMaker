@@ -3,15 +3,14 @@ package com.practicum.playlistmaker.player.data
 import android.media.MediaPlayer
 import com.practicum.playlistmaker.player.domain.MediaPlayerRepository
 import com.practicum.playlistmaker.player.domain.PlayerState
-import com.practicum.playlistmaker.player.ui.ScreenState
 import timber.log.Timber
 
 class MediaPlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : MediaPlayerRepository {
 
     private var playerState = PlayerState.INITIAL
 
-    override fun setDataSource(url: String) {
-        Timber.d("=== class MediaPlayerRepositoryImpl => setDataSource(url: String) ${url}")
+    override fun setDataURL(url: String) {
+        Timber.d("=== class MediaPlayerRepositoryImpl => setDataURL(url: String) ${url}")
         mediaPlayer.setDataSource(url)
             mediaPlayer.setOnCompletionListener { onPlayerCompletion() }
     }

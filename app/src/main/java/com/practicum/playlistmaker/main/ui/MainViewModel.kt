@@ -17,15 +17,4 @@ class MainViewModel(private val mainInteractor: MainInteractor) : ViewModel() {
     fun onSettingsButtonClicked() {
         mainInteractor.navigateToSettings()
     }
-
-//    companion object {
-//        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-//            initializer {
-//                val application = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
-//                MainViewModel(
-//                    mainInteractor = Creator.provideMainInteractor(application)
-//                )
-//            }
-//        }
-//    }
 }

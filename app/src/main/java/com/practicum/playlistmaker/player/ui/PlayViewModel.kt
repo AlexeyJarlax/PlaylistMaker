@@ -14,9 +14,6 @@ class PlayViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : 
     private val _screenState = MutableLiveData<ScreenState>(ScreenState.Initial)
     val screenState: LiveData<ScreenState> = _screenState
 
-    init {
-//      mediaPlayerInteractor.getPlayerReady()
-    }
     private fun playerPlay() {
         mediaPlayerInteractor.play()
         DebounceExtension(AppPreferencesKeys.CLICK_DEBOUNCE_DELAY, ::timerTask).debounce()
@@ -59,17 +56,7 @@ class PlayViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : 
         }
     }
 
-    fun setDataSource(url: String) {
-        mediaPlayerInteractor.setDataSource(url)
+    fun setDataURL(url: String) {
+        mediaPlayerInteractor.setDataURL(url)
     }
-//    companion object {
-//            fun getViewModelFactory(previewUrl: String?): ViewModelProvider.Factory = viewModelFactory {
-//                initializer {
-//                    PlayViewModel(
-//                        mediaPlayerInteractor = Creator.provideMediaPlayerInteractor(previewUrl ?: "")
-//                    )
-//                }
-//            }
-//
-//    }
 }

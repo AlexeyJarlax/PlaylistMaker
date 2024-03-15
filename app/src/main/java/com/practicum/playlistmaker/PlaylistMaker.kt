@@ -25,7 +25,7 @@ class PlaylistMaker : Application()  {
         }}
 
     private fun applyDayNightTheme() {
-        val settingsViewModel: SettingsInteractor by inject()
-        settingsViewModel.applyTheme()
+        val settings: SettingsInteractor by inject()
+        settings.applyTheme()
     }
 }

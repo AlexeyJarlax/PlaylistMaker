@@ -45,7 +45,6 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
 
     fun saveToHistory(track: Track) {
         tracksInteractor.saveToHistory(track)
-//        showActiveList()
     }
 
     fun saveToHistoryAndRefresh(track: Track) {
@@ -71,19 +70,5 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
     fun setNoResultsState() {
         _screenState.value = SearchScreenState.NoResults
     }
-
-    companion object {
-        var isLoadingPlayer = false
-
-//        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-//            initializer {
-//                val application = this[APPLICATION_KEY] as Application
-//                SearchViewModel(
-//                    tracksInteractor = Creator.provideTracksInteractor(application)
-//                )
-//            }
-//        }
-    }
-
 }
 

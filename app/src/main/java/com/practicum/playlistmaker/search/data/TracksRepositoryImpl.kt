@@ -1,14 +1,32 @@
 package com.practicum.playlistmaker.search.data
 
-import com.practicum.playlistmaker.search.data.network.NetworkClient
+import android.content.SharedPreferences
+import com.practicum.playlistmaker.search.domain.TracksRepository
+import com.practicum.playlistmaker.search.domain.models.Track
+import com.practicum.playlistmaker.utils.AppPreferencesKeys.SEARCH_HISTORY
+import com.google.gson.Gson
 import com.practicum.playlistmaker.search.data.dto.SearchRequest
 import com.practicum.playlistmaker.search.data.dto.SearchResponse
-import com.practicum.playlistmaker.search.domain.TracksSearchRepository
-import com.practicum.playlistmaker.search.domain.models.Track
+import com.practicum.playlistmaker.search.data.network.NetworkClient
 import com.practicum.playlistmaker.search.domain.models.TracksResponse
 import timber.log.Timber
 
-class RepositoryImplForTracksList(private val networkClient: NetworkClient): TracksSearchRepository {
+class TracksRepositoryImpl(private val sharedPreferences: SharedPreferences, private val networkClient: NetworkClient) :
+    TracksRepository {
+
+    override fun saveToHistory(history: ArrayList<Track>) {
+        val json = Gson().toJson(history)
+        sharedPreferences.edit().putString(SEARCH_HISTORY, json).apply()
+    }
+
+    override fun loadFromHistory(): ArrayList<Track> {
+        val json = sharedPreferences.getString(SEARCH_HISTORY, null) ?: return arrayListOf()
+        return ArrayList(Gson().fromJson(json, Array<Track>::class.java).toList())
+    }
+
+    override fun killHistory() {
+        sharedPreferences.edit().remove(SEARCH_HISTORY).apply()
+    }
 
     override fun searchTracks(expression: String): TracksResponse {
         val response = networkClient.doRequest(SearchRequest(expression))

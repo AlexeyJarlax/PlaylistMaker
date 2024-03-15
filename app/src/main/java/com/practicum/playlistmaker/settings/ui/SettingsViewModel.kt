@@ -26,14 +26,6 @@ class SettingsViewModel(private val settingsInteractor: SettingsInteractor) : Vi
             }
         }
     }
-//        fun applyTheme() { // функция, применяющая настройки день/ночь на все приложение, передаю в расширение Application()
-//            val nightModeEnabled = settingsInteractor.loadNightMode()
-//            if (nightModeEnabled) {
-//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-//            } else {
-//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-//            }
-//        }
 
         fun shareApp() {
             settingsInteractor.buttonToShareApp()
@@ -46,15 +38,4 @@ class SettingsViewModel(private val settingsInteractor: SettingsInteractor) : Vi
         fun seeUserAgreement() {
             settingsInteractor.buttonToSeeUserAgreement()
         }
-
-//        companion object {
-//            fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-//                initializer {
-//                    val application = this[APPLICATION_KEY] as Application
-//                    SettingsViewModel(
-//                        settingsInteractor = Creator.provideSettingsInteractor(application)
-//                    )
-//                }
-//            }
-//        }
     }
