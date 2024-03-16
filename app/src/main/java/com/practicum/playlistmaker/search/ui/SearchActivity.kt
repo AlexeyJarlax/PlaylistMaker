@@ -12,6 +12,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -116,7 +117,7 @@ private val viewModel: SearchViewModel by viewModel()
                     Timber.d("=== SearchScreenState.ShowHistory")
                     showTracksFromHistory(screenState.historyList)
                     unitedRecyclerView.isVisible = true
-                    binding.killTheHistory.isVisible = true
+                    binding.killTheHistory.isVisible = historyTrackList.isNotEmpty()
                     stopLoadingIndicator()
                 }
 
@@ -230,7 +231,7 @@ private val viewModel: SearchViewModel by viewModel()
         // Фокус + ЖЦ вход в приложение queryInput пуст
         queryInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && queryInput.text.isEmpty()) {
-                showToUserHistoryOfOldTracks()
+                    showToUserHistoryOfOldTracks()
             } else if (queryInput.text.isNotEmpty()) {
             }
         }
