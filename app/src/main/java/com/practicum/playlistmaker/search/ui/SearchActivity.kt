@@ -12,8 +12,8 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
@@ -28,6 +28,7 @@ import com.practicum.playlistmaker.utils.AppPreferencesKeys
 import com.practicum.playlistmaker.utils.DebounceExtension
 import com.practicum.playlistmaker.utils.startLoadingIndicator
 import com.practicum.playlistmaker.utils.stopLoadingIndicator
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
@@ -37,19 +38,17 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var queryInput: EditText
     private lateinit var clearButton: ImageButton
     private lateinit var unitedRecyclerView: RecyclerView
-    private lateinit var viewModel: SearchViewModel
+private val viewModel: SearchViewModel by viewModel()
     private val trackListFromAPI = ArrayList<Track>()
     private val historyTrackList = ArrayList<Track>()
     private lateinit var adapterForHistoryTracks: AdapterForHistoryTracks
     private lateinit var adapterForAPITracks: AdapterForAPITracks
     private val layoutManager = LinearLayoutManager(this)
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.plant(Timber.DebugTree()) // для логирования
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(
-            this, SearchViewModel.getViewModelFactory()
-        )[SearchViewModel::class.java]
         initViews()
         setupAdapterForHistoryTracks()
         setupAdapterForAPITracks()
@@ -118,7 +117,7 @@ class SearchActivity : AppCompatActivity() {
                     Timber.d("=== SearchScreenState.ShowHistory")
                     showTracksFromHistory(screenState.historyList)
                     unitedRecyclerView.isVisible = true
-                    binding.killTheHistory.isVisible = true
+                    binding.killTheHistory.isVisible = historyTrackList.isNotEmpty()
                     stopLoadingIndicator()
                 }
 
@@ -232,7 +231,7 @@ class SearchActivity : AppCompatActivity() {
         // Фокус + ЖЦ вход в приложение queryInput пуст
         queryInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && queryInput.text.isEmpty()) {
-                showToUserHistoryOfOldTracks()
+                    showToUserHistoryOfOldTracks()
             } else if (queryInput.text.isNotEmpty()) {
             }
         }

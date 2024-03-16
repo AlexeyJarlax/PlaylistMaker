@@ -5,8 +5,7 @@ internal object AppPreferencesKeys { // глобальные объекты
     // ключи и файлы в хранилище
     const val PREFS_NAME = "MyPrefs"
     const val KEY_NIGHT_MODE = "nightMode"
-//    const val KEY_HISTORY_LIST = "key_for_history_list"
-const val SEARCH_HISTORY = "search_history"
+    const val SEARCH_HISTORY = "search_history"
     const val AN_INSTANCE_OF_THE_TRACK_CLASS = "an instance of the Track class"
 
     // константы

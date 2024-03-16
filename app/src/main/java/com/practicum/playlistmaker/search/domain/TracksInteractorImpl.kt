@@ -5,13 +5,10 @@ import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.domain.models.TracksResponse
 import com.practicum.playlistmaker.utils.AppPreferencesKeys
 
-class TracksInteractorImpl(
-    private val repository: TracksSearchRepository,
-    private val history: TracksHistoryRepository
-) : TracksInteractor {
+class TracksInteractorImpl(private val history: TracksRepository) : TracksInteractor {
 
     override fun searchTracks(expression: String, consumer: Consumer<TracksResponse>) {
-        val thread = Thread { consumer.accept(repository.searchTracks(expression)) }
+        val thread = Thread { consumer.accept(history.searchTracks(expression)) }
         thread.start()
     }
 
