@@ -19,6 +19,6 @@ import org.koin.dsl.module
         }
 
         single<TracksRepository> {
-            TracksRepositoryImpl(get(), get())
+            TracksRepositoryImpl(get(), get(), get())
         }
     }
