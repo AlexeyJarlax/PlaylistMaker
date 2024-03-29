@@ -4,15 +4,49 @@ import android.media.MediaPlayer
 import com.practicum.playlistmaker.player.domain.MediaPlayerRepository
 import com.practicum.playlistmaker.player.domain.PlayerState
 import timber.log.Timber
+import java.io.IOException
 
 class MediaPlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : MediaPlayerRepository {
 
     private var playerState = PlayerState.INITIAL
 
     override fun setDataURL(url: String) {
-        Timber.d("=== class MediaPlayerRepositoryImpl => setDataURL(url: String) ${url}")
-        mediaPlayer.setDataSource(url)
-            mediaPlayer.setOnCompletionListener { onPlayerCompletion() }
+        Timber.d("=== class MediaPlayerRepositoryImpl => setDataURL(url: String) $url")
+        try {
+            when (playerState) {
+                PlayerState.INITIAL, PlayerState.ERROR -> {
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(url)
+                    mediaPlayer.prepareAsync()
+                    mediaPlayer.setOnCompletionListener { onPlayerCompletion() }
+                    playerState = PlayerState.READY
+                }
+                PlayerState.PAUSED -> {
+                    mediaPlayer.start()
+                    playerState = PlayerState.PLAYING
+                }
+                PlayerState.PLAYING -> {
+                    mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(url)
+                    mediaPlayer.prepareAsync()
+                    mediaPlayer.setOnCompletionListener { onPlayerCompletion() }
+                    playerState = PlayerState.READY
+                }
+                PlayerState.KILL -> {
+                    mediaPlayer = MediaPlayer()
+                    mediaPlayer.setDataSource(url)
+                    mediaPlayer.prepareAsync()
+                    mediaPlayer.setOnCompletionListener { onPlayerCompletion() }
+                    playerState = PlayerState.READY
+                }
+
+                else -> {}
+            }
+        } catch (e: IOException) {
+            Timber.e(e, "Error setting data source")
+            playerState = PlayerState.ERROR
+        }
     }
 
     override fun getPlayerState(): PlayerState {
@@ -50,20 +84,16 @@ class MediaPlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : MediaPla
     private fun prepareMediaPlayer() {
         try {
             mediaPlayer.prepare()
+            playerState = PlayerState.READY
         } catch (e: Exception) {
+            Timber.e(e, "Error preparing media player")
             playerState = PlayerState.ERROR
-        } finally {
-            if (playerState == PlayerState.ERROR) {
-                mediaPlayer.stop()
-            } else {
-                playerState = PlayerState.READY
-            }
-            Timber.d("=== class MediaPlayerRepositoryImpl => prepareMediaPlayer() ${playerState}")
+            mediaPlayer.stop()
         }
-
+        Timber.d("=== class MediaPlayerRepositoryImpl => prepareMediaPlayer() $playerState")
     }
 
-        private fun onPlayerCompletion() {
-            playerState = PlayerState.READY
-        }
+    private fun onPlayerCompletion() {
+        playerState = PlayerState.READY
+    }
 }
