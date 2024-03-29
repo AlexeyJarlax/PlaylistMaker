@@ -35,6 +35,7 @@
         <activity
             android:name=".search.ui.SearchActivity"
             android:exported="false"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="fullSensor" />
         <activity
             android:name=".mediateka.MedialabActivity"
