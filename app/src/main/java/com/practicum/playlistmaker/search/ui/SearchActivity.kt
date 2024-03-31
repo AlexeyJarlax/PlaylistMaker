@@ -12,7 +12,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +25,7 @@ import com.practicum.playlistmaker.utils.bindGoBackButton
 import com.practicum.playlistmaker.utils.setDebouncedClickListener
 import com.practicum.playlistmaker.utils.AppPreferencesKeys
 import com.practicum.playlistmaker.utils.DebounceExtension
+import com.practicum.playlistmaker.utils.ErrorUtils.ifActivityErrorShowPlug
 import com.practicum.playlistmaker.utils.startLoadingIndicator
 import com.practicum.playlistmaker.utils.stopLoadingIndicator
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -133,7 +133,7 @@ private val viewModel: SearchViewModel by viewModel()
                     Timber.e("=== SearchScreenState.NoResults")
                     unitedRecyclerView.isVisible = false
                     binding.killTheHistory.isVisible = false
-                    solvingThisProblemWith(AppPreferencesKeys.RESULTS) {}
+                    ifActivityErrorShowPlug(AppPreferencesKeys.RESULTS_EMPTY) {}
                     stopLoadingIndicator()
                 }
 
@@ -141,7 +141,7 @@ private val viewModel: SearchViewModel by viewModel()
                     Timber.e("=== SearchScreenState.Error")
                     unitedRecyclerView.isVisible = false
                     binding.killTheHistory.isVisible = false
-                    solvingThisProblemWith(AppPreferencesKeys.INTERNET) {
+                    ifActivityErrorShowPlug(AppPreferencesKeys.INTERNET_EMPTY) {
                         viewModel.searchRequestFromViewModel((queryInput.text.toString().trim()), true)
                     }
                     stopLoadingIndicator()
@@ -266,41 +266,5 @@ private val viewModel: SearchViewModel by viewModel()
 
     private fun startToSearchTrackRightAway() { // ищем трек сразу
         viewModel.searchRequestFromViewModel((queryInput.text.toString().trim()), false)
-    }
-
-    //****************************************** решаем проблемы с отсутствием результата поиска треков или интернета
-
-    fun solvingThisProblemWith(problemTipo: String, sendRequestForDoReserch: () -> Unit) {
-        val utilErrorBox = findViewById<LinearLayout>(R.id.utilErrorBox)
-        val errorIcon = findViewById<ImageView>(R.id.error_icon)
-        val errorTextWeb = findViewById<TextView>(R.id.error_text_web)
-        val retryButton = findViewById<Button>(R.id.retry_button)
-
-        when (problemTipo) {
-            AppPreferencesKeys.INTERNET -> {
-                errorIcon.setImageResource(R.drawable.ic_error_internet)
-                errorTextWeb.text = resources.getString(R.string.error_text_web)
-                retryButton.visibility = View.VISIBLE
-                retryButton.setDebouncedClickListener {
-                    sendRequestForDoReserch() // тут отправляем на повторный поиск
-                    utilErrorBox.visibility = View.GONE
-                }
-            }
-
-            AppPreferencesKeys.RESULTS -> {
-                errorIcon.setImageResource(R.drawable.ic_error_notfound)
-                errorTextWeb.text = resources.getString(R.string.nothing_was_found)
-                retryButton.visibility = View.GONE
-            }
-
-            else -> {
-                retryButton.visibility = View.GONE
-            }
-        }
-
-        utilErrorBox.visibility = View.VISIBLE
-        utilErrorBox.setDebouncedClickListener {
-            utilErrorBox.visibility = View.GONE
-        }
     }
 }

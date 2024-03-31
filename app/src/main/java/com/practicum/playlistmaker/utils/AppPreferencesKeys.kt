@@ -16,9 +16,12 @@ internal object AppPreferencesKeys { // глобальные объекты
     const val ONE_SECOND = 1000L // одна секунда
     const val iTunesSearchUrl = "https://itunes.apple.com"
 
-    const val INTERNET = "problems_with_internet"
-    const val RESULTS = "problems_with_results"
-    const val plug = "заглушка"
+    // заглушки
+    const val INTERNET_EMPTY = "problems_with_internet"
+    const val RESULTS_EMPTY = "no_results"
+    const val FAVORITES_EMPTY = "favorites_empty"
+    const val PLAYLISTS_EMPTY = "playlists_empty"
+    const val LOADING = "loading"
 }
 
 

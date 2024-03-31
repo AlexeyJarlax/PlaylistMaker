@@ -46,4 +46,7 @@
     <string name="zero_time">00:00</string>
     <string name="favorite_tracks">Избранные треки</string>
     <string name="playlists">Плейлисты</string>
+    <string name="media_library_is_empty">Ваша медиатека пуста</string>
+    <string name="havent_created_any_playlists">Вы не создали ни одного плейлиста</string>
+    <string name="new_play_list">Новый плейлист</string>
 </resources>

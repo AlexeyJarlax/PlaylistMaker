@@ -1,17 +1,15 @@
 package com.practicum.playlistmaker.medialibrary
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityMedialabBinding
-
+import com.practicum.playlistmaker.utils.bindGoBackButton
 
 class MLActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMedialabBinding
-
     private lateinit var tabMediator: TabLayoutMediator
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,10 +17,8 @@ class MLActivity : AppCompatActivity() {
         binding = ActivityMedialabBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val plug = intent.getStringExtra("plug") ?: ""
-
         binding.viewPager.adapter = MLViewPagerAdapter(supportFragmentManager,
-            lifecycle, plug)
+            lifecycle)
 
         tabMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             when(position) {
@@ -31,6 +27,7 @@ class MLActivity : AppCompatActivity() {
             }
         }
         tabMediator.attach()
+        bindGoBackButton()
     }
 
     override fun onDestroy() {

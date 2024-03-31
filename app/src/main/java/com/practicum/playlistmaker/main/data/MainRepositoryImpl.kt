@@ -6,7 +6,6 @@ import android.content.Intent
 import com.practicum.playlistmaker.medialibrary.MLActivity
 import com.practicum.playlistmaker.search.ui.SearchActivity
 import com.practicum.playlistmaker.settings.ui.SettingsActivity
-import com.practicum.playlistmaker.utils.AppPreferencesKeys.plug
 
 class MainRepositoryImpl(private val context: Context) : MainRepository {
 
@@ -19,7 +18,6 @@ class MainRepositoryImpl(private val context: Context) : MainRepository {
     override fun navigateToMediaLib() {
         val intent = Intent(context, MLActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        intent.putExtra("plug", plug)
         context.startActivity(intent)
     }
 

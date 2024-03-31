@@ -2,24 +2,38 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:background="@color/yp_white_and_yp_black"
+    android:orientation="vertical"
+    style="@style/TabText"
     tools:context=".medialibrary.MLActivity">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/yp_white_and_yp_black"
-            app:tabRippleColor="@color/yp_black_and_yp_white"
-            app:tabTextColor="@color/yp_black_and_yp_white"
-            app:tabIndicatorColor="@color/yp_black_and_yp_white"/>
+    <Button
+        android:id="@+id/buttonBack"
+        style="@style/GoBackButtons"
+        android:text="@string/button_media_lib"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabTextAppearance="@style/TabText"
+        app:tabMode="fixed"
+        app:tabIndicatorFullWidth="true"
+        style="@style/TabText"/>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <include
+        android:id="@+id/utilErrorBoxForFragments"
+        layout="@layout/util_error_layout_for_fragments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>
