@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.main.data
 import com.practicum.playlistmaker.main.domain.MainRepository
 import android.content.Context
 import android.content.Intent
-import com.practicum.playlistmaker.mediateka.MedialabActivity
+import com.practicum.playlistmaker.medialibrary.MLActivity
 import com.practicum.playlistmaker.search.ui.SearchActivity
 import com.practicum.playlistmaker.settings.ui.SettingsActivity
 
@@ -16,7 +16,7 @@ class MainRepositoryImpl(private val context: Context) : MainRepository {
     }
 
     override fun navigateToMediaLib() {
-        val intent = Intent(context, MedialabActivity::class.java)
+        val intent = Intent(context, MLActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
     }

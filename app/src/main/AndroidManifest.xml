@@ -38,7 +38,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name=".mediateka.MedialabActivity"
+            android:name=".medialibrary.MLActivity"
             android:exported="false"
             android:screenOrientation="fullSensor" />
         <activity

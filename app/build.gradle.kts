@@ -40,7 +40,6 @@ android {
 }
 
 dependencies {
-
 //БАЗОВЫЕ
 
     // Расширения Kotlin для работы с Activity.
