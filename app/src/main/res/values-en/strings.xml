@@ -44,4 +44,7 @@
     <string name="genre">genre&#160;&#160;&#160;</string>
     <string name="country">country&#160;&#160;&#160;</string>
     <string name="toast">toast</string>
+    <string name="zero_time">00:00</string>
+    <string name="favorite_tracks">Favorite tracks</string>
+    <string name="playlists">Playlists</string>
 </resources>

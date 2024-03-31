@@ -19,9 +19,15 @@ class MLPlaylistsFragment : Fragment() {
 
     companion object {
         private const val plug = "plug"
+
+        fun newInstance(plug: String) = MLPlaylistsFragment().apply {
+            arguments = Bundle().apply {
+                putString(plug, plug)
+            }
+        }
     }
 
-    private val posterViewModel: MLPlaylistsViewModel by viewModel {
+    private val thisViewModel: MLPlaylistsViewModel by viewModel {
         parametersOf(requireArguments().getString(plug))
     }
 
@@ -36,10 +42,10 @@ class MLPlaylistsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        plugImageView = view.findViewById(R.id.error_icon)
+        plugImageView = view.findViewById(R.id.artwork_image_view)
 
-        posterViewModel.observeUrl().observe(viewLifecycleOwner) {
-            ArtworkUrlLoader().loadImage(it, plugImageView)
+        thisViewModel.observeUrl().observe(viewLifecycleOwner) { plug ->
+                plugImageView.setImageResource(R.drawable.ic_error_notfound)
+            }
         }
     }
-}

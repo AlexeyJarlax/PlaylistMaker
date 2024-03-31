@@ -18,6 +18,7 @@ internal object AppPreferencesKeys { // глобальные объекты
 
     const val INTERNET = "problems_with_internet"
     const val RESULTS = "problems_with_results"
+    const val plug = "заглушка"
 }
 
 
