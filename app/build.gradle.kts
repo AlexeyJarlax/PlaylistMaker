@@ -74,6 +74,9 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
 
+    // Библиотека для создания функций отправки в Intents с помощью mailto: URI
+    implementation("de.cketti.mailto:email-intent-builder:2.0.0")
+
 // ТЕСТИРОВАНИЕ
 
     // Библиотека для логирования.

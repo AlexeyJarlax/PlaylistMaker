@@ -50,4 +50,5 @@
     <string name="media_library_is_empty">Media library is empty</string>
     <string name="havent_created_any_playlists">Havent created any playlists</string>
     <string name="new_play_list">New play list</string>
+    <string name="app_id">ru.yandex.practicum.flutter_practicum</string>
 </resources>

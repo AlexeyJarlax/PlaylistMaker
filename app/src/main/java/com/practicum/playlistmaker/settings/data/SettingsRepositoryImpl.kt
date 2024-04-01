@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.settings.domain.SettingsRepository
 import com.practicum.playlistmaker.utils.AppPreferencesKeys.KEY_NIGHT_MODE
+import de.cketti.mailto.EmailIntentBuilder
 
 class SettingsRepositoryImpl(private val context: Context, private val sharedPreferences: SharedPreferences) :
     SettingsRepository {
@@ -30,12 +31,12 @@ class SettingsRepositoryImpl(private val context: Context, private val sharedPre
     }
 
     override fun buttonToShareApp() {
-        val appId = ""
+        val appId = context.getString(R.string.app_id)
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
         intent.putExtra(
             Intent.EXTRA_TEXT,
-            context.getString(R.string.share_app_text, appId)
+            context.getString(R.string.share_app_text) + appId // идентификатор приложения
         )
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         val chooserIntent = Intent.createChooser(intent, context.getString(R.string.share_app_title))
@@ -44,12 +45,14 @@ class SettingsRepositoryImpl(private val context: Context, private val sharedPre
     }
 
     override fun buttonToHelp() {
-        val intent = Intent(Intent.ACTION_SENDTO)
-        intent.data = Uri.parse(context.getString(R.string.support_email))
-        intent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.support_email_subject))
-        intent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.support_email_text))
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(intent)
+        val subject = context.getString(R.string.support_email_subject)
+        val body = context.getString(R.string.support_email_text)
+        val email = context.getString(R.string.support_email)
+        val emailIntent = EmailIntentBuilder.from(context)
+            .to(email)
+            .subject(subject)
+            .body(body)
+            .start()
     }
 
     override fun buttonToSeeUserAgreement() {

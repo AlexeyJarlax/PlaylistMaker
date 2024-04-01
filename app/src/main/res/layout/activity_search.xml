@@ -97,7 +97,6 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/track_recycler_view"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp8"
@@ -117,7 +116,6 @@
             android:layout_height="@dimen/dp36"
             android:layout_marginTop="@dimen/dp24"
             android:layout_marginBottom="@dimen/dp24"
-            android:gravity="center"
             android:paddingVertical="@dimen/dp6"
             android:paddingStart="@dimen/dp12"
             android:paddingEnd="@dimen/dp12"
@@ -125,7 +123,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/track_recycler_view"
             tools:visibility="visible" />
 
         <ProgressBar

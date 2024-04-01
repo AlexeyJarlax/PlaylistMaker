@@ -103,6 +103,7 @@ private val viewModel: SearchViewModel by viewModel()
                     Timber.d("=== SearchScreenState.InitialState")
                     unitedRecyclerView.isVisible = false
                     binding.killTheHistory.isVisible = false
+                    binding.youWereLookingFor.isVisible = false
                 }
 
                 SearchScreenState.Loading -> {
@@ -111,6 +112,7 @@ private val viewModel: SearchViewModel by viewModel()
                     startLoadingIndicator()
                     unitedRecyclerView.isVisible = false
                     binding.killTheHistory.isVisible = false
+                    binding.youWereLookingFor.isVisible = false
                 }
 
                 is SearchScreenState.ShowHistory -> {
@@ -118,6 +120,7 @@ private val viewModel: SearchViewModel by viewModel()
                     showTracksFromHistory(screenState.historyList)
                     unitedRecyclerView.isVisible = true
                     binding.killTheHistory.isVisible = historyTrackList.isNotEmpty()
+                    binding.youWereLookingFor.isVisible = historyTrackList.isNotEmpty()
                     stopLoadingIndicator()
                 }
 
@@ -126,6 +129,7 @@ private val viewModel: SearchViewModel by viewModel()
                     showSearchFromAPI(screenState.searchAPIList)
                     unitedRecyclerView.isVisible = true
                     binding.killTheHistory.isVisible = false
+                    binding.youWereLookingFor.isVisible = false
                     stopLoadingIndicator()
                 }
 
@@ -133,6 +137,7 @@ private val viewModel: SearchViewModel by viewModel()
                     Timber.e("=== SearchScreenState.NoResults")
                     unitedRecyclerView.isVisible = false
                     binding.killTheHistory.isVisible = false
+                    binding.youWereLookingFor.isVisible = false
                     ifActivityErrorShowPlug(AppPreferencesKeys.RESULTS_EMPTY) {}
                     stopLoadingIndicator()
                 }
@@ -141,6 +146,7 @@ private val viewModel: SearchViewModel by viewModel()
                     Timber.e("=== SearchScreenState.Error")
                     unitedRecyclerView.isVisible = false
                     binding.killTheHistory.isVisible = false
+                    binding.youWereLookingFor.isVisible = false
                     ifActivityErrorShowPlug(AppPreferencesKeys.INTERNET_EMPTY) {
                         viewModel.searchRequestFromViewModel((queryInput.text.toString().trim()), true)
                     }
