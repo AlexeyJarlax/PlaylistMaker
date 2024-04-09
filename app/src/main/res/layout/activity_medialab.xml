@@ -1,16 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".mediateka.MedialabActivity">
+    android:background="@color/yp_white_and_yp_black"
+    android:orientation="vertical"
+    style="@style/TabText"
+    tools:context=".medialibrary.MLActivity">
 
-    <TextView
-        android:id="@+id/medialab0"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/buttonBack"
+        style="@style/GoBackButtons"
+        android:text="@string/button_media_lib"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/there_wil_be_media_library"
-        tools:layout_editor_absoluteX="21dp"
-        tools:layout_editor_absoluteY="685dp" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        app:tabTextAppearance="@style/TabText"
+        app:tabMode="fixed"
+        app:tabIndicatorFullWidth="true"
+        style="@style/TabText"/>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <include
+        android:id="@+id/utilErrorBoxForFragments"
+        layout="@layout/util_error_layout_for_fragments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/utilErrorBoxForFragments"
+        layout="@layout/util_error_layout_for_fragments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!--тестовый проброс списка треков из даты -->
+    <!--    <TextView-->
+    <!--        android:id="@+id/test_block2"-->
+    <!--        style="@style/TrackArtistText"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="@dimen/dp8"-->
+    <!--        android:layout_marginEnd="@dimen/dp8"-->
+    <!--        android:text="@string/placeholder_artist_name"-->
+    <!--        android:alpha="0.3"-->
+    <!--        android:layout_gravity="bottom" />-->
+</FrameLayout>

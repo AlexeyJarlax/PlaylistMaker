@@ -9,9 +9,10 @@
     <string name="share_the_app">Поделиться приложением</string>
     <string name="write_to_support">Написать в поддержку</string>
     <string name="user_agreement">Пользовательское соглашение</string>
-    <string name="share_app_text">Попробуй это приложение, которое я яростно написал: https://play.google.com/store/apps/details?id=%1$s</string>
+    <string name="share_app_text">https://play.google.com/store/apps/details?id=</string>
+    <string name="app_id">ru.yandex.practicum.flutter_practicum</string>
     <string name="share_app_title">Поделиться приложением</string>
-    <string name="support_email">mailto:al3ksei.pav@yandex.ru</string>
+    <string name="support_email">al3ksei.pav@yandex.ru</string>
     <string name="support_email_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="support_email_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="user_agreement_url">https://yandex.ru/legal/practicum_offer/</string>
@@ -44,4 +45,9 @@
     <string name="country">Страна&#160;&#160;&#160;</string>
     <string name="toast">toast</string>
     <string name="zero_time">00:00</string>
+    <string name="favorite_tracks">Избранные треки</string>
+    <string name="playlists">Плейлисты</string>
+    <string name="media_library_is_empty">Ваша медиатека пуста</string>
+    <string name="havent_created_any_playlists">Вы не создали ни одного плейлиста</string>
+    <string name="new_play_list">Новый плейлист</string>
 </resources>

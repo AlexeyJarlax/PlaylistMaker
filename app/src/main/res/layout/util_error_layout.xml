@@ -18,15 +18,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/any_mistake"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_size_sp16"
         android:gravity="center"/>
 
     <Button
         android:id="@+id/retry_button"
         style="@style/ErrorButtons"
         android:layout_marginTop="@dimen/dp24"
-        android:layout_width="@dimen/dp91"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/dp36"
         android:text="@string/refresh"
-         />
+        />
 </LinearLayout>
