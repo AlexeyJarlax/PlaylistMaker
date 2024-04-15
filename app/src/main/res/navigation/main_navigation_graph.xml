@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation_graph"
+    app:startDestination="@id/MLPlaylistsFragment">
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.practicum.playlistmaker.search.ui.SearchFragment"
+        android:label="fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_playFragment"
+            app:destination="@id/playFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/playFragment"
+        android:name="com.practicum.playlistmaker.player.ui.PlayFragment"
+        android:label="fragment_play"
+        tools:layout="@layout/fragment_play" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.practicum.playlistmaker.settings.ui.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/MLFragment"
+        android:name="com.practicum.playlistmaker.medialibrary.MLFragment"
+        android:label="fragment_medialab"
+        tools:layout="@layout/fragment_ml" >
+        <action
+            android:id="@+id/action_MLFragment_to_MLFavoritesFragment"
+            app:destination="@id/MLFavoritesFragment" />
+        <action
+            android:id="@+id/action_MLFragment_to_MLPlaylistsFragment"
+            app:destination="@id/MLPlaylistsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/MLPlaylistsFragment"
+        android:name="com.practicum.playlistmaker.medialibrary.playlists.MLPlaylistsFragment"
+        android:label="MLPlaylistsFragment" />
+
+    <fragment
+        android:id="@+id/MLFavoritesFragment"
+        android:name="com.practicum.playlistmaker.medialibrary.favorites.MLFavoritesFragment"
+        android:label="MLFavoritesFragment" />
+</navigation>

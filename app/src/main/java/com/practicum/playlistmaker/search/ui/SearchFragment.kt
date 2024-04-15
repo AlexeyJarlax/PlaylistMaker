@@ -1,54 +1,60 @@
 package com.practicum.playlistmaker.search.ui
 
-import timber.log.Timber
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 
-import com.practicum.playlistmaker.databinding.ActivitySearchBinding
-import com.practicum.playlistmaker.databinding.UtilErrorLayoutBinding
-import com.practicum.playlistmaker.player.ui.PlayActivity
+import com.practicum.playlistmaker.databinding.FragmentSearchBinding
+import com.practicum.playlistmaker.player.ui.PlayFragment
 import com.practicum.playlistmaker.search.domain.models.Track
-import com.practicum.playlistmaker.utils.bindGoBackButton
-import com.practicum.playlistmaker.utils.setDebouncedClickListener
 import com.practicum.playlistmaker.utils.AppPreferencesKeys
 import com.practicum.playlistmaker.utils.DebounceExtension
-import com.practicum.playlistmaker.utils.ErrorUtils.ifActivityErrorShowPlug
+import com.practicum.playlistmaker.utils.setDebouncedClickListener
 import com.practicum.playlistmaker.utils.startLoadingIndicator
 import com.practicum.playlistmaker.utils.stopLoadingIndicator
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
 
-    private lateinit var binding: ActivitySearchBinding
-    private lateinit var utilErrorBinding: UtilErrorLayoutBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
+
     private var hasFocus = true
     private lateinit var queryInput: EditText
     private lateinit var clearButton: ImageButton
     private lateinit var unitedRecyclerView: RecyclerView
-private val viewModel: SearchViewModel by viewModel()
+    private val viewModel: SearchViewModel by viewModel()
     private val trackListFromAPI = ArrayList<Track>()
     private val historyTrackList = ArrayList<Track>()
     private lateinit var adapterForHistoryTracks: AdapterForHistoryTracks
     private lateinit var adapterForAPITracks: AdapterForAPITracks
-    private val layoutManager = LinearLayoutManager(this)
+    private val layoutManager by lazy { LinearLayoutManager(requireContext()) }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        Timber.plant(Timber.DebugTree()) // для логирования
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initViews()
         setupAdapterForHistoryTracks()
         setupAdapterForAPITracks()
@@ -57,15 +63,14 @@ private val viewModel: SearchViewModel by viewModel()
         queryTextChangedListener()
         killTheHistory()
         viewModel.setInitialState()
-        bindGoBackButton()
     }
 
-    private fun initViews() { // вызовы вьюх
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        utilErrorBinding = UtilErrorLayoutBinding.inflate(layoutInflater)
-        binding.root.addView(utilErrorBinding.root)
-        utilErrorBinding.root.visibility = View.GONE
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun initViews() {
         queryInput = binding.searchEditText
         clearButton = binding.clearButton
         unitedRecyclerView = binding.trackRecyclerView
@@ -76,20 +81,32 @@ private val viewModel: SearchViewModel by viewModel()
     private fun setupAdapterForAPITracks() {
         adapterForAPITracks = AdapterForAPITracks {
             viewModel.saveToHistory(it)
-            val intent = Intent(this@SearchActivity, PlayActivity::class.java)
-            intent.putExtra(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS, it)
-            startActivity(intent)
+            val fragment = PlayFragment()
+            val bundle = Bundle().apply {
+                putSerializable(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS, it)
+            }
+            fragment.arguments = bundle
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment, fragment)
+                .addToBackStack(null)
+                .commit()
         }
         adapterForAPITracks.tracks = trackListFromAPI
     }
 
-    // устанавливаю адаптер на треки из истории сохранений
+    // Устанавливаю адаптер на треки из истории сохранений
     private fun setupAdapterForHistoryTracks() {
         adapterForHistoryTracks = AdapterForHistoryTracks {
             viewModel.saveToHistoryAndRefresh(it)
-            val intent = Intent(this@SearchActivity, PlayActivity::class.java)
-            intent.putExtra(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS, it)
-            startActivity(intent)
+            val fragment = PlayFragment()
+            val bundle = Bundle().apply {
+                putSerializable(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS, it)
+            }
+            fragment.arguments = bundle
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment, fragment)
+                .addToBackStack(null)
+                .commit()
         }
         adapterForHistoryTracks.searchHistoryTracks = historyTrackList
     }
@@ -97,7 +114,7 @@ private val viewModel: SearchViewModel by viewModel()
     //********************************** устанавливаем наблюдатель за изменениями в состоянии экрана
 
     private fun setupObserver() {
-        viewModel.screenState.observe(this@SearchActivity) { screenState ->
+        viewModel.screenState.observe(viewLifecycleOwner) { screenState ->
             when (screenState) {
                 SearchScreenState.InitialState -> {
                     Timber.d("=== SearchScreenState.InitialState")
@@ -138,7 +155,7 @@ private val viewModel: SearchViewModel by viewModel()
                     unitedRecyclerView.isVisible = false
                     binding.killTheHistory.isVisible = false
                     binding.youWereLookingFor.isVisible = false
-                    ifActivityErrorShowPlug(AppPreferencesKeys.RESULTS_EMPTY) {}
+//                    ifActivityErrorShowPlug(AppPreferencesKeys.RESULTS_EMPTY) {}
                     stopLoadingIndicator()
                 }
 
@@ -147,9 +164,9 @@ private val viewModel: SearchViewModel by viewModel()
                     unitedRecyclerView.isVisible = false
                     binding.killTheHistory.isVisible = false
                     binding.youWereLookingFor.isVisible = false
-                    ifActivityErrorShowPlug(AppPreferencesKeys.INTERNET_EMPTY) {
-                        viewModel.searchRequestFromViewModel((queryInput.text.toString().trim()), true)
-                    }
+//                    ifActivityErrorShowPlug(AppPreferencesKeys.INTERNET_EMPTY) {
+//                        viewModel.searchRequestFromViewModel((queryInput.text.toString().trim()), true)
+//                    }
                     stopLoadingIndicator()
                 }
             }
@@ -187,12 +204,13 @@ private val viewModel: SearchViewModel by viewModel()
             adapterForAPITracks.notifyDataSetChanged()
             unitedRecyclerView.adapter = adapterForAPITracks
         } else {
-                viewModel.setNoResultsState()
+            viewModel.setNoResultsState()
         }
     }
 
     private fun hideKeyboard() {
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(queryInput.windowToken, 0)
     }
 
@@ -223,7 +241,7 @@ private val viewModel: SearchViewModel by viewModel()
             ) {
                 val searchText = queryInput.text.toString().trim()
                 clearButton.visibility = if (searchText.isNotEmpty()) View.VISIBLE else View.GONE
-                Timber.d("=== class SearchActivity  => (viewModel.searchDebounce( ${searchText} ))")
+                Timber.d("=== class SearchFragment  => (viewModel.searchDebounce( ${searchText} ))")
                 if (hasFocus && searchText.isEmpty()) {  // обработка ввода без нажатий
                     showToUserHistoryOfOldTracks()
                 } else {
@@ -237,7 +255,7 @@ private val viewModel: SearchViewModel by viewModel()
         // Фокус + ЖЦ вход в приложение queryInput пуст
         queryInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && queryInput.text.isEmpty()) {
-                    showToUserHistoryOfOldTracks()
+                showToUserHistoryOfOldTracks()
             } else if (queryInput.text.isNotEmpty()) {
             }
         }
