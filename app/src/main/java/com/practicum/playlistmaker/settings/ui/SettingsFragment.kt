@@ -1,42 +1,63 @@
 package com.practicum.playlistmaker.settings.ui
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.practicum.playlistmaker.databinding.FragmentSettingsBinding
 import com.practicum.playlistmaker.utils.setDebouncedClickListener
-import com.practicum.playlistmaker.utils.bindGoBackButton
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsFragment : AppCompatActivity() {
+class SettingsFragment : Fragment() {
 
-    private lateinit var binding: FragmentSettingsBinding
+    private var _binding: FragmentSettingsBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: SettingsViewModel by viewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = FragmentSettingsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        bindGoBackButton()
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        // КНОПКА НОЧНОЙ И ДНЕВНОЙ ТЕМЫ
-        viewModel.isNightMode.observe(this) { binding.switchDarkMode.isChecked = it }
-        binding.switchDarkMode.setOnCheckedChangeListener { _, value ->
-            viewModel.changeNightMode(
-                value
-            )
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupDarkModeSwitch()
+        setupShareButton()
+        setupSupportButton()
+        setupUserAgreementButton()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun setupDarkModeSwitch() {
+        viewModel.isNightMode.observe(viewLifecycleOwner) { isNightMode ->
+            binding.switchDarkMode.isChecked = isNightMode
         }
+        binding.switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.changeNightMode(isChecked)
+        }
+    }
 
-        // КНОПКА ПОДЕЛИТЬСЯ
+    private fun setupShareButton() {
         binding.buttonSettingsShare.setDebouncedClickListener {
             viewModel.shareApp()
         }
+    }
 
-        // КНОПКА ТЕХПОДДЕРЖКИ
+    private fun setupSupportButton() {
         binding.buttonSettingsWriteToSupp.setDebouncedClickListener {
             viewModel.goToHelp()
         }
+    }
 
-        // КНОПКА ПОЛЬЗОВАТЕЛЬСКОГО СОГЛАШЕНИЯ
+    private fun setupUserAgreementButton() {
         binding.buttonSettingsUserAgreement.setDebouncedClickListener {
             viewModel.seeUserAgreement()
         }
