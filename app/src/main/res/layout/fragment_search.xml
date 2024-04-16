@@ -47,7 +47,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="@dimen/dp16"
                         android:contentDescription="@string/todo"
-                        android:src="@drawable/ic_search" />
+                        android:src="@drawable/ic_btn_search" />
 
                     <EditText
                         android:id="@+id/search_edit_text"
@@ -100,6 +100,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp8"
+            android:layout_marginBottom="@dimen/dp60"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/you_were_looking_for"
             app:tint="@color/yp_light_gray_and_yp_white"

@@ -16,6 +16,7 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_view"
+        style="@style/TitleTextSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/yp_white_and_yp_black"
