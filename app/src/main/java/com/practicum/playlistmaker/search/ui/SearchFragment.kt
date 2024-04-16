@@ -87,6 +87,7 @@ class SearchFragment : Fragment() {
             }
             fragment.arguments = bundle
             parentFragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment, fragment)
                 .addToBackStack(null)
                 .commit()
@@ -104,6 +105,7 @@ class SearchFragment : Fragment() {
             }
             fragment.arguments = bundle
             parentFragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment, fragment)
                 .addToBackStack(null)
                 .commit()
