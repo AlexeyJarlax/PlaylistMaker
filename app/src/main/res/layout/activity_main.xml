@@ -22,8 +22,10 @@
         android:background="@color/yp_white_and_yp_black"
         app:itemIconTint="@color/color_selector"
         app:itemTextColor="@color/color_selector"
+        app:launchSingleTop="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_navigation_menu" />
+        app:menu="@menu/bottom_navigation_menu"
+        app:navGraph="@navigation/main_navigation_graph" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

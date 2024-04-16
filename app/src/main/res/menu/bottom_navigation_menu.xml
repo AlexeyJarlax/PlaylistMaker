@@ -7,7 +7,7 @@
     <item
         android:id="@+id/navigation_ml"
         android:title="@string/button_media_lib"
-        android:icon="@drawable/ic_btn_lib" />
+        android:icon="@drawable/ic_btn_lib"/>
     <item
         android:id="@+id/navigation_settings"
         android:title="@string/button_settings"
