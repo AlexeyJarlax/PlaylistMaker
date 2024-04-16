@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/navigation_search"
-        android:title="@string/button_search"
-        android:icon="@drawable/ic_btn_search" />
+        android:id="@+id/searchFragment"
+        android:icon="@drawable/ic_btn_search"
+        android:title="@string/button_search" />
     <item
-        android:id="@+id/navigation_ml"
-        android:title="@string/button_media_lib"
-        android:icon="@drawable/ic_btn_lib"/>
+        android:id="@+id/MLFragment"
+        android:icon="@drawable/ic_btn_lib"
+        android:title="@string/button_media_lib" />
     <item
-        android:id="@+id/navigation_settings"
-        android:title="@string/button_settings"
-        android:icon="@drawable/ic_btn_settings" />
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/ic_btn_settings"
+        android:title="@string/button_settings" />
 </menu>
