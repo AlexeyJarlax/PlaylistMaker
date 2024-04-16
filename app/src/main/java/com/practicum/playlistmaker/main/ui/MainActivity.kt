@@ -17,7 +17,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
@@ -26,14 +27,17 @@ class MainActivity : AppCompatActivity() {
                     navController.navigate(R.id.searchFragment)
                     true
                 }
+
                 R.id.navigation_ml -> {
                     navController.navigate(R.id.MLFragment)
                     true
                 }
+
                 R.id.navigation_settings -> {
                     navController.navigate(R.id.settingsFragment)
                     true
                 }
+
                 else -> false
             }
         }

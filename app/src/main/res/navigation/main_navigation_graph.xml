@@ -20,7 +20,6 @@
         android:label="fragment_play"
         tools:layout="@layout/fragment_play" />
 
-
     <fragment
         android:id="@+id/MLFragment"
         android:name="com.practicum.playlistmaker.medialibrary.MLFragment"

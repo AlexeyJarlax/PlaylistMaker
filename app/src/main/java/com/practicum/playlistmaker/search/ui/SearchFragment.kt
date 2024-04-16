@@ -22,6 +22,7 @@ import com.practicum.playlistmaker.player.ui.PlayFragment
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.utils.AppPreferencesKeys
 import com.practicum.playlistmaker.utils.DebounceExtension
+import com.practicum.playlistmaker.utils.ErrorUtils.ifSearchErrorShowPlug
 import com.practicum.playlistmaker.utils.setDebouncedClickListener
 import com.practicum.playlistmaker.utils.startLoadingIndicator
 import com.practicum.playlistmaker.utils.stopLoadingIndicator
@@ -42,7 +43,6 @@ class SearchFragment : Fragment() {
     private val historyTrackList = ArrayList<Track>()
     private lateinit var adapterForHistoryTracks: AdapterForHistoryTracks
     private lateinit var adapterForAPITracks: AdapterForAPITracks
-    private val layoutManager by lazy { LinearLayoutManager(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,6 +58,7 @@ class SearchFragment : Fragment() {
         initViews()
         setupAdapterForHistoryTracks()
         setupAdapterForAPITracks()
+        setupLayoutManager()
         setupObserver()
         clearButton()
         queryTextChangedListener()
@@ -74,7 +75,6 @@ class SearchFragment : Fragment() {
         queryInput = binding.searchEditText
         clearButton = binding.clearButton
         unitedRecyclerView = binding.trackRecyclerView
-        unitedRecyclerView.layoutManager = layoutManager
     }
 
     // устанавливаем адаптер на треки из АйТюнс
@@ -109,6 +109,18 @@ class SearchFragment : Fragment() {
                 .commit()
         }
         adapterForHistoryTracks.searchHistoryTracks = historyTrackList
+    }
+
+    private fun setupLayoutManager() {
+        if (unitedRecyclerView.layoutManager != null) {
+            unitedRecyclerView.adapter = adapterForHistoryTracks
+            adapterForHistoryTracks.searchHistoryTracks = historyTrackList
+        } else {
+            val layoutManager by lazy { LinearLayoutManager(requireContext()) }
+            unitedRecyclerView.layoutManager = layoutManager
+            unitedRecyclerView.adapter = adapterForHistoryTracks
+            adapterForHistoryTracks.searchHistoryTracks = historyTrackList
+        }
     }
 
     //********************************** устанавливаем наблюдатель за изменениями в состоянии экрана
@@ -155,7 +167,7 @@ class SearchFragment : Fragment() {
                     unitedRecyclerView.isVisible = false
                     binding.killTheHistory.isVisible = false
                     binding.youWereLookingFor.isVisible = false
-//                    ifActivityErrorShowPlug(AppPreferencesKeys.RESULTS_EMPTY) {}
+                    ifSearchErrorShowPlug(AppPreferencesKeys.RESULTS_EMPTY) {}
                     stopLoadingIndicator()
                 }
 
@@ -164,9 +176,9 @@ class SearchFragment : Fragment() {
                     unitedRecyclerView.isVisible = false
                     binding.killTheHistory.isVisible = false
                     binding.youWereLookingFor.isVisible = false
-//                    ifActivityErrorShowPlug(AppPreferencesKeys.INTERNET_EMPTY) {
-//                        viewModel.searchRequestFromViewModel((queryInput.text.toString().trim()), true)
-//                    }
+                    ifSearchErrorShowPlug(AppPreferencesKeys.INTERNET_EMPTY) {
+                        viewModel.searchRequestFromViewModel((queryInput.text.toString().trim()), true)
+                    }
                     stopLoadingIndicator()
                 }
             }

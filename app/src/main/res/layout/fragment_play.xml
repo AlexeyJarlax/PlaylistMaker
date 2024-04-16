@@ -20,9 +20,9 @@
     <Button
         android:id="@+id/buttonBack"
         style="@style/GoBackButtons"
-        android:layout_height="52dp"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/button_back"
-        android:text=""
+        android:text="@string/button_back"
         app:layout_constraintBottom_toTopOf="@id/gasket1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -196,8 +196,7 @@
         android:layout_height="@dimen/dp51"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleCountry"
-        tools:background="@color/yp_blue_light" />
+        app:layout_constraintTop_toBottomOf="@id/titleCountry" />
 
     <!-- правая сторона -->
     <androidx.constraintlayout.widget.Guideline
@@ -302,7 +301,7 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="@dimen/dp108"
         android:layout_height="@dimen/dp108"
-        android:layout_marginTop="@dimen/dp4"
+        android:layout_marginTop="@dimen/dp2"
         android:indeterminateTint="@color/yp_blue_and_yp_blue"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/btnPlay"

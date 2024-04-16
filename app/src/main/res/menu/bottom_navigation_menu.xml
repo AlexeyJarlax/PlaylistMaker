@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_search"
-        android:title="@string/search"
+        android:title="@string/button_search"
         android:icon="@drawable/ic_btn_search" />
     <item
         android:id="@+id/navigation_ml"

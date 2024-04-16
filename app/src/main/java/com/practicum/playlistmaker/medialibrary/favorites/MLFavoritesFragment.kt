@@ -10,7 +10,7 @@ import com.practicum.playlistmaker.utils.AppPreferencesKeys.FAVORITES_EMPTY
 import com.practicum.playlistmaker.utils.AppPreferencesKeys.INTERNET_EMPTY
 import com.practicum.playlistmaker.utils.AppPreferencesKeys.LOADING
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import com.practicum.playlistmaker.utils.ErrorUtils.ifFragmentErrorShowPlug
+import com.practicum.playlistmaker.utils.ErrorUtils.ifMedialibraryErrorShowPlug
 
 class MLFavoritesFragment : Fragment() {
 
@@ -39,15 +39,13 @@ class MLFavoritesFragment : Fragment() {
         viewModel.screenState.observe(viewLifecycleOwner) { screenState ->
             when (screenState) {
                 is MLFavoritesScreenState.Ready -> {
-                    ifFragmentErrorShowPlug(requireContext(), FAVORITES_EMPTY)
-//                    val favoritesList = screenState.historyList
-//                    binding.testBlock1.text = favoritesList.joinToString("\n")
+                    ifMedialibraryErrorShowPlug(requireContext(), FAVORITES_EMPTY)
                 }
                 MLFavoritesScreenState.Error -> {
-                    ifFragmentErrorShowPlug(requireContext(), INTERNET_EMPTY)
+                    ifMedialibraryErrorShowPlug(requireContext(), INTERNET_EMPTY)
                 }
                 MLFavoritesScreenState.Loading -> {
-                    ifFragmentErrorShowPlug(requireContext(), LOADING)
+                    ifMedialibraryErrorShowPlug(requireContext(), LOADING)
                 }
             }
         }
