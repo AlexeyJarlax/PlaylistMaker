@@ -81,11 +81,11 @@
         <item name="cornerRadius">0dp</item>
         <item name="icon">@drawable/ic_btn_back</item>
         <item name="iconGravity">textStart</item>
-        <item name="iconPadding">@dimen/dp16</item>
+        <item name="iconPadding">@dimen/dp12</item>
         <item name="iconSize">@dimen/dp24</item>
         <item name="iconTint">@color/yp_black_and_yp_white</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:padding">@dimen/dp16</item>
+        <item name="android:padding">@dimen/dp12</item>
         <item name="android:elevation">0dp</item>
         <item name="android:stateListAnimator">@null</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
@@ -100,7 +100,7 @@
         <item name="android:textColor">@color/yp_black_and_yp_black</item>
         <item name="android:textColorHint">@color/yp_text_gray_and_yp_black</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="android:hint">@string/search</item>
+        <item name="android:hint">@string/button_search</item>
         <item name="android:autofillHints">truth</item>
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:layout_marginTop">0dp</item>
@@ -212,5 +212,22 @@
         <item name="tabIndicatorColor">@color/yp_black_and_yp_white</item>
         <item name="tabRippleColor">@color/yp_black_and_yp_white</item>
         <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <!-- Стиль прокладки в верхней части экрана с названием рездела"-->
+    <style name="Gasket" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/text_size_sp22</item>
+        <item name="android:textColor">@color/yp_black_and_yp_white</item>
+        <item name="android:gravity">start</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="cornerRadius">0dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:padding">@dimen/dp16</item>
+        <item name="android:elevation">0dp</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:backgroundTint">@android:color/transparent</item>
+        <item name="android:letterSpacing">0.0</item>
     </style>
 </resources>

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/play"
-    tools:context=".player.ui.PlayActivity">
+    tools:context=".player.ui.PlayFragment">
 
     <!-- левая сторона экрана + центр = двусвязный список -->
     <androidx.constraintlayout.widget.Guideline
@@ -20,9 +20,9 @@
     <Button
         android:id="@+id/buttonBack"
         style="@style/GoBackButtons"
-        android:layout_height="52dp"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/button_back"
-        android:text=""
+        android:text="@string/button_back"
         app:layout_constraintBottom_toTopOf="@id/gasket1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -186,18 +186,17 @@
         android:layout_height="wrap_content"
         android:text="@string/country"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/gasket5"
+        app:layout_constraintBottom_toTopOf="@id/gasket_for_bar"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
         app:layout_constraintTop_toBottomOf="@id/titleGenre" />
 
     <View
-        android:id="@+id/gasket5"
+        android:id="@+id/gasket_for_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp1"
+        android:layout_height="@dimen/dp51"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleCountry"
-        tools:background="@color/yp_blue_light" />
+        app:layout_constraintTop_toBottomOf="@id/titleCountry" />
 
     <!-- правая сторона -->
     <androidx.constraintlayout.widget.Guideline
@@ -291,7 +290,7 @@
         android:maxLines="1"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/gasket5"
+        app:layout_constraintBottom_toTopOf="@id/gasket_for_bar"
         app:layout_constraintEnd_toStartOf="@+id/right_guideline"
         app:layout_constraintStart_toEndOf="@+id/titleCountry"
         app:layout_constraintTop_toBottomOf="@id/contentGenre"
@@ -302,7 +301,7 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="@dimen/dp108"
         android:layout_height="@dimen/dp108"
-        android:layout_marginTop="@dimen/dp4"
+        android:layout_marginTop="@dimen/dp2"
         android:indeterminateTint="@color/yp_blue_and_yp_blue"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/btnPlay"

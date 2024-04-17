@@ -7,9 +7,7 @@ package com.practicum.playlistmaker.utils
 //PLAYLISTS_EMPTY = вы не создали ни одного плейлиста
 //LOADING = загружаем
 
-import android.app.Activity
 import android.content.Context
-import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -20,43 +18,47 @@ import com.practicum.playlistmaker.R
 
 object ErrorUtils {
 
-    fun Activity.ifActivityErrorShowPlug(problemTipo: String, sendRequestForDoReserch: () -> Unit) {
-        val utilErrorBox = findViewById<LinearLayout>(R.id.utilErrorBox)
-        val errorIcon = findViewById<ImageView>(R.id.error_icon)
-        val errorTextWeb = findViewById<TextView>(R.id.error_text_web)
-        val retryButton = findViewById<Button>(R.id.retry_button)
-        utilErrorBox.visibility = View.VISIBLE
+    fun Fragment.ifSearchErrorShowPlug(
+        problemTipo: String,
+        sendRequestForDoReserch: () -> Unit
+    ) {
+        val utilErrorBox = view?.findViewById<LinearLayout>(R.id.utilErrorBox)
+        val errorIcon = view?.findViewById<ImageView>(R.id.error_icon)
+        val errorTextWeb = view?.findViewById<TextView>(R.id.error_text_web)
+        val retryButton = view?.findViewById<Button>(R.id.retry_button)
+
+        utilErrorBox?.visibility = View.VISIBLE
 
         when (problemTipo) {
             AppPreferencesKeys.INTERNET_EMPTY -> {
-                errorIcon.setImageResource(R.drawable.ic_error_internet)
-                errorTextWeb.text = resources.getString(R.string.error_text_web)
-                retryButton.visibility = View.VISIBLE
-                retryButton.setDebouncedClickListener {
+                errorIcon?.setImageResource(R.drawable.ic_error_internet)
+                errorTextWeb?.text = resources.getString(R.string.error_text_web)
+                retryButton?.visibility = View.VISIBLE
+                retryButton?.setDebouncedClickListener {
                     sendRequestForDoReserch() // тут отправляем на повторный поиск
-                    utilErrorBox.visibility = View.GONE
+                    utilErrorBox?.visibility = View.GONE
                 }
-                utilErrorBox.setDebouncedClickListener {
+                utilErrorBox?.setDebouncedClickListener {
                     utilErrorBox.visibility = View.GONE
                 }
             }
 
             AppPreferencesKeys.RESULTS_EMPTY -> {
-                errorIcon.setImageResource(R.drawable.ic_error_notfound)
-                errorTextWeb.text = resources.getString(R.string.nothing_was_found)
-                retryButton.visibility = View.GONE
-                utilErrorBox.setDebouncedClickListener {
-                    utilErrorBox.visibility = View.GONE
+                errorIcon?.setImageResource(R.drawable.ic_error_notfound)
+                errorTextWeb?.text = resources.getString(R.string.nothing_was_found)
+                retryButton?.visibility = View.GONE
+                utilErrorBox?.setDebouncedClickListener {
+                    utilErrorBox?.visibility = View.GONE
                 }
             }
 
             else -> {
-                retryButton.visibility = View.GONE
+                retryButton?.visibility = View.GONE
             }
         }
     }
 
-    fun Fragment.ifFragmentErrorShowPlug(
+    fun Fragment.ifMedialibraryErrorShowPlug(
         context: Context,
         problemTipo: String
     ) {

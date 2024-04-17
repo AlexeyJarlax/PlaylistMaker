@@ -12,8 +12,8 @@ android {
         applicationId = "com.practicum.playlistmaker"
         minSdk = 29
         targetSdk = 33
-        versionCode = 18
-        versionName = "1.8"
+        versionCode = 19
+        versionName = "1.9"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -102,5 +102,10 @@ dependencies {
 
     // Компонент ViewPager2 для реализации горизонтальных и вертикальных листалок.
     implementation("androidx.viewpager2:viewpager2:1.0.0")
+
+    // Jetpack Navigation Component (библиотеки не обновляю, чтобы не получить конфликт с версией Sdk 33)
+    implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
+    implementation("androidx.fragment:fragment-ktx:1.5.6")
 }
 

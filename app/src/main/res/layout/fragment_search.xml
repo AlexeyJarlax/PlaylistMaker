@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/BackMenuLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".search.ui.SearchFragment">
+
+    <TextView
+        android:id="@+id/gasket_search"
+        style="@style/Gasket"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_search"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:imeOptions="actionDone"
+        app:layout_constraintTop_toBottomOf="@id/gasket_search">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/search_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:imeOptions="actionDone"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RelativeLayout
+                style="@style/SearchButtons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone">
+
+                <ImageButton
+                    android:id="@+id/search_icon"
+                    style="@style/SearchIconStyle"
+                    android:layout_width="@dimen/dp16"
+                    android:layout_height="@dimen/dp16"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:contentDescription="@string/todo"
+                    android:src="@drawable/ic_btn_search" />
+
+                <EditText
+                    android:id="@+id/search_edit_text"
+                    style="@style/SearchButtons"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="0dp"
+                    android:layout_toStartOf="@id/clearButton"
+                    android:background="@android:color/transparent"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:paddingVertical="0dp"
+                    android:paddingStart="@dimen/dp24"
+                    android:text="" />
+
+                <ImageButton
+                    android:id="@+id/clearButton"
+                    style="@style/SearchIconStyle"
+                    android:layout_width="@dimen/dp16"
+                    android:layout_height="@dimen/dp16"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:src="@drawable/ic_btn_clear"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+            </RelativeLayout>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/you_were_looking_for"
+        style="@style/ErrorTextBig"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="@dimen/dp44"
+        android:paddingBottom="@dimen/dp12"
+        android:text="@string/you_were_looking_for"
+        android:textSize="@dimen/text_size_sp19"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/search_layout"
+        tools:visibility="visible" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/track_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp8"
+        android:layout_marginBottom="@dimen/dp60"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/you_were_looking_for"
+        app:tint="@color/yp_light_gray_and_yp_white"
+        tools:context=".ui.MedialabActivity"
+        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:layout_editor_absoluteX="0dp"
+        tools:listitem="@layout/util_item_track"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/kill_the_history"
+        style="@style/ErrorButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp36"
+        android:layout_marginTop="@dimen/dp24"
+        android:layout_marginBottom="@dimen/dp24"
+        android:paddingVertical="@dimen/dp6"
+        android:paddingStart="@dimen/dp12"
+        android:paddingEnd="@dimen/dp12"
+        android:text="@string/clear_the_history"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/track_recycler_view"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/loading_indicator"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="@dimen/dp44"
+        android:layout_height="@dimen/dp44"
+        android:layout_marginTop="@dimen/dp248"
+        android:indeterminateTint="@color/yp_blue_and_yp_blue"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/track_recycler_view"
+        app:layout_constraintStart_toStartOf="@+id/track_recycler_view"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <include
+        android:id="@+id/utilErrorBox"
+        layout="@layout/util_error_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

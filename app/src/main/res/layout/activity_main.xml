@@ -1,38 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/FrontMenuLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context=".main.ui.MainActivity">
 
-    <TextView
-        android:id="@+id/title"
+    <fragment
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/main_navigation_graph" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation_view"
+        style="@style/TitleTextSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="@dimen/dp16"
-        android:text="@string/playlist_maker"
-        android:textColor="@color/yp_white"
-        android:textSize="@dimen/text_size_sp22" />
+        android:background="@color/yp_white_and_yp_black"
+        app:itemIconTint="@color/color_selector"
+        app:itemTextColor="@color/color_selector"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_navigation_menu"
+        app:navGraph="@navigation/main_navigation_graph" />
 
-    <Button
-        android:id="@+id/button_search"
-        style="@style/MainMenuButtons"
-        android:text="@string/search"
-        app:icon="@drawable/ic_search"
-        tools:ignore="VisualLintButtonSize" />
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:id="@+id/button_media_lib"
-        style="@style/MainMenuButtons"
-        android:text="@string/button_media_lib"
-        app:icon="@drawable/ic_library"
-        tools:ignore="VisualLintButtonSize" />
-
-    <Button
-        android:id="@+id/button_settings"
-        style="@style/MainMenuButtons"
-        android:text="@string/button_settings"
-        app:icon="@drawable/ic_btn_settings"
-        tools:ignore="VisualLintButtonSize" />
-</LinearLayout>

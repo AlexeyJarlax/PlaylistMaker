@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/TabText"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/yp_white_and_yp_black"
     android:orientation="vertical"
-    style="@style/TabText"
-    tools:context=".medialibrary.MLActivity">
+    tools:context=".medialibrary.MLFragment">
 
-    <Button
-        android:id="@+id/buttonBack"
-        style="@style/GoBackButtons"
+    <TextView
+        style="@style/Gasket"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/button_media_lib"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
+        style="@style/TabText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabTextAppearance="@style/TabText"
-        app:tabMode="fixed"
         app:tabIndicatorFullWidth="true"
-        style="@style/TabText"/>
+        app:tabMode="fixed"
+        app:tabTextAppearance="@style/TabText" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"

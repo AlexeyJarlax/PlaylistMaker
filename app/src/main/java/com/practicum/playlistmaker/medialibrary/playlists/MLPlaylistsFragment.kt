@@ -9,7 +9,7 @@ import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.practicum.playlistmaker.utils.AppPreferencesKeys.INTERNET_EMPTY
 import com.practicum.playlistmaker.utils.AppPreferencesKeys.LOADING
 import com.practicum.playlistmaker.utils.AppPreferencesKeys.PLAYLISTS_EMPTY
-import com.practicum.playlistmaker.utils.ErrorUtils.ifFragmentErrorShowPlug
+import com.practicum.playlistmaker.utils.ErrorUtils.ifMedialibraryErrorShowPlug
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MLPlaylistsFragment : Fragment() {
@@ -39,15 +39,15 @@ class MLPlaylistsFragment : Fragment() {
         viewModel.screenState.observe(viewLifecycleOwner) { screenState ->
             when (screenState) {
                 is MLPlaylistsScreenState.Ready -> {
-                    ifFragmentErrorShowPlug(requireContext(), PLAYLISTS_EMPTY)
+                    ifMedialibraryErrorShowPlug(requireContext(), PLAYLISTS_EMPTY)
 //                    val favoritesList = screenState.historyList
 //                    binding.testBlock2.text = favoritesList.joinToString("\n")
                 }
                 MLPlaylistsScreenState.Error -> {
-                    ifFragmentErrorShowPlug(requireContext(), INTERNET_EMPTY)
+                    ifMedialibraryErrorShowPlug(requireContext(), INTERNET_EMPTY)
                 }
                 MLPlaylistsScreenState.Loading -> {
-                    ifFragmentErrorShowPlug(requireContext(), LOADING)
+                    ifMedialibraryErrorShowPlug(requireContext(), LOADING)
                 }
             }
         }
