@@ -24,7 +24,7 @@ class DebounceExtension(private val delayMillis: Long, private val action: () ->
 fun View.setDebouncedClickListener(delayMillis: Long = AppPreferencesKeys.CLICK_DEBOUNCE_DELAY, onClick: () -> Unit) {
     var debounceJob: Job? = null
     setOnClickListener {
-        debounceJob?.cancel() // Отменяем предыдущую задержку, если она была запущена
+        debounceJob?.cancel()
         debounceJob = CoroutineScope(Dispatchers.Main).launch {
             delay(delayMillis)
             onClick()

@@ -11,6 +11,8 @@ import com.practicum.playlistmaker.search.data.dto.SearchRequest
 import com.practicum.playlistmaker.search.data.dto.SearchResponse
 import com.practicum.playlistmaker.search.data.network.NetworkClient
 import com.practicum.playlistmaker.search.domain.models.TracksResponse
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class TracksRepositoryImpl(
     private val sharedPreferences: SharedPreferences,
@@ -33,7 +35,7 @@ class TracksRepositoryImpl(
         sharedPreferences.edit().remove(AppPreferencesKeys.SEARCH_HISTORY).apply()
     }
 
-    override fun searchTracks(expression: String): TracksResponse {
+    override fun searchTracks(expression: String): Flow<TracksResponse> = flow {
         val response = networkClient.doRequest(SearchRequest(expression))
         if (response.resultCode == 200) {
             val trackList = (response as SearchResponse).results.map {
@@ -51,7 +53,9 @@ class TracksRepositoryImpl(
                 )
             }
             Timber.d("=== class TracksRepositoryImpl => return TracksResponse(${trackList})")
-            return TracksResponse(trackList, response.resultCode)
-        } else return TracksResponse(emptyList(), response.resultCode)
+            emit(TracksResponse(trackList, 200))
+        } else {
+            emit(TracksResponse(emptyList(), -1))
+        }
     }
 }
