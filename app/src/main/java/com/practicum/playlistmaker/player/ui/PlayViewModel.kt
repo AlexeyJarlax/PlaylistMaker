@@ -3,30 +3,51 @@ package com.practicum.playlistmaker.player.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 
 import com.practicum.playlistmaker.player.domain.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.PlayerState
 import com.practicum.playlistmaker.utils.AppPreferencesKeys
 import com.practicum.playlistmaker.utils.DebounceExtension
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 class PlayViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : ViewModel() {
 
     private val _screenState = MutableLiveData<ScreenState>(ScreenState.Initial)
     val screenState: LiveData<ScreenState> = _screenState
 
-    private fun playerPlay() {
+    private var job: Job? = null
+
+    fun playerPlay() {
         mediaPlayerInteractor.play()
-        DebounceExtension(AppPreferencesKeys.CLICK_DEBOUNCE_DELAY, ::timerTask).debounce()
+        startTimer()
     }
 
-    private fun playerPause() {
+    fun playerPause() {
         mediaPlayerInteractor.pause()
-        updatePlayerInfo()
+        cancelTimer()
     }
 
-    fun getState(): PlayerState {
-        val state = mediaPlayerInteractor.getState()
-        return state
+    private fun startTimer() {
+        job?.cancel()
+        job = viewModelScope.launch {
+            flow {
+                while (isActive) {
+                    emit(Unit)
+                    delay(300)
+                }
+            }.collect {
+                updatePlayerInfo()
+            }
+        }
+    }
+
+    private fun cancelTimer() {
+        job?.cancel()
     }
 
     private fun updatePlayerInfo() {
@@ -47,16 +68,7 @@ class PlayViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : 
     override fun onCleared() {
         super.onCleared()
         mediaPlayerInteractor.stop()
-    }
-
-    private fun timerTask() { // добавил проверку для исправления вылета перехода из плеера НАЗАД в список песен
-        val playerState = mediaPlayerInteractor.getState()
-        if (playerState != PlayerState.INITIAL && playerState != PlayerState.KILL && playerState != PlayerState.ERROR) {
-            updatePlayerInfo()
-            if (playerState == PlayerState.PLAYING) {
-                DebounceExtension(AppPreferencesKeys.CLICK_DEBOUNCE_DELAY, ::timerTask).debounce()
-            }
-        }
+        cancelTimer()
     }
 
     fun setDataURL(url: String) {

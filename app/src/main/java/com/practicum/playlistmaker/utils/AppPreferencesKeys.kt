@@ -11,7 +11,7 @@ internal object AppPreferencesKeys { // глобальные объекты
     // константы
     const val ALBUM_ROUNDED_CORNERS = 8
     const val HISTORY_TRACK_LIST_SIZE = 10
-    const val CLICK_DEBOUNCE_DELAY = 500L // кулдаун для клика / милисекунда
+    const val CLICK_DEBOUNCE_DELAY = 1500L // кулдаун для клика / милисекунда
     const val TWO_SECONDS = 2000L // две секунды  / отложенный поисковый запрос
     const val ONE_SECOND = 1000L // одна секунда
     const val iTunesSearchUrl = "https://itunes.apple.com"
