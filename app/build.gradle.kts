@@ -12,8 +12,8 @@ android {
         applicationId = "com.practicum.playlistmaker"
         minSdk = 29
         targetSdk = 33
-        versionCode = 19
-        versionName = "1.9"
+        versionCode = 20
+        versionName = "2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -107,5 +107,8 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
     implementation("androidx.fragment:fragment-ktx:1.5.6")
+
+    // корутин
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
 }
 

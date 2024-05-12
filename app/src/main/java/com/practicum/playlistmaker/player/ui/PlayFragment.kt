@@ -53,10 +53,6 @@ class PlayFragment : Fragment() {
         } else {
             Timber.d("Track где-то потерялся")
         }
-
-        binding.buttonBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
-            }
     }
 
     private fun setTrackData(track: Track) {
@@ -77,6 +73,9 @@ class PlayFragment : Fragment() {
     }
 
     private fun setupBtnsAndClickListeners() {
+        binding.buttonBack.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
         binding.btnPlay.setDebouncedClickListener { viewModel.playBtnClick() }
         setupLikeButton()
         setupAddToPlaylistButton()

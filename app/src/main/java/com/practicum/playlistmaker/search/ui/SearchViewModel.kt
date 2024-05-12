@@ -1,12 +1,12 @@
 package com.practicum.playlistmaker.search.ui
 
-import androidx.core.util.Consumer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.search.domain.TracksInteractor
 import com.practicum.playlistmaker.search.domain.models.Track
-import com.practicum.playlistmaker.search.domain.models.TracksResponse
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewModel() {
@@ -30,13 +30,13 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
         if (!rebootingFromError && oldSearchText == searchText) return
         oldSearchText = searchText
         _screenState.value = SearchScreenState.Loading
-        val consumer = Consumer<TracksResponse> { tracksResponse ->
-            if (tracksResponse.resultCode == 200) {
-                _screenState.postValue(SearchScreenState.SearchAPI(tracksResponse.results))
+        viewModelScope.launch {
+            tracksInteractor.searchTracks(searchText).collect { response ->
+            if (response.resultCode == 200) {
+                _screenState.postValue(SearchScreenState.SearchAPI(response.results))
             } else _screenState.postValue(SearchScreenState.Error)
         }
-        tracksInteractor.searchTracks(searchText, consumer)
-    }
+    }}
 
     fun killHistory() {
         tracksInteractor.killHistory()

@@ -1,25 +1,33 @@
 package com.practicum.playlistmaker.utils
 
-import android.os.Handler
-import android.os.Looper
 import android.view.View
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-//********************************** дебаунсер для поиска во время ввода и защиты от лишних кликов
+//********************************** дебаунсер для поиска во время ввода и защиты от лишних кликов на Корутине
 class DebounceExtension(private val delayMillis: Long, private val action: () -> Unit) {
-    private val handler = Handler(Looper.getMainLooper())
+    private var debounceJob: Job? = null
 
     fun debounce() {
-        handler.removeCallbacksAndMessages(null)
-        handler.postDelayed({
+        debounceJob?.cancel()
+        debounceJob = CoroutineScope(Dispatchers.Main).launch {
+            delay(delayMillis)
             action.invoke()
-        }, delayMillis)
+        }
     }
 }
 
-// расширение для улучшенного кликера
+// расширение для улучшенного кликера на Корутине
 fun View.setDebouncedClickListener(delayMillis: Long = AppPreferencesKeys.CLICK_DEBOUNCE_DELAY, onClick: () -> Unit) {
-    val debouncer = DebounceExtension(delayMillis, onClick)
+    var debounceJob: Job? = null
     setOnClickListener {
-        debouncer.debounce()
+        debounceJob?.cancel()
+        debounceJob = CoroutineScope(Dispatchers.Main).launch {
+            delay(delayMillis)
+            onClick()
+        }
     }
 }

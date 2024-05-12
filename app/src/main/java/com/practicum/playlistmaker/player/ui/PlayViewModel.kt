@@ -16,7 +16,7 @@ class PlayViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : 
 
     private fun playerPlay() {
         mediaPlayerInteractor.play()
-        DebounceExtension(AppPreferencesKeys.CLICK_DEBOUNCE_DELAY, ::timerTask).debounce()
+        DebounceExtension(AppPreferencesKeys.THREE_HUNDRED_MILLISECONDS, ::timerTask).debounce()
     }
 
     private fun playerPause() {

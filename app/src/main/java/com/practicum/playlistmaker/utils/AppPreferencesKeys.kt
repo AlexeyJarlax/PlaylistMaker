@@ -14,6 +14,7 @@ internal object AppPreferencesKeys { // глобальные объекты
     const val CLICK_DEBOUNCE_DELAY = 500L // кулдаун для клика / милисекунда
     const val TWO_SECONDS = 2000L // две секунды  / отложенный поисковый запрос
     const val ONE_SECOND = 1000L // одна секунда
+    const val THREE_HUNDRED_MILLISECONDS = 300L // период обновления для музыкального плеера
     const val iTunesSearchUrl = "https://itunes.apple.com"
 
     // заглушки

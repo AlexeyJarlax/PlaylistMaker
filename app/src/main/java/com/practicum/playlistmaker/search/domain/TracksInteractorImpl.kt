@@ -1,15 +1,14 @@
 package com.practicum.playlistmaker.search.domain
 
-import androidx.core.util.Consumer
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.domain.models.TracksResponse
 import com.practicum.playlistmaker.utils.AppPreferencesKeys
+import kotlinx.coroutines.flow.Flow
 
 class TracksInteractorImpl(private val history: TracksRepository) : TracksInteractor {
 
-    override fun searchTracks(expression: String, consumer: Consumer<TracksResponse>) {
-        val thread = Thread { consumer.accept(history.searchTracks(expression)) }
-        thread.start()
+    override fun searchTracks(expression: String): Flow<TracksResponse> {
+        return history.searchTracks(expression)
     }
 
     override fun saveToHistory(track: Track) {
