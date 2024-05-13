@@ -43,13 +43,13 @@ dependencies {
 //БАЗОВЫЕ
 
     // Расширения Kotlin для работы с Activity.
-    implementation("androidx.activity:activity-ktx:1.8.2")
+    implementation("androidx.activity:activity-ktx:1.9.0")
 
     // Библиотека для работы с API Android.
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.core:core-ktx:1.13.1")
 
     // Библиотека для поддержки современного дизайна пользовательского интерфейса.
-    implementation("com.google.android.material:material:1.11.0")
+    implementation("com.google.android.material:material:1.12.0")
 
     // Библиотека для обеспечения совместимости с новыми возможностями платформы Android на более старых устройствах.
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -72,7 +72,7 @@ dependencies {
     // HTTP-клиент для обмена данными с удаленными серверами.
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:okhttp:4.9.1")
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
 
     // Библиотека для создания функций отправки в Intents с помощью mailto: URI
     implementation("de.cketti.mailto:email-intent-builder:2.0.0")
@@ -98,7 +98,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
 
     // Расширения Kotlin для фрагментов
-    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation("androidx.fragment:fragment-ktx:1.7.0")
 
     // Компонент ViewPager2 для реализации горизонтальных и вертикальных листалок.
     implementation("androidx.viewpager2:viewpager2:1.0.0")
@@ -109,6 +109,6 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.5.6")
 
     // корутин
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 }
 
