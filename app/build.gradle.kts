@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     kotlin("plugin.serialization") version "1.9.21"
-//    id("kotlin-kapt") // плагин kotlin-kapt для работы зависимостей kapt("
+    id("kotlin-kapt") // плагин kotlin-kapt для работы зависимостей kapt("
 }
 
 android {
@@ -113,7 +113,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 
     // библиотека Room
-//    implementation("androidx.room:room-runtime:$2.5.1")
-//    kapt("androidx.room:room-compiler:$2.5.1")
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
 }
 

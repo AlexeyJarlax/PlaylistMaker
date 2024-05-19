@@ -2,7 +2,9 @@ package com.practicum.playlistmaker.di
 
 import android.content.Context
 import android.media.MediaPlayer
+import androidx.room.Room
 import com.google.gson.Gson
+import com.practicum.playlistmaker.medialibrary.favorites.data.AppDatabase
 import com.practicum.playlistmaker.player.data.MediaPlayerRepositoryImpl
 import com.practicum.playlistmaker.player.domain.MediaPlayerRepository
 import com.practicum.playlistmaker.search.data.network.ITunesAPIService
@@ -45,4 +47,16 @@ import retrofit2.Retrofit
 
         factory { Gson() }
         factory { MediaPlayer() }
+
+        // Room Database
+        single {
+            Room.databaseBuilder(androidContext(), AppDatabase::class.java, "playlist_db")
+                .build()
+        }
+        single {
+            get<AppDatabase>().trackDao()
+        }
+        single {
+            TrackRepository(get())
+        }
     }
