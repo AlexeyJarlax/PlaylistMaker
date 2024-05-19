@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.medialibrary.favorites
+package com.practicum.playlistmaker.medialibrary.favorites.ui
 
 import com.practicum.playlistmaker.search.domain.models.Track
 

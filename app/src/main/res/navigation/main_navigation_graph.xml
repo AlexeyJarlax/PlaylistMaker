@@ -34,7 +34,7 @@
 
     <fragment
         android:id="@+id/MLFavoritesFragment"
-        android:name="com.practicum.playlistmaker.medialibrary.favorites.MLFavoritesFragment"
+        android:name="com.practicum.playlistmaker.medialibrary.favorites.ui.MLFavoritesFragment"
         android:label="MLFavoritesFragment" >
         <action
             android:id="@+id/action_MLFavoritesFragment_to_playFragment"
