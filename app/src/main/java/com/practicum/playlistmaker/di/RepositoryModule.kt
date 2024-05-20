@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.di
 
-import com.practicum.playlistmaker.medialibrary.favorites.data.TrackDbConvertor
+import com.practicum.playlistmaker.medialibrary.favorites.data.FavoritesRepositoryImpl
+import com.practicum.playlistmaker.medialibrary.favorites.domain.db.FavoritesRepository
 import com.practicum.playlistmaker.search.data.TracksRepositoryImpl
 import com.practicum.playlistmaker.search.domain.TracksRepository
 import com.practicum.playlistmaker.settings.data.SettingsRepositoryImpl
@@ -17,5 +18,8 @@ import org.koin.dsl.module
             TracksRepositoryImpl(get(), get(), get())
         }
 
-        factory { TrackDbConvertor() }
+        single<FavoritesRepository> {
+            FavoritesRepositoryImpl(get())
+        }
+
     }

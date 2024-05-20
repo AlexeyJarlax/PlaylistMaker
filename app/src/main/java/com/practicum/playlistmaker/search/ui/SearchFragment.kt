@@ -27,7 +27,7 @@ import com.practicum.playlistmaker.utils.setDebouncedClickListener
 import com.practicum.playlistmaker.utils.startLoadingIndicator
 import com.practicum.playlistmaker.utils.stopLoadingIndicator
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
+import android.util.Log
 
 class SearchFragment : Fragment() {
 
@@ -131,14 +131,14 @@ class SearchFragment : Fragment() {
         viewModel.screenState.observe(viewLifecycleOwner) { screenState ->
             when (screenState) {
                 SearchScreenState.InitialState -> {
-                    Timber.d("=== SearchScreenState.InitialState")
+                    Log.d("=== LOG ===", "===  SearchScreenState.InitialState")
                     unitedRecyclerView.isVisible = false
                     binding.killTheHistory.isVisible = false
                     binding.youWereLookingFor.isVisible = false
                 }
 
                 SearchScreenState.Loading -> {
-                    Timber.d("=== SearchScreenState.Loading")
+                    Log.d("=== LOG ===", "===  SearchScreenState.Loading")
                     hideKeyboard()
                     startLoadingIndicator()
                     unitedRecyclerView.isVisible = false
@@ -147,7 +147,7 @@ class SearchFragment : Fragment() {
                 }
 
                 is SearchScreenState.ShowHistory -> {
-                    Timber.d("=== SearchScreenState.ShowHistory")
+                    Log.d("=== LOG ===", "===  SearchScreenState.ShowHistory")
                     showTracksFromHistory(screenState.historyList)
                     unitedRecyclerView.isVisible = true
                     binding.killTheHistory.isVisible = historyTrackList.isNotEmpty()
@@ -156,7 +156,7 @@ class SearchFragment : Fragment() {
                 }
 
                 is SearchScreenState.SearchAPI -> {
-                    Timber.d("=== SearchScreenState.SearchAPI")
+                    Log.d("=== LOG ===", "===  SearchScreenState.SearchAPI")
                     showSearchFromAPI(screenState.searchAPIList)
                     unitedRecyclerView.isVisible = true
                     binding.killTheHistory.isVisible = false
@@ -165,7 +165,7 @@ class SearchFragment : Fragment() {
                 }
 
                 is SearchScreenState.NoResults -> {
-                    Timber.e("=== SearchScreenState.NoResults")
+                    Log.e("=== LOG ===", "=== SearchScreenState.NoResults")
                     unitedRecyclerView.isVisible = false
                     binding.killTheHistory.isVisible = false
                     binding.youWereLookingFor.isVisible = false
@@ -174,7 +174,7 @@ class SearchFragment : Fragment() {
                 }
 
                 is SearchScreenState.Error -> {
-                    Timber.e("=== SearchScreenState.Error")
+                    Log.e("=== LOG ===", "=== SearchScreenState.Error")
                     unitedRecyclerView.isVisible = false
                     binding.killTheHistory.isVisible = false
                     binding.youWereLookingFor.isVisible = false
@@ -212,7 +212,7 @@ class SearchFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     private fun showSearchFromAPI(resultsList: List<Track>) {
         if (resultsList.isNotEmpty()) {
-            Timber.d("=== class SearchActivity => fun showSearchResults( ${resultsList} )")
+            Log.d("=== LOG ===", "===  class SearchActivity => fun showSearchResults( ${resultsList} )")
             trackListFromAPI.clear()
             trackListFromAPI.addAll(resultsList)
             adapterForAPITracks.notifyDataSetChanged()
@@ -255,7 +255,7 @@ class SearchFragment : Fragment() {
             ) {
                 val searchText = queryInput.text.toString().trim()
                 clearButton.visibility = if (searchText.isNotEmpty()) View.VISIBLE else View.GONE
-                Timber.d("=== class SearchFragment  => (viewModel.searchDebounce( ${searchText} ))")
+                Log.d("=== LOG ===", "===  class SearchFragment  => (viewModel.searchDebounce( ${searchText} ))")
                 if (hasFocus && searchText.isEmpty()) {  // обработка ввода без нажатий
                     showToUserHistoryOfOldTracks()
                 } else {

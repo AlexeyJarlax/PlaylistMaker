@@ -1,40 +1,37 @@
 package com.practicum.playlistmaker.medialibrary.favorites.data
 
 import com.practicum.playlistmaker.medialibrary.favorites.data.db.TrackEntity
-import com.practicum.playlistmaker.search.data.dto.TrackDTO
 import com.practicum.playlistmaker.search.domain.models.Track
 
-// Для того чтобы преобразовывать модели одного слоя в модели другого слоя, используются специальные классы-конвертеры
+// Функция-расширение для преобразования объектов Track и TrackEntity друг в друга
 
-class TrackDbConvertor {
-
-    fun map(track: TrackDTO): TrackEntity {
+    fun Track.toTrackEntity(): TrackEntity {
         return TrackEntity(
-            track.trackId,
-            track.trackName,
-            track.artistName,
-            track.trackTimeMillis,
-            track.artworkUrl100,
-            track.collectionName,
-            track.releaseDate,
-            track.primaryGenreName,
-            track.country,
-            track.previewUrl
+            id = null,
+            trackId = this.trackId,
+            trackName = this.trackName,
+            artistName = this.artistName,
+            trackTimeMillis = this.trackTimeMillis,
+            artworkUrl100 = this.artworkUrl100,
+            collectionName = this.collectionName,
+            releaseDate = this.releaseDate,
+            primaryGenreName = this.primaryGenreName,
+            country = this.country,
+            previewUrl = this.previewUrl
         )
     }
 
-    fun map(track: TrackEntity): Track {
+    fun TrackEntity.toTrack(): Track {
         return Track(
-            track.trackId,
-            track.trackName,
-            track.artistName,
-            track.trackTimeMillis,
-            track.artworkUrl100,
-            track.collectionName,
-            track.releaseDate,
-            track.primaryGenreName,
-            track.country,
-            track.previewUrl,
+            trackId = this.trackId,
+            trackName = this.trackName,
+            artistName = this.artistName,
+            trackTimeMillis = this.trackTimeMillis,
+            artworkUrl100 = this.artworkUrl100,
+            collectionName = this.collectionName,
+            releaseDate = this.releaseDate,
+            primaryGenreName = this.primaryGenreName,
+            country = this.country,
+            previewUrl = this.previewUrl
         )
     }
-}

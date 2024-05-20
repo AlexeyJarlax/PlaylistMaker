@@ -19,7 +19,7 @@ val viewModelModule = module {
     }
 
     viewModel {
-        PlayViewModel(get())
+        PlayViewModel(get(), get())
     }
 
     viewModel {

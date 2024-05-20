@@ -2,10 +2,12 @@ package com.practicum.playlistmaker.medialibrary.favorites.data.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.practicum.playlistmaker.utils.AppPreferencesKeys.DATA_BASE_FOR_FAVORITE_TRACKS
 
-@Entity(tableName = "tracks_table")
+@Entity(tableName = DATA_BASE_FOR_FAVORITE_TRACKS)
 data class TrackEntity(
-    @PrimaryKey val trackId: Int?,   // Id
+    @PrimaryKey(autoGenerate = true) val id: Int?, // Id DB
+    val trackId: Int?,              // Id трека
     val trackName: String?,          // Название
     val artistName: String?,          // Исполнитель
     val trackTimeMillis: Long?,       // Продолжительность

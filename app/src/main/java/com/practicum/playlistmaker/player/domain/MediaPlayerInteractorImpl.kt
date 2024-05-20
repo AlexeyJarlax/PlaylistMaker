@@ -29,4 +29,8 @@ class MediaPlayerInteractorImpl(private val mediaPlayer: MediaPlayerRepository) 
     override fun stop() {
         mediaPlayer.destroy()
     }
+
+    override fun resetPlayer() {
+        mediaPlayer.resetPlayer()
+    }
 }

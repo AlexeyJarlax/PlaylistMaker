@@ -80,9 +80,6 @@ dependencies {
 
 // ТЕСТИРОВАНИЕ
 
-    // Библиотека для логирования.
-    implementation("com.jakewharton.timber:timber:4.7.1")
-
     // Фреймворк для написания и запуска тестов в Java.
     testImplementation("junit:junit:4.13.2")
 
