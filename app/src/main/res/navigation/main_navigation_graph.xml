@@ -19,7 +19,11 @@
         android:id="@+id/playFragment"
         android:name="com.practicum.playlistmaker.player.ui.PlayFragment"
         android:label="fragment_play"
-        tools:layout="@layout/fragment_play" />
+        tools:layout="@layout/fragment_play" >
+        <action
+            android:id="@+id/action_playFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/MLFragment"
