@@ -2,7 +2,7 @@ package com.practicum.playlistmaker.search.data
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
-import timber.log.Timber
+import android.util.Log
 
 import com.practicum.playlistmaker.search.domain.TracksRepository
 import com.practicum.playlistmaker.search.domain.models.Track
@@ -52,7 +52,7 @@ class TracksRepositoryImpl(
                     previewUrl = it.previewUrl ?: ""
                 )
             }
-            Timber.d("=== class TracksRepositoryImpl => return TracksResponse(${trackList})")
+            Log.d("=== LOG ===", "===  class TracksRepositoryImpl => return TracksResponse(${trackList})")
             emit(TracksResponse(trackList, 200))
         } else {
             emit(TracksResponse(emptyList(), -1))

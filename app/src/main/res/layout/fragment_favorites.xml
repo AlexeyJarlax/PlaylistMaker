@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favorites_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp8"
+        android:layout_marginBottom="@dimen/dp60"
+        app:layout_constraintTop_toBottomOf="@id/you_were_looking_for"
+        app:tint="@color/yp_light_gray_and_yp_white"
+        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:layout_editor_absoluteX="0dp"
+        tools:listitem="@layout/util_item_track"
+        tools:visibility="visible" />
 
     <include
         android:id="@+id/utilErrorBoxForFragments"
         layout="@layout/util_error_layout_for_fragments"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <!--тестовый проброс списка треков из даты -->
-    <!--    <TextView-->
-    <!--        android:id="@+id/test_block1"-->
-    <!--        style="@style/TrackArtistText"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="@dimen/dp8"-->
-    <!--        android:layout_marginEnd="@dimen/dp8"-->
-    <!--        android:text="@string/placeholder_artist_name"-->
-    <!--        android:alpha="0.3"-->
-    <!--        android:layout_gravity="bottom" />-->
 </FrameLayout>
 

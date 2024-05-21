@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     kotlin("plugin.serialization") version "1.9.21"
+    id("kotlin-kapt") // плагин kotlin-kapt для работы зависимостей kapt("
 }
 
 android {
@@ -12,8 +13,8 @@ android {
         applicationId = "com.practicum.playlistmaker"
         minSdk = 29
         targetSdk = 33
-        versionCode = 20
-        versionName = "2.0"
+        versionCode = 21
+        versionName = "2.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -79,9 +80,6 @@ dependencies {
 
 // ТЕСТИРОВАНИЕ
 
-    // Библиотека для логирования.
-    implementation("com.jakewharton.timber:timber:4.7.1")
-
     // Фреймворк для написания и запуска тестов в Java.
     testImplementation("junit:junit:4.13.2")
 
@@ -110,5 +108,10 @@ dependencies {
 
     // корутин
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+
+    // библиотека Room
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
 }
 
