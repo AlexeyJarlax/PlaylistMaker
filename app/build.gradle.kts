@@ -44,6 +44,7 @@ dependencies {
 // БАЗОВЫЕ
 
     // Расширения Kotlin для работы с Activity.
+    implementation("androidx.activity:activity:1.9.0")
     implementation("androidx.activity:activity-ktx:1.9.0")
 
     // Библиотека для работы с API Android.
@@ -101,13 +102,16 @@ dependencies {
     // Компонент ViewPager2 для реализации горизонтальных и вертикальных листалок.
     implementation("androidx.viewpager2:viewpager2:1.1.0")
 
-    // Jetpack Navigation Component (библиотеки не обновляю, чтобы не получить конфликт с версией Sdk 33)
+    // Jetpack Navigation Component
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
     implementation("androidx.fragment:fragment-ktx:1.7.1")
 
     // корутин
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    // Permission для работы с корутин
+    implementation("com.markodevcic:peko:3.0.5")
 
     // библиотека Room
     implementation("androidx.room:room-runtime:2.6.1")
