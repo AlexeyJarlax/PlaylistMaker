@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/dotted_frame"
+        android:layout_width="@dimen/dp248"
+        android:layout_height="@dimen/dp300"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/dp24"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="@dimen/dp24"
+        android:background="@drawable/util_rounded_corners_dotted_line"
+        android:contentDescription="@string/placeholder_track_time"
+        android:scaleType="centerCrop" />
+
+    <ImageView
+        android:id="@+id/coverImageView"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignStart="@+id/dotted_frame"
+        android:layout_alignTop="@+id/dotted_frame"
+        android:layout_alignEnd="@+id/dotted_frame"
+        android:layout_alignBottom="@+id/dotted_frame"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="100dp"
+        android:background="#FFFFFF"
+        android:src="@drawable/add_pctr_for_play_list" />
+
+    <EditText
+        android:id="@+id/editTextTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dotted_frame"
+        android:layout_gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/dp44"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="6dp"
+        android:background="@drawable/util_rounded_corners_new_playlist"
+        android:hint="Название*"
+        android:padding="8dp" />
+
+    <EditText
+        android:id="@+id/editTextDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextTitle"
+        android:layout_gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/util_rounded_corners_new_playlist"
+        android:hint="Описание*"
+        android:padding="8dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/createButton"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp36"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/dp24"
+        android:layout_marginEnd="@dimen/dp24"
+        android:layout_marginBottom="@dimen/dp36"
+        android:background="@drawable/uti_background_selector"
+        android:fontFamily="@font/ys_display_medium"
+        android:padding="4dp"
+        android:text="Создать"
+        android:textColor="@color/yp_white"
+        android:textAllCaps="false"
+        android:textSize="@dimen/text_size_sp16" />
+
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_btn_back"/>
+</RelativeLayout>

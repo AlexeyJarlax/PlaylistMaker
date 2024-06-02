@@ -57,4 +57,10 @@ import retrofit2.Retrofit
             Room.databaseBuilder(androidContext(), AppDatabase::class.java, DATA_BASE_FOR_FAVORITE_TRACKS)
                 .build()
         }
+
+        single {
+            Room.databaseBuilder(androidContext(), AppDatabase::class.java, "playlist_database").build()
+        }
+
+//        single { get<AppDatabase>().playlistDao() }
     }

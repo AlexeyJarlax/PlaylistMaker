@@ -35,6 +35,13 @@ class MLFragment : Fragment() {
             }
         }
         tabMediator.attach()
+
+//        binding.newPlaylistButton.setOnClickListener {
+//            parentFragmentManager.beginTransaction()
+//                .replace(R.id.fragment_container, MLCreatePlaylistFragment.newInstance())
+//                .addToBackStack(null)
+//                .commit()
+//        }
     }
 
     override fun onDestroyView() {
@@ -42,5 +49,7 @@ class MLFragment : Fragment() {
         _binding = null
         tabMediator.detach()
     }
+
+
 }
 
