@@ -5,32 +5,13 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/dotted_frame"
-        android:layout_width="@dimen/dp248"
-        android:layout_height="@dimen/dp300"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="center"
-        android:layout_marginStart="@dimen/dp24"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="@dimen/dp24"
-        android:background="@drawable/util_rounded_corners_dotted_line"
-        android:contentDescription="@string/placeholder_track_time"
-        android:scaleType="centerCrop" />
-
-    <ImageView
         android:id="@+id/coverImageView"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_alignStart="@+id/dotted_frame"
-        android:layout_alignTop="@+id/dotted_frame"
-        android:layout_alignEnd="@+id/dotted_frame"
-        android:layout_alignBottom="@+id/dotted_frame"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="100dp"
-        android:layout_marginBottom="100dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_below="@+id/backButton"
+
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         android:background="#FFFFFF"
         android:src="@drawable/add_pctr_for_play_list" />
 
@@ -38,7 +19,7 @@
         android:id="@+id/editTextTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/dotted_frame"
+        android:layout_below="@+id/coverImageView"
         android:layout_gravity="center"
         android:layout_marginStart="16dp"
         android:layout_marginTop="@dimen/dp44"
@@ -87,7 +68,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/ic_btn_back"/>
+        android:layout_marginEnd="371dp"
+        android:src="@drawable/ic_btn_back" />
 </RelativeLayout>

@@ -28,6 +28,7 @@ import com.practicum.playlistmaker.utils.startLoadingIndicator
 import com.practicum.playlistmaker.utils.stopLoadingIndicator
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import android.util.Log
+import androidx.navigation.fragment.findNavController
 
 class SearchFragment : Fragment() {
 
@@ -81,16 +82,17 @@ class SearchFragment : Fragment() {
     private fun setupAdapterForAPITracks() {
         adapterForAPITracks = AdapterForAPITracks {
             viewModel.saveToHistory(it)
-            val fragment = PlayFragment()
-            val bundle = Bundle().apply {
-                putSerializable(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS, it)
-            }
-            fragment.arguments = bundle
-            parentFragmentManager.beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment, fragment)
-                .addToBackStack(null)
-                .commit()
+//            val fragment = PlayFragment()
+//            val bundle = Bundle().apply {
+//                putSerializable(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS, it)
+//            }
+//            fragment.arguments = bundle
+//            parentFragmentManager.beginTransaction()
+//                .setReorderingAllowed(true)
+//                .replace(R.id.nav_host_fragment, fragment)
+//                .addToBackStack(null)
+//                .commit()
+            moveMeToPlayFragmentWithThisTrack(it)
         }
         adapterForAPITracks.tracks = trackListFromAPI
     }
@@ -99,18 +101,28 @@ class SearchFragment : Fragment() {
     private fun setupAdapterForHistoryTracks() {
         adapterForHistoryTracks = AdapterForHistoryTracks {
             viewModel.saveToHistoryAndRefresh(it)
-            val fragment = PlayFragment()
-            val bundle = Bundle().apply {
-                putSerializable(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS, it)
-            }
-            fragment.arguments = bundle
-            parentFragmentManager.beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment, fragment)
-                .addToBackStack(null)
-                .commit()
+//            val fragment = PlayFragment()
+//            val bundle = Bundle().apply {
+//                putSerializable(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS, it)
+//            }
+//            fragment.arguments = bundle
+//            parentFragmentManager.beginTransaction()
+//                .setReorderingAllowed(true)
+//                .replace(R.id.nav_host_fragment, fragment)
+//                .addToBackStack(null)
+//                .commit()
+            moveMeToPlayFragmentWithThisTrack(it)
         }
         adapterForHistoryTracks.searchHistoryTracks = historyTrackList
+    }
+
+    private fun moveMeToPlayFragmentWithThisTrack(track: Track) {
+        findNavController().navigate(
+            R.id.action_searchFragment_to_playFragment,
+            Bundle().apply {
+                putSerializable(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS, track)
+            }
+        )
     }
 
     private fun setupLayoutManager() {
@@ -179,7 +191,10 @@ class SearchFragment : Fragment() {
                     binding.killTheHistory.isVisible = false
                     binding.youWereLookingFor.isVisible = false
                     ifSearchErrorShowPlug(AppPreferencesKeys.INTERNET_EMPTY) {
-                        viewModel.searchRequestFromViewModel((queryInput.text.toString().trim()), true)
+                        viewModel.searchRequestFromViewModel(
+                            (queryInput.text.toString().trim()),
+                            true
+                        )
                     }
                     stopLoadingIndicator()
                 }
@@ -212,7 +227,10 @@ class SearchFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     private fun showSearchFromAPI(resultsList: List<Track>) {
         if (resultsList.isNotEmpty()) {
-            Log.d("=== LOG ===", "===  class SearchActivity => fun showSearchResults( ${resultsList} )")
+            Log.d(
+                "=== LOG ===",
+                "===  class SearchActivity => fun showSearchResults( ${resultsList} )"
+            )
             trackListFromAPI.clear()
             trackListFromAPI.addAll(resultsList)
             adapterForAPITracks.notifyDataSetChanged()
@@ -255,7 +273,10 @@ class SearchFragment : Fragment() {
             ) {
                 val searchText = queryInput.text.toString().trim()
                 clearButton.visibility = if (searchText.isNotEmpty()) View.VISIBLE else View.GONE
-                Log.d("=== LOG ===", "===  class SearchFragment  => (viewModel.searchDebounce( ${searchText} ))")
+                Log.d(
+                    "=== LOG ===",
+                    "===  class SearchFragment  => (viewModel.searchDebounce( ${searchText} ))"
+                )
                 if (hasFocus && searchText.isEmpty()) {  // обработка ввода без нажатий
                     showToUserHistoryOfOldTracks()
                 } else {

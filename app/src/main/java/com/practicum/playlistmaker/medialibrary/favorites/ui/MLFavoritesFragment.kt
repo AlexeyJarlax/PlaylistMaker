@@ -19,6 +19,7 @@ import com.practicum.playlistmaker.utils.AppPreferencesKeys.FAVORITES_EMPTY
 import com.practicum.playlistmaker.utils.AppPreferencesKeys.INTERNET_EMPTY
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.practicum.playlistmaker.utils.ErrorUtils.ifMedialibraryErrorShowPlug
+import androidx.navigation.fragment.findNavController
 
 class MLFavoritesFragment : Fragment() {
 
@@ -51,16 +52,22 @@ class MLFavoritesFragment : Fragment() {
 
     private fun setupAdapterForFavorites() {
         favoriteTracksAdapter = AdapterForFavorites { track ->
-            val fragment = PlayFragment().apply {
-                arguments = Bundle().apply {
+//            val fragment = PlayFragment().apply {
+//                arguments = Bundle().apply {
+//                    putSerializable(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS, track)
+//                }
+//            }
+            findNavController().navigate(
+                R.id.action_MLFragment_to_playFragment,
+                Bundle().apply {
                     putSerializable(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS, track)
                 }
-            }
-            requireActivity().supportFragmentManager.beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment, fragment)
-                .addToBackStack(null)
-                .commit()
+            )
+//            requireActivity().supportFragmentManager.beginTransaction()
+//                .setReorderingAllowed(true)
+//                .replace(R.id.nav_host_fragment, fragment)
+//                .addToBackStack(null)
+//                .commit()
         }
         Log.d("=== LOG ===", "=== MLFavoritesFragment > setupAdapterForFavorites()")
         favoriteTracksAdapter.favoritTracks = favoriteTrackList

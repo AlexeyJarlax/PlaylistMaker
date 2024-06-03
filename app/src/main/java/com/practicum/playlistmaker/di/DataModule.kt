@@ -58,9 +58,9 @@ import retrofit2.Retrofit
                 .build()
         }
 
-        single {
-            Room.databaseBuilder(androidContext(), AppDatabase::class.java, "playlist_database").build()
-        }
+//        single {
+//            Room.databaseBuilder(androidContext(), AppDatabase::class.java, "playlist_database").build()
+//        }
 
 //        single { get<AppDatabase>().playlistDao() }
     }
