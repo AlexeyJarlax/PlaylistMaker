@@ -50,4 +50,11 @@
     <string name="media_library_is_empty">Ваша медиатека пуста</string>
     <string name="havent_created_any_playlists">Вы не создали ни одного плейлиста</string>
     <string name="new_play_list">Новый плейлист</string>
+    <string name="dialog_title">title</string>
+    <string name="dialog_text">yes or no</string>
+    <string name="dialog_cancel">no</string>
+    <string name="dialog_ok">yes</string>
+    <string name="playlist_created">playlist</string>
+    <string name="image_empty">no image</string>
+    <string name="image_select">select image</string>
 </resources>

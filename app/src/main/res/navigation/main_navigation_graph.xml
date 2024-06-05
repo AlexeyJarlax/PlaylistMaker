@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/MLFragment"
-        android:name="com.practicum.playlistmaker.medialibrary.MLFragment"
+        android:name="com.practicum.playlistmaker.medialibrary.ui.ml.MLFragment"
         android:label="fragment_medialab"
         tools:layout="@layout/fragment_ml" >
         <action
@@ -46,18 +46,18 @@
 
     <fragment
         android:id="@+id/MLPlaylistsFragment"
-        android:name="com.practicum.playlistmaker.medialibrary.playlists.MLPlaylistsFragment"
+        android:name="com.practicum.playlistmaker.medialibrary.ui.playlists.MLPlaylistsFragment"
         android:label="MLPlaylistsFragment" />
 
     <fragment
         android:id="@+id/MLCreatePlaylistFragment"
-        android:name="com.practicum.playlistmaker.medialibrary.playlists.MLCreatePlaylistFragment"
+        android:name="com.practicum.playlistmaker.medialibrary.ui.playlists.MLCreatePlaylistFragment"
         android:label="MLCreatePlaylistFragment"
         tools:layout="@layout/fragment_create_playlist" />
 
     <fragment
         android:id="@+id/MLFavoritesFragment"
-        android:name="com.practicum.playlistmaker.medialibrary.favorites.ui.MLFavoritesFragment"
+        android:name="com.practicum.playlistmaker.medialibrary.ui.favorites.MLFavoritesFragment"
         android:label="MLFavoritesFragment" >
         <action
             android:id="@+id/action_MLFavoritesFragment_to_playFragment"
@@ -69,5 +69,4 @@
         android:name="com.practicum.playlistmaker.settings.ui.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
-
 </navigation>

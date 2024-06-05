@@ -4,22 +4,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/coverImageView"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        android:layout_below="@+id/backButton"
-
+    <Button
+        android:id="@+id/backButton"
+        style="@style/GoBackButtons"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:background="#FFFFFF"
-        android:src="@drawable/add_pctr_for_play_list" />
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:contentDescription="@string/button_back"
+        android:text="@string/button_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/containerImageView"
+        android:layout_width="@dimen/dp300"
+        android:layout_height="@dimen/dp300"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginHorizontal="@dimen/dp24"
+        android:layout_marginTop="60dp"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/backButton">
+
+        <ImageView
+            android:id="@+id/coverImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/util_doted_line"
+            android:clickable="true"
+            android:contentDescription="@string/image_select"
+            android:scaleType="centerInside"
+            android:src="@drawable/add_pctr_for_play_list" />
+    </androidx.cardview.widget.CardView>
 
     <EditText
         android:id="@+id/editTextTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/coverImageView"
+        android:layout_below="@+id/containerImageView"
         android:layout_gravity="center"
         android:layout_marginStart="16dp"
         android:layout_marginTop="@dimen/dp44"
@@ -58,19 +90,7 @@
         android:fontFamily="@font/ys_display_medium"
         android:padding="4dp"
         android:text="Создать"
-        android:textColor="@color/yp_white"
         android:textAllCaps="false"
+        android:textColor="@color/yp_white"
         android:textSize="@dimen/text_size_sp16" />
-
-    <ImageView
-        android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="371dp"
-        android:src="@drawable/ic_btn_back" />
 </RelativeLayout>
