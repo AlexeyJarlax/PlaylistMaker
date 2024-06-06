@@ -5,17 +5,23 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.core.os.bundleOf
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.Locale
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlayBinding
+import com.practicum.playlistmaker.medialibrary.domain.db.Playlist
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.utils.ArtworkUrlLoader
 import com.practicum.playlistmaker.player.domain.PlayerState
 import com.practicum.playlistmaker.utils.AppPreferencesKeys
+import com.practicum.playlistmaker.utils.AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS
 import com.practicum.playlistmaker.utils.DebounceExtension
 import com.practicum.playlistmaker.utils.setDebouncedClickListener
 import com.practicum.playlistmaker.utils.stopLoadingIndicator
@@ -28,6 +34,9 @@ class PlayFragment : Fragment() {
     private lateinit var track: Track
     private val viewModel: PlayViewModel by viewModel()
     private var isAddedToPlaylist: Boolean = false
+//    private lateinit var playlistsAdapter: PlaylistsSmallAdapter
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
+    private val playlistsList = ArrayList<Playlist>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +48,7 @@ class PlayFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val trackFromArguments = arguments?.getSerializable(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS) as? Track
 
         if (trackFromArguments != null) {
@@ -150,15 +160,38 @@ class PlayFragment : Fragment() {
     }
 
     private fun setupAddToPlaylistButton() {
+//        binding.btnAddToPlaylist.setDebouncedClickListener {
+//            val newImageResource = if (isAddedToPlaylist) {
+//                R.drawable.ic_btn_add_to_playlist
+//            } else {
+//                showSnackbar("Плейлист «BeSt SoNg EvEr!» создан")
+//                R.drawable.ic_btn_add_to_playlist_done
+//            }
+//            binding.btnAddToPlaylist.setImageResource(newImageResource)
+//            isAddedToPlaylist = !isAddedToPlaylist
+//        }
+        viewModel.playlists.observe(viewLifecycleOwner) { list ->
+            playlistsList.clear()
+            playlistsList.addAll(list)
+//            playlistsAdapter.notifyDataSetChanged()
+        }
+
         binding.btnAddToPlaylist.setDebouncedClickListener {
-            val newImageResource = if (isAddedToPlaylist) {
-                R.drawable.ic_btn_add_to_playlist
-            } else {
-                showSnackbar("Плейлист «BeSt SoNg EvEr!» создан")
-                R.drawable.ic_btn_add_to_playlist_done
+            findNavController().navigate(R.id.action_playFragment_to_MLCreatePlaylistFragment)
+        }
+
+        viewModel.addResult.observe(viewLifecycleOwner) { addResult ->
+            if (addResult.successful==true) {
+                showSnackbar("Плейлист создан")
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             }
-            binding.btnAddToPlaylist.setImageResource(newImageResource)
-            isAddedToPlaylist = !isAddedToPlaylist
+            else if (addResult.successful==false) {
+                showSnackbar("Плейлист вроде бы уже есть?")
+            }
+        }
+
+        binding.btnAddToPlaylist.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
         }
     }
 
@@ -171,6 +204,27 @@ class PlayFragment : Fragment() {
             viewModel.upsertFavoriteTrack(track)
             Log.d("=== LOG ===", "=== PlayFragment > setupLikeButton()")
         }
+    }
+
+    private fun initializeBottomSheet() {
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.lrBottomSheet)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        bottomSheetBehavior.addBottomSheetCallback(
+            object : BottomSheetBehavior.BottomSheetCallback() {
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    when (newState) {
+                        BottomSheetBehavior.STATE_HIDDEN -> {
+                            binding.overlay.visibility = View.GONE
+                        }
+
+                        else -> {
+                            binding.overlay.visibility = View.VISIBLE
+                        }
+                    }
+                }
+            }
+        )
     }
 
     private fun showSnackbar(message: String) {
@@ -187,5 +241,9 @@ class PlayFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        fun createArguments(track: Track): Bundle = bundleOf(AN_INSTANCE_OF_THE_TRACK_CLASS to track)
     }
 }

@@ -54,7 +54,10 @@ import retrofit2.Retrofit
         factory { MediaPlayer() }
 
         single {
-            Room.databaseBuilder(context = androidContext(), klass = AppDatabase::class.java, name = DATA_BASE_NAME)
+            Room.databaseBuilder(
+                androidContext(),
+                AppDatabase::class.java, DATA_BASE_NAME
+            ).fallbackToDestructiveMigration()
                 .build()
         }
     }

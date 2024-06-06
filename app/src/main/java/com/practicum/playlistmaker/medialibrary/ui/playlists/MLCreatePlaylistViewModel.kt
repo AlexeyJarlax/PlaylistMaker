@@ -6,11 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.medialibrary.domain.db.Playlist
+import com.practicum.playlistmaker.medialibrary.domain.db.PlaylistsInteractor
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MLCreatePlaylistViewModel : ViewModel() {
+class MLCreatePlaylistViewModel(private val playlistsInteractor: PlaylistsInteractor) : ViewModel() {
 
-    //Screen state
     private val _screenState = MutableLiveData<MLCreatePlaylistScreenState>()
     val screenState: LiveData<MLCreatePlaylistScreenState> = _screenState
     init {
@@ -18,16 +19,16 @@ class MLCreatePlaylistViewModel : ViewModel() {
     }
 
     fun createClick() {
-        viewModelScope.launch {
-            val newPlaylist = _screenState.value?.let {
-                Playlist(
-                    id = null,
-                    title = it.title,
-                    description = _screenState.value?.description,
-                    poster = _screenState.value?.uri,
-                    count = 0
-                )
-            }
+        viewModelScope.launch(Dispatchers.IO) {
+            val newPlaylist = Playlist(
+                id = null,
+                title = _screenState.value!!.title,
+                description = _screenState.value!!.description,
+                poster = _screenState.value!!.uri,
+                tracks = "[]",
+                count = 0
+            )
+            playlistsInteractor.upsertPlaylist(newPlaylist)
         }
     }
 

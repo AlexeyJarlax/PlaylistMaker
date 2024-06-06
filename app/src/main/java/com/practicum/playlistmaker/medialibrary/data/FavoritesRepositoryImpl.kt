@@ -37,6 +37,4 @@ class FavoritesRepositoryImpl(private val db: AppDatabase) : FavoritesRepository
         db.favoritesDao().deleteTrackById(trackId)
         Log.d("=== LOG ===", "=== FavoritesRepositoryImpl > deleteTrackById")
     }
-
-
 }

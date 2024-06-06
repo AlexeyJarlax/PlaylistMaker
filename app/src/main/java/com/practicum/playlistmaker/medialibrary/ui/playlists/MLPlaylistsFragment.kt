@@ -1,10 +1,12 @@
 package com.practicum.playlistmaker.medialibrary.ui.playlists
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
@@ -15,15 +17,15 @@ import com.practicum.playlistmaker.utils.AppPreferencesKeys.PLAYLISTS_EMPTY
 import com.practicum.playlistmaker.utils.ErrorUtils.ifMedialibraryErrorShowPlug
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.navigation.fragment.findNavController
+import com.practicum.playlistmaker.medialibrary.domain.db.Playlist
 
 class MLPlaylistsFragment : Fragment() {
 
     private val viewModel: MLPlaylistsViewModel by viewModel()
-
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
-    private var _utilErrorLayoutBinding: UtilErrorLayoutForFragmentsBinding? = null
-    private val utilErrorLayoutBinding get() = _utilErrorLayoutBinding!!
+    private val playlistsList = ArrayList<Playlist>()
+    private lateinit var playlistsAdapter: PlaylistsBigAdapter
 
     companion object {
         fun newInstance() = MLPlaylistsFragment()
@@ -35,7 +37,6 @@ class MLPlaylistsFragment : Fragment() {
     ): View? {
         _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
         val rootView = binding.root
-        _utilErrorLayoutBinding = UtilErrorLayoutForFragmentsBinding.bind(rootView.findViewById(R.id.utilErrorBoxForFragments))
         return rootView
     }
 
@@ -44,7 +45,7 @@ class MLPlaylistsFragment : Fragment() {
         setupObserver()
         viewModel.loadFromHistory()
 
-        utilErrorLayoutBinding.retryButton.setOnClickListener {
+        binding.buttonNewPlayList.setOnClickListener {
 
             findNavController().navigate(R.id.action_MLFragment_to_MLCreatePlaylistFragment)
 
@@ -67,12 +68,13 @@ class MLPlaylistsFragment : Fragment() {
 
         Log.d("=== LOG ===", "=== MLPlaylistsFragment > utilErrorLayoutBinding.retryButton.setOnClickListener > MLCreatePlaylistFragment.kt")
         }
+        initializeAdapter()
     }
 
     private fun setupObserver() {
         viewModel.screenState.observe(viewLifecycleOwner) { screenState ->
             when (screenState) {
-                is MLPlaylistsScreenState.Ready -> {
+                is MLPlaylistsScreenState.Content -> {
                     ifMedialibraryErrorShowPlug(requireContext(), PLAYLISTS_EMPTY)
 //                    val favoritesList = screenState.historyList
 //                    binding.testBlock2.text = favoritesList.joinToString("\n")
@@ -90,6 +92,29 @@ class MLPlaylistsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        _utilErrorLayoutBinding = null
+
     }
+
+    private fun initializeAdapter() {
+        playlistsAdapter = PlaylistsBigAdapter { playlist ->
+            println("clicked ${playlist.title}")
+        }
+        playlistsAdapter.playlists = playlistsList
+        binding.rvListPlaylists.adapter = playlistsAdapter
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun showContent(screenState: MLPlaylistsScreenState.Content) {
+        if (screenState.playlistsList.isNotEmpty()) {
+            binding.placeholderImage.isVisible = false
+            playlistsList.clear()
+            playlistsList.addAll(screenState.playlistsList)
+            playlistsAdapter.notifyDataSetChanged()
+        } else {
+            binding.placeholderImage.isVisible = true
+            playlistsList.clear()
+            playlistsAdapter.notifyDataSetChanged()
+        }
+    }
+
 }

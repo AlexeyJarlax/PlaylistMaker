@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.medialibrary.domain.db
 
+import com.practicum.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 
 class PlaylistsInteractorImpl(
@@ -14,4 +15,7 @@ class PlaylistsInteractorImpl(
         playlistsRepository.upsertPlaylist(playlist)
     }
 
+    override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist) {
+        playlistsRepository.addTrackToPlaylist(track, playlist)
+    }
 }

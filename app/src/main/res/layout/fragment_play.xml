@@ -309,4 +309,66 @@
         app:layout_constraintTop_toBottomOf="@+id/gasket3"
         tools:visibility="visible" />
 
+    <!-- BottomSheet -->
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/titlesBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="end" />
+
+
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/lrBottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shit2"
+        android:orientation="vertical"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="360dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <View
+            android:layout_width="50dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/shit1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/ys_display_medium"
+            android:text="add to playlist"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="19sp" />
+
+        <Button
+            android:id="@+id/btnNewPlaylist"
+            style="@style/ErrorTextBig"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp16"
+            android:text="new playlist" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPlaylists"
+            style="@style/recyclerViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:itemCount="3"
+            tools:listitem="@layout/shit9" />
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

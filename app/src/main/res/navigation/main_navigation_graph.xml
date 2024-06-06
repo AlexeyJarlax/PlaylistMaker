@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_playFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_playFragment_to_MLCreatePlaylistFragment"
+            app:destination="@id/MLCreatePlaylistFragment" />
     </fragment>
 
     <fragment

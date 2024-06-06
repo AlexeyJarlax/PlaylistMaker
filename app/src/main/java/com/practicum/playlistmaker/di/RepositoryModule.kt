@@ -1,8 +1,10 @@
 package com.practicum.playlistmaker.di
 
 import com.practicum.playlistmaker.medialibrary.data.FavoritesRepositoryImpl
+import com.practicum.playlistmaker.medialibrary.data.ImagesRepositoryImpl
 import com.practicum.playlistmaker.medialibrary.data.PlaylistsRepositoryImpl
 import com.practicum.playlistmaker.medialibrary.domain.db.FavoritesRepository
+import com.practicum.playlistmaker.medialibrary.domain.db.ImagesRepository
 import com.practicum.playlistmaker.medialibrary.domain.db.PlaylistsRepository
 import com.practicum.playlistmaker.search.data.TracksRepositoryImpl
 import com.practicum.playlistmaker.search.domain.TracksRepository
@@ -25,6 +27,10 @@ import org.koin.dsl.module
         }
 
         single<PlaylistsRepository> {
-            PlaylistsRepositoryImpl(get())
+            PlaylistsRepositoryImpl(get(), get())
+        }
+
+        single<ImagesRepository> {
+            ImagesRepositoryImpl(get())
         }
     }

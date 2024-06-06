@@ -100,7 +100,8 @@ class MLCreatePlaylistFragment : Fragment() {
 
     private fun showExitDialog() {
         if (isChangesExist) {
-            MaterialAlertDialogBuilder(requireActivity()).setTitle(getString(R.string.dialog_title))
+            MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(getString(R.string.dialog_title))
                 .setMessage(getString(R.string.dialog_text))
                 .setNeutralButton(getString(R.string.dialog_cancel)) { _, _ ->
                     //close dialog

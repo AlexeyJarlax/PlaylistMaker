@@ -9,6 +9,7 @@ internal object AppPreferencesKeys { // глобальные объекты
     const val AN_INSTANCE_OF_THE_TRACK_CLASS = "an instance of the Track class"
     const val DATA_BASE_NAME = "alex_pavlov_data_base"
     const val iTunesSearchUrl = "https://itunes.apple.com"
+    const val IMAGES_DIR = "pictures"
 
     // числовые константы
     const val ALBUM_ROUNDED_CORNERS = 8

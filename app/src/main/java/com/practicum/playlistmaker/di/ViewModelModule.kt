@@ -20,7 +20,7 @@ val viewModelModule = module {
     }
 
     viewModel {
-        PlayViewModel(get(), get())
+        PlayViewModel(get(), get(), get())
     }
 
     viewModel {
@@ -31,5 +31,7 @@ val viewModelModule = module {
         MLPlaylistsViewModel(get())
     }
 
-    viewModel { MLCreatePlaylistViewModel() }
+    viewModel {
+        MLCreatePlaylistViewModel(get())
+    }
 }

@@ -1,13 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginBottom="56dp"
+    android:background="?attr/colorPrimary">
 
-    <include
-        android:id="@+id/utilErrorBoxForFragments"
-        layout="@layout/util_error_layout_for_fragments"
+    <Button
+        android:id="@+id/buttonNewPlayList"
+        style="@style/SearchButtons"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="24dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="10dp"
+        android:text="1235"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/placeholderImage"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="106dp"
+        android:src="@drawable/ic_placeholder"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/ys_display_medium"
+        android:text="3453437"
+        android:textAlignment="center"
+        android:textColor="@color/yp_text_gray"
+        android:textFontWeight="@integer/text_weight_400"
+        android:textSize="@dimen/text_size_sp14"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/placeholderImage" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvListPlaylists"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</FrameLayout>
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonNewPlayList"
+        app:spanCount="2"
+        tools:itemCount="2"
+        tools:listitem="@layout/shit9" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
