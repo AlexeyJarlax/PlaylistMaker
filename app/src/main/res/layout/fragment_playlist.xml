@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/dp51"
+    android:background="@color/yp_white_and_yp_black"
+    tools:context=".medialibrary.ui.playlist.PlaylistFragment">
+
+    <Button
+        android:id="@+id/buttonNewPlayList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/ErrorButtons"
+        android:layout_marginTop="@dimen/dp24"
+        android:paddingHorizontal="@dimen/dp12"
+        android:paddingVertical="@dimen/dp12"
+        android:text="@string/new_play_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/PlaylistsRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="@dimen/dp12"
+        android:layout_marginTop="@dimen/dp16"
+        android:scaleType="centerCrop"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonNewPlayList"
+        app:spanCount="2"
+        tools:itemCount="2"
+        tools:listitem="@layout/util_playlist_view_in_mediateka" />
+
+    <include
+        android:id="@+id/utilErrorBoxForFragments"
+        layout="@layout/util_error_layout_for_fragments"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

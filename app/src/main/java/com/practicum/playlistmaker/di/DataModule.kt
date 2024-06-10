@@ -4,11 +4,10 @@ import android.content.Context
 import android.media.MediaPlayer
 import androidx.room.Room
 import com.google.gson.Gson
-import com.practicum.playlistmaker.medialibrary.favorites.data.FavoritesRepositoryImpl
-import com.practicum.playlistmaker.medialibrary.favorites.data.db.AppDatabase
-import com.practicum.playlistmaker.medialibrary.favorites.domain.db.FavoritesInteractor
-import com.practicum.playlistmaker.medialibrary.favorites.domain.db.FavoritesInteractorImpl
-import com.practicum.playlistmaker.medialibrary.favorites.domain.db.FavoritesRepository
+import com.practicum.playlistmaker.medialibrary.data.db.database.FavoritesTracksDatabase
+import com.practicum.playlistmaker.medialibrary.data.db.converters.PlaylistDbConverter
+import com.practicum.playlistmaker.medialibrary.data.db.database.PlaylistsDatabase
+import com.practicum.playlistmaker.medialibrary.data.db.converters.TrackDbConverter
 import com.practicum.playlistmaker.player.data.MediaPlayerRepositoryImpl
 import com.practicum.playlistmaker.player.domain.MediaPlayerRepository
 import com.practicum.playlistmaker.search.data.network.ITunesAPIService
@@ -19,7 +18,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import com.practicum.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.practicum.playlistmaker.settings.data.SettingsRepositoryImpl
 import com.practicum.playlistmaker.settings.domain.SettingsRepository
-import com.practicum.playlistmaker.utils.AppPreferencesKeys.DATA_BASE_FOR_FAVORITE_TRACKS
 import org.koin.android.ext.koin.androidContext
 import retrofit2.Retrofit
 
@@ -54,7 +52,23 @@ import retrofit2.Retrofit
         factory { MediaPlayer() }
 
         single {
-            Room.databaseBuilder(androidContext(), AppDatabase::class.java, DATA_BASE_FOR_FAVORITE_TRACKS)
-                .build()
+            Room.databaseBuilder(
+                androidContext(),
+                FavoritesTracksDatabase::class.java,
+                "dbFavoritesTracks.db"
+            ).build()
         }
+
+        single {
+            Room.databaseBuilder(
+                androidContext(),
+                PlaylistsDatabase::class.java,
+                "dbPlaylists.db"
+            ).build()
+        }
+
+        factory { TrackDbConverter() }
+
+
+        factory { PlaylistDbConverter(gson = get()) }
     }
