@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
-import com.practicum.playlistmaker.player.ui.PlayFragment
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.utils.AppPreferencesKeys
 import com.practicum.playlistmaker.utils.DebounceExtension
@@ -82,16 +81,6 @@ class SearchFragment : Fragment() {
     private fun setupAdapterForAPITracks() {
         adapterForAPITracks = AdapterForAPITracks {
             viewModel.saveToHistory(it)
-//            val fragment = PlayFragment()
-//            val bundle = Bundle().apply {
-//                putSerializable(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS, it)
-//            }
-//            fragment.arguments = bundle
-//            parentFragmentManager.beginTransaction()
-//                .setReorderingAllowed(true)
-//                .replace(R.id.nav_host_fragment, fragment)
-//                .addToBackStack(null)
-//                .commit()
             moveMeToPlayFragmentWithThisTrack(it)
         }
         adapterForAPITracks.tracks = trackListFromAPI
@@ -101,16 +90,6 @@ class SearchFragment : Fragment() {
     private fun setupAdapterForHistoryTracks() {
         adapterForHistoryTracks = AdapterForHistoryTracks {
             viewModel.saveToHistoryAndRefresh(it)
-//            val fragment = PlayFragment()
-//            val bundle = Bundle().apply {
-//                putSerializable(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS, it)
-//            }
-//            fragment.arguments = bundle
-//            parentFragmentManager.beginTransaction()
-//                .setReorderingAllowed(true)
-//                .replace(R.id.nav_host_fragment, fragment)
-//                .addToBackStack(null)
-//                .commit()
             moveMeToPlayFragmentWithThisTrack(it)
         }
         adapterForHistoryTracks.searchHistoryTracks = historyTrackList
@@ -118,7 +97,7 @@ class SearchFragment : Fragment() {
 
     private fun moveMeToPlayFragmentWithThisTrack(track: Track) {
         findNavController().navigate(
-            R.id.action_searchFragment_to_playFragment,
+            R.id.action_searchFragment_to_trackFragment,
             Bundle().apply {
                 putSerializable(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS, track)
             }

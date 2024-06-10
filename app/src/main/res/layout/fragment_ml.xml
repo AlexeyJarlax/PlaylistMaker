@@ -36,21 +36,4 @@
         layout="@layout/util_error_layout_for_fragments"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-<!--    <fragment-->
-<!--        android:id="@+id/nav_host_fragment"-->
-<!--        android:name="androidx.navigation.fragment.NavHostFragment"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        app:defaultNavHost="false"-->
-<!--        app:navGraph="@navigation/main_navigation_graph" />-->
-
-<!--    <FrameLayout-->
-<!--        android:id="@+id/nav_host_fragment"-->
-<!--        android:name="androidx.navigation.fragment.NavHostFragment"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--            app:defaultNavHost="false"-->
-<!--            app:navGraph="@navigation/main_navigation_graph" />-->
-
 </LinearLayout>

@@ -52,10 +52,14 @@
     <string name="new_play_list">New play list</string>
     <string name="app_id">ru.yandex.practicum.flutter_practicum</string>
     <string name="dialog_title">title</string>
-    <string name="dialog_text">yes or no</string>
-    <string name="dialog_cancel">no</string>
-    <string name="dialog_ok">yes</string>
-    <string name="playlist_created">playlist made now</string>
-    <string name="image_empty">no image</string>
-    <string name="image_select">select image</string>
+    <string name="name">name</string>
+    <string name="description">description</string>
+    <string name="addToPlaylist">add to Playlist</string>
+    <string name="addToPlaylistSuccess">"added to Playlist "</string>
+    <string name="addToPlaylistDefeat">allready in PlayList</string>
+    <string name="finishCreatingPlaylist">Stop creating Playlist?</string>
+    <string name="unsavedDataWillBeLost">ou no!</string>
+    <string name="create">create</string>
+    <string name="cancel">cancel</string>
+    <string name="end">end</string>
 </resources>
