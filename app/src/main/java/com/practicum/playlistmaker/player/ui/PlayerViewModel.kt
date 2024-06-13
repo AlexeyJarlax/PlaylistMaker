@@ -62,7 +62,13 @@ class PlayerViewModel(
     fun upsertFavoriteTrack(track: Track) {
         Log.d("=== LOG ===", "=== PlayViewModel > changeFavoriteClick(track: Track)")
         viewModelScope.launch {
+            if (_isFavoriteTrack.value == true) {
+                favoritesInteractor.deleteTrack(track)
+                _isFavoriteTrack.postValue(false)
+            } else {
                 favoritesInteractor.addTrack(track)
+                _isFavoriteTrack.postValue(true)
+            }
         }
     }
 
