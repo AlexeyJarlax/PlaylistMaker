@@ -12,7 +12,7 @@ internal object AppPreferencesKeys { // глобальные объекты
     // числовые константы
     const val ALBUM_ROUNDED_CORNERS = 8
     const val HISTORY_TRACK_LIST_SIZE = 6
-    const val CLICK_DEBOUNCE_DELAY = 500L // кулдаун для клика / милисекунда
+    const val HALF_SECOND_DELAY = 500L // кулдаун для клика / милисекунда
     const val TWO_SECONDS = 2000L // две секунды  / отложенный поисковый запрос
     const val ONE_SECOND = 1000L // одна секунда
     const val THREE_HUNDRED_MILLISECONDS = 300L // период обновления для музыкального плеера
