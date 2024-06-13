@@ -26,6 +26,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/btnBackFromNewPlayList"
         style="@style/GoBackButtons"
+        app:titleMarginBottom="@dimen/dp16"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_btn_back"
         app:title="@string/new_play_list" />

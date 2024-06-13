@@ -24,7 +24,7 @@ import org.koin.dsl.module
         }
 
         single<FavoritesTracksRepository> {
-            FavoritesTrackRepositoryImpl(get(), get())
+            FavoritesTrackRepositoryImpl(get())
         }
 
         single<PlaylistsRepository> {

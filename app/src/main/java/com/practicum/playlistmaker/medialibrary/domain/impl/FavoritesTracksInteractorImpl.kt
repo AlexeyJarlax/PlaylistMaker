@@ -16,21 +16,20 @@ class FavoritesTracksInteractorImpl(private val repository: FavoritesTracksRepos
     }
 
     override suspend fun addTrack(track: Track) {
-        repository.addTrack(track)
-    }
+        Log.d("=== LOG ===", "=== FavoritesInteractorImpl > changeFavorite(track: Track)")
+        if (track.trackId?.let { repository.getTrackById(it) } == null) {
+            repository.addTrack(track)
+    }}
 
     override suspend fun deleteTrack(track: Track) {
         repository.deleteTrack(track)
     }
 
+    override suspend fun deleteTrackById(trackId: Int) {
+        repository.deleteTrackById(trackId)
+    }
+
     override fun getTracksIDs(): Flow<List<Int>> {
         return repository.getTracksIDs()
     }
-
-//    override suspend fun upsertTrack(track: Track) {
-//        Log.d("=== LOG ===", "=== FavoritesInteractorImpl > changeFavorite(track: Track)")
-//        if (track.trackId?.let { repository.getTrackById(it) } == null) {
-//            repository.upsertTrack(track)
-//        } else repository.deleteTrack(track.trackId)
-//    }
 }

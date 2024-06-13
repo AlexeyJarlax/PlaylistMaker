@@ -28,6 +28,11 @@ import com.practicum.playlistmaker.utils.stopLoadingIndicator
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import android.util.Log
 import androidx.navigation.fragment.findNavController
+import com.practicum.playlistmaker.utils.AppPreferencesKeys.HALF_SECOND_DELAY
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment() {
 
@@ -304,5 +309,14 @@ class SearchFragment : Fragment() {
 
     private fun startToSearchTrackRightAway() { // ищем трек сразу
         viewModel.searchRequestFromViewModel((queryInput.text.toString().trim()), false)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startLoadingIndicator()
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(HALF_SECOND_DELAY)
+            stopLoadingIndicator()
+        }
     }
 }

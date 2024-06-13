@@ -9,6 +9,6 @@ interface FavoritesTracksInteractor {
     fun getAllTracksSortedById(): Flow<List<Track>>
     suspend fun addTrack(track: Track)
     suspend fun deleteTrack(track: Track)
+    suspend fun deleteTrackById(trackId: Int)
     fun getTracksIDs(): Flow<List<Int>>
-//    suspend fun upsertTrack(track: Track)
 }

@@ -5,36 +5,33 @@ import com.practicum.playlistmaker.search.domain.models.Track
 
 // Функция-расширение для преобразования объектов Track и TrackEntity друг в друга
 
-class TrackDbConverter {
+fun Track.toTrackEntity(): TrackEntity {
+    return TrackEntity(
+        id = null,
+        trackId = this.trackId,
+        trackName = this.trackName,
+        artistName = this.artistName,
+        trackTimeMillis = this.trackTimeMillis,
+        artworkUrl100 = this.artworkUrl100,
+        collectionName = this.collectionName,
+        releaseDate = this.releaseDate,
+        primaryGenreName = this.primaryGenreName,
+        country = this.country,
+        previewUrl = this.previewUrl
+    )
+}
 
-    fun trackToTrackEntity(track: Track): TrackEntity {
-        return TrackEntity(
-            0,
-            track.trackId,
-            track.trackName,
-            track.artistName,
-            track.trackTimeMillis,
-            track.artworkUrl100,
-            track.releaseDate,
-            track.primaryGenreName,
-            track.collectionName,
-            track.country,
-            track.previewUrl
-        )
-    }
-
-    fun trackEntityToTrack(track: TrackEntity): Track {
-        return Track(
-            track.trackId,
-            track.trackName,
-            track.artistName,
-            track.trackTimeMillis,
-            track.artworkUrl100,
-            track.releaseDate,
-            track.primaryGenreName,
-            track.collectionName,
-            track.country,
-            track.previewUrl
-        )
-    }
+fun TrackEntity.toTrack(): Track {
+    return Track(
+        trackId = this.trackId,
+        trackName = this.trackName,
+        artistName = this.artistName,
+        trackTimeMillis = this.trackTimeMillis,
+        artworkUrl100 = this.artworkUrl100,
+        collectionName = this.collectionName,
+        releaseDate = this.releaseDate,
+        primaryGenreName = this.primaryGenreName,
+        country = this.country,
+        previewUrl = this.previewUrl
+    )
 }

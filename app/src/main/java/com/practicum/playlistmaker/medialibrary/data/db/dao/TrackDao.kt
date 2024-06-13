@@ -17,12 +17,15 @@ interface TrackDao {
     @Query("DELETE FROM track_table WHERE trackId = :trackId")
     suspend fun deleteTrack(trackId: Int)
 
+    @Query("DELETE FROM track_table WHERE trackId = :trackId")
+    suspend fun deleteTrackById(trackId: Int)
+
     @Query("SELECT * FROM track_table ORDER BY id DESC")
     fun getAllTrack(): Flow<List<TrackEntity>>
 
     @Query("SELECT trackId FROM track_table ")
     fun getIdsTracks(): Flow<List<Int>>
 
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    suspend fun upsertTrack(trackEntity: TrackEntity)
+    @Query("SELECT * FROM track_table WHERE trackId = :trackId")
+    suspend fun getTrackById(trackId: Int): TrackEntity?
 }

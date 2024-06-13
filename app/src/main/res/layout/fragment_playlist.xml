@@ -39,6 +39,7 @@
     <include
         android:id="@+id/utilErrorBoxForFragments"
         layout="@layout/util_error_layout_for_fragments"
+        android:layout_marginTop="@dimen/dp44"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

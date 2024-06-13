@@ -77,8 +77,7 @@ object ErrorUtils {
             AppPreferencesKeys.PLAYLISTS_EMPTY -> {
                 errorTextWeb?.text =
                     context.resources.getString(R.string.havent_created_any_playlists)
-                retryButton?.text = context.resources.getString(R.string.new_play_list)
-                retryButton?.visibility = View.VISIBLE
+                retryButton?.visibility = View.GONE
             }
 
             AppPreferencesKeys.LOADING -> {
