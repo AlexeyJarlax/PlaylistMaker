@@ -7,7 +7,6 @@ import com.google.gson.Gson
 import com.practicum.playlistmaker.medialibrary.data.db.database.FavoritesTracksDatabase
 import com.practicum.playlistmaker.medialibrary.data.db.converters.PlaylistDbConverter
 import com.practicum.playlistmaker.medialibrary.data.db.database.PlaylistsDatabase
-import com.practicum.playlistmaker.medialibrary.data.db.converters.TrackDbConverter
 import com.practicum.playlistmaker.player.data.MediaPlayerRepositoryImpl
 import com.practicum.playlistmaker.player.domain.MediaPlayerRepository
 import com.practicum.playlistmaker.search.data.network.ITunesAPIService
@@ -66,9 +65,6 @@ import retrofit2.Retrofit
                 "dbPlaylists.db"
             ).build()
         }
-
-        factory { TrackDbConverter() }
-
 
         factory { PlaylistDbConverter(gson = get()) }
     }

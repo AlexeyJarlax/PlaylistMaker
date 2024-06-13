@@ -8,7 +8,8 @@ interface FavoritesTracksRepository {
 
     suspend fun addTrack(track: Track)
     suspend fun deleteTrack(track: Track)
+    suspend fun deleteTrackById(trackId: Int)
     fun getTracksIDs():Flow<List<Int>>
+    suspend fun getTrackById(trackId: Int): Track?
     fun getAllFavoritesTrack(): Flow<List<Track>>
-//    suspend fun upsertTrack(track: Track)
 }
