@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,8 +14,10 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentFavoritesBinding
 import com.practicum.playlistmaker.player.ui.PlayerFragment
 import com.practicum.playlistmaker.search.domain.models.Track
+import com.practicum.playlistmaker.utils.AppPreferencesKeys.FAVORITES_EMPTY
 import com.practicum.playlistmaker.utils.AppPreferencesKeys.ONE_SECOND
 import com.practicum.playlistmaker.utils.DebounceExtension
+import com.practicum.playlistmaker.utils.ErrorUtils.ifMedialibraryErrorShowPlug
 
 class FavoritesFragment : Fragment() {
 
@@ -40,7 +41,7 @@ class FavoritesFragment : Fragment() {
         }
     }
     private val trackAdapter = TrackAdapter(trackClickListener)
-    private val utilErrorBox = view?.findViewById<LinearLayout>(R.id.utilErrorBoxForFragments)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -62,25 +63,31 @@ class FavoritesFragment : Fragment() {
             debounceExtension.debounce()
             requireActivity().lifecycleScope
         }
+        setupObserver()
+    }
 
-        aboutViewModel.observeState().observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is FavoriteState.Content -> showContent(state.tracks)
-                is FavoriteState.Empty -> showEmpty()
+    private fun setupObserver() {
+        aboutViewModel.stateLiveData.observe(viewLifecycleOwner) { stateLiveData ->
+            when (stateLiveData) {
+                is FavoriteState.Ready-> showContent(stateLiveData)
+                FavoriteState.Error -> {
+                    showEmpty()
+                }
+                FavoriteState.Loading -> {}
+                else -> {}
             }
         }
     }
 
     private fun showEmpty() {
-        utilErrorBox?.visibility = View.VISIBLE
+        ifMedialibraryErrorShowPlug(requireContext(), FAVORITES_EMPTY)
         trackAdapter.tracks.clear()
         trackAdapter.notifyDataSetChanged()
     }
 
-    private fun showContent(tracks: List<Track>) {
-        utilErrorBox?.visibility = View.GONE
+    private fun showContent(stateLiveData: FavoriteState.Ready) {
         trackAdapter.tracks.clear()
-        trackAdapter.tracks.addAll(tracks)
+        trackAdapter.tracks.addAll(stateLiveData.favoritesList)
         trackAdapter.notifyDataSetChanged()
     }
 

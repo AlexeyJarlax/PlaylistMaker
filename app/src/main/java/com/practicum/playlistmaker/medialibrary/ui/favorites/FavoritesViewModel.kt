@@ -15,8 +15,8 @@ class FavoritesViewModel(
 ) :
     ViewModel() {
 
-    private val stateLiveData = MutableLiveData<FavoriteState>()
-    fun observeState(): LiveData<FavoriteState> = stateLiveData
+    private val _stateLiveData = MutableLiveData<FavoriteState>()
+    val stateLiveData: LiveData<FavoriteState> = _stateLiveData
 
     init {
         viewModelScope.launch {
@@ -24,9 +24,9 @@ class FavoritesViewModel(
                 .getAllTracksSortedById()
                 .collect { result ->
                     if (result.isEmpty()) {
-                        stateLiveData.postValue(FavoriteState.Empty)
+                        _stateLiveData.value = FavoriteState.Error
                     } else {
-                        stateLiveData.postValue(FavoriteState.Content(result))
+                        _stateLiveData.value = FavoriteState.Ready(result)
                     }
                 }
         }
@@ -36,9 +36,9 @@ class FavoritesViewModel(
         viewModelScope.launch {
             favoritesTracksInteractor.getAllTracksSortedById().collect { result ->
                 if (result.isEmpty()) {
-                    stateLiveData.postValue(FavoriteState.Empty)
+                    _stateLiveData.postValue(FavoriteState.Error)
                 } else {
-                    stateLiveData.postValue(FavoriteState.Content(result))
+                    _stateLiveData.postValue(FavoriteState.Ready(result))
                 }
             }
         }
