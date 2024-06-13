@@ -54,7 +54,7 @@ import retrofit2.Retrofit
             Room.databaseBuilder(
                 androidContext(),
                 FavoritesTracksDatabase::class.java,
-                "dbFavoritesTracks.db"
+                "db1FavoritesTracks.db"
             ).build()
         }
 
@@ -62,7 +62,7 @@ import retrofit2.Retrofit
             Room.databaseBuilder(
                 androidContext(),
                 PlaylistsDatabase::class.java,
-                "dbPlaylists.db"
+                "db2Playlists.db"
             ).build()
         }
 
