@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/yp_white_and_yp_black"
+    android:orientation="vertical"
+    tools:context=".medialibrary.ui.newplaylist.NewPlaylistFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.56" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/verticalBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_tags="inputDescriptionLayout" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/btnBackFromNewPlayList"
+        style="@style/GoBackButtons"
+        app:titleMarginBottom="@dimen/dp16"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_btn_back"
+        app:title="@string/new_play_list" />
+
+    <ImageView
+        android:id="@+id/addPicture"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="@dimen/dp24"
+        android:layout_marginTop="@dimen/dp24"
+        android:background="@drawable/pl_add_photo_background"
+        android:scaleType="centerCrop"
+        android:src="@drawable/pl_plus_photo"
+        app:layout_constraintBottom_toTopOf="@id/guideline"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnBackFromNewPlayList"
+        app:layout_constraintVertical_bias="0" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputNameLayout"
+        style="@style/PLLayoutForNewPlaylist"
+        android:layout_marginTop="26dp"
+        app:layout_constraintBottom_toTopOf="@id/inputDescriptionLayout"
+        app:layout_constraintTop_toBottomOf="@id/addPicture">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputName"
+            style="@style/PLEditTextForNewPlaylist"
+            android:hint="@string/name" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputDescriptionLayout"
+        style="@style/PLLayoutForNewPlaylist"
+        android:layout_marginTop="10dp"
+        android:tag="inputDescriptionLayout"
+        app:layout_constraintTop_toBottomOf="@id/inputNameLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputDescription"
+            style="@style/PLEditTextForNewPlaylist"
+            android:hint="@string/description" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/createPlaylist"
+        style="@style/PLbuttonCreateNewPlaylist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:fontFamily="@font/ys_display_medium"
+        android:text="@string/create"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/verticalBarrier"
+        app:layout_constraintVertical_bias="1" />
+
+    <ProgressBar
+        android:id="@+id/loading_indicator"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="@dimen/dp91"
+        android:layout_height="@dimen/dp91"
+        android:indeterminateTint="@color/yp_blue_and_yp_blue"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

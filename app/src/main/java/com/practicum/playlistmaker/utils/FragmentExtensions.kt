@@ -4,12 +4,20 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
 import com.practicum.playlistmaker.R
 
 //****************************************** индикатор загрузки и поток на продолжительные операции
 
-fun Fragment.toast(text: String) {
-    Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
+fun Fragment.showSnackbar(message: String) {
+    val snackbar = Snackbar.make(
+        requireView(),
+        message,
+        Snackbar.LENGTH_SHORT
+    )
+    val snackbarView = snackbar.view
+    snackbarView.setBackgroundResource(R.color.yp_black_and_yp_white)
+    snackbar.show()
 }
 
 fun Fragment.startLoadingIndicator() {

@@ -2,7 +2,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     kotlin("plugin.serialization") version "1.9.21"
-    id("kotlin-kapt") // плагин kotlin-kapt для работы зависимостей kapt("
+//    id("kotlin-kapt") // плагин kotlin-kapt для работы зависимостей kapt("
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -12,7 +13,7 @@ android {
     defaultConfig {
         applicationId = "com.practicum.playlistmaker"
         minSdk = 29
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 22
         versionName = "2.2"
 
@@ -44,6 +45,7 @@ dependencies {
 // БАЗОВЫЕ
 
     // Расширения Kotlin для работы с Activity.
+    implementation("androidx.activity:activity:1.9.0")
     implementation("androidx.activity:activity-ktx:1.9.0")
 
     // Библиотека для работы с API Android.
@@ -53,7 +55,7 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
 
     // Библиотека для обеспечения совместимости с новыми возможностями платформы Android на более старых устройствах.
-    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.appcompat:appcompat:1.7.0")
 
     // Библиотека для создания сложных макетов пользовательского интерфейса.
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -93,7 +95,7 @@ dependencies {
     implementation("io.insert-koin:koin-android:3.3.0")
 
     // Расширения Kotlin для работы с жизненным циклом компонентов.
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.1")
 
     // Расширения Kotlin для фрагментов
     implementation("androidx.fragment:fragment-ktx:1.7.1")
@@ -101,7 +103,7 @@ dependencies {
     // Компонент ViewPager2 для реализации горизонтальных и вертикальных листалок.
     implementation("androidx.viewpager2:viewpager2:1.1.0")
 
-    // Jetpack Navigation Component (библиотеки не обновляю, чтобы не получить конфликт с версией Sdk 33)
+    // Jetpack Navigation Component
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
     implementation("androidx.fragment:fragment-ktx:1.7.1")
@@ -109,9 +111,13 @@ dependencies {
     // корутин
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
+    // Permission для работы с корутин
+    implementation("com.markodevcic:peko:3.0.5")
+
     // библиотека Room
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
+//    kapt("androidx.room:room-compiler:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
 }
 

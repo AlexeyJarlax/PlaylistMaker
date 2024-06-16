@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/yp_white_and_yp_black"
     android:orientation="vertical"
-    tools:context=".medialibrary.MLFragment">
+    tools:context=".medialibrary.ui.ml.MLFragment">
 
     <TextView
         style="@style/Gasket"

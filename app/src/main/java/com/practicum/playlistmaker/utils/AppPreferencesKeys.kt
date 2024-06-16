@@ -7,13 +7,12 @@ internal object AppPreferencesKeys { // глобальные объекты
     const val KEY_NIGHT_MODE = "nightMode"
     const val SEARCH_HISTORY = "search_history"
     const val AN_INSTANCE_OF_THE_TRACK_CLASS = "an instance of the Track class"
-    const val DATA_BASE_FOR_FAVORITE_TRACKS = "tracks_table"
     const val iTunesSearchUrl = "https://itunes.apple.com"
 
     // числовые константы
     const val ALBUM_ROUNDED_CORNERS = 8
     const val HISTORY_TRACK_LIST_SIZE = 6
-    const val CLICK_DEBOUNCE_DELAY = 500L // кулдаун для клика / милисекунда
+    const val HALF_SECOND_DELAY = 500L // кулдаун для клика / милисекунда
     const val TWO_SECONDS = 2000L // две секунды  / отложенный поисковый запрос
     const val ONE_SECOND = 1000L // одна секунда
     const val THREE_HUNDRED_MILLISECONDS = 300L // период обновления для музыкального плеера

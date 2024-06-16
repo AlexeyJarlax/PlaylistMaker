@@ -5,7 +5,7 @@
         android:icon="@drawable/ic_btn_search"
         android:title="@string/button_search" />
     <item
-        android:id="@+id/MLFragment"
+        android:id="@+id/libraryFragment"
         android:icon="@drawable/ic_btn_lib"
         android:title="@string/button_media_lib" />
     <item
