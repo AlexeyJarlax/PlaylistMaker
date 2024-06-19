@@ -21,10 +21,6 @@ class PlaylistInteractorImpl(
         return repository.getAllPlaylists()
     }
 
-    override suspend fun updatePlaylist(track: Track, playlist: Playlist) {
-        repository.updatePlaylist(track, playlist)
-    }
-
     override suspend fun addTrackInPlaylist(track: Track) {
         repository.addTrackInPlaylist(track)
     }
@@ -35,5 +31,29 @@ class PlaylistInteractorImpl(
 
     override fun getImageFromPrivateStorage(imageName: String): Uri {
         return imageStorage.getImageFromPrivateStorage(imageName)
+    }
+
+    override suspend fun getPlaylistById(playlistId: Int): Playlist {
+        return repository.getPlaylistById(playlistId)
+    }
+
+    override suspend fun updatePlaylistAndAddTrack(track: Track, playlist: Playlist) {
+        repository.updatePlaylistAndAddTrack(track, playlist)
+    }
+
+    override suspend fun updatePlaylistAndDeleteTrack(trackId: Int, playlist: Playlist) {
+        repository.updatePlaylistAndDeleteTrack(trackId, playlist)
+    }
+
+    override suspend fun updatePlaylist(playlist: Playlist) {
+        repository.updatePlaylist(playlist)
+    }
+
+    override suspend fun deletePlaylist(playlistId: Int) {
+        repository.deletePlaylist(playlistId)
+    }
+
+    override suspend fun getTrackById(trackId: Int): Track {
+        return repository.getTrackById(trackId)
     }
 }

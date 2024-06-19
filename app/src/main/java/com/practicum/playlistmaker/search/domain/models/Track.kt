@@ -14,7 +14,7 @@ val country: String?            // Страна
 val previewUrl: String?         // ссылка на 30 сек. фрагмент
 */
 
-import com.practicum.playlistmaker.utils.mmss
+import com.practicum.playlistmaker.utils.msToSs
 import kotlinx.serialization.SerialName
 import java.io.Serializable
 
@@ -34,6 +34,9 @@ data class Track(
     val releaseYear: String?
         get() = releaseDate?.substringBefore('-')
     val trackTime: String
-        get() = mmss(trackTimeMillis)
+        get() = msToSs(trackTimeMillis)
+    override fun toString(): String {
+        return "$artistName - $trackName (${msToSs(trackTimeMillis)})\n"
+    }
 }
 

@@ -18,6 +18,7 @@ internal class ArtworkUrlLoader {
         Glide.with(imageView).load(imageUrl).placeholder(R.drawable.ic_placeholder)
             .transform(RoundedCorners(AppPreferencesKeys.ALBUM_ROUNDED_CORNERS))
             .error(R.drawable.ic_placeholder)
+            .centerCrop()
             .into(imageView)
     }
 }

@@ -7,6 +7,7 @@ internal object AppPreferencesKeys { // глобальные объекты
     const val KEY_NIGHT_MODE = "nightMode"
     const val SEARCH_HISTORY = "search_history"
     const val AN_INSTANCE_OF_THE_TRACK_CLASS = "an instance of the Track class"
+    const val PLAYLIST_KEY = "an instance of the playlist"
     const val iTunesSearchUrl = "https://itunes.apple.com"
 
     // числовые константы

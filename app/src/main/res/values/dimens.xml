@@ -33,4 +33,5 @@
 
     <integer name="width_500">500</integer>
     <integer name="width_400">400</integer>
+    <integer name="width_700">700</integer>
 </resources>

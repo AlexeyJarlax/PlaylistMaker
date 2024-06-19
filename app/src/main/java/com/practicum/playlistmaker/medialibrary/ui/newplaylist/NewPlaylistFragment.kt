@@ -22,10 +22,10 @@ import com.practicum.playlistmaker.utils.showSnackbar
 import com.practicum.playlistmaker.utils.startLoadingIndicator
 import com.practicum.playlistmaker.utils.stopLoadingIndicator
 
-class NewPlaylistFragment : Fragment() {
+open class NewPlaylistFragment : Fragment() {
 
-    private lateinit var binding: FragmentNewPlaylistBinding
-    private val playlistViewModel: NewPlaylistViewModel by viewModel()
+    open lateinit var binding: FragmentNewPlaylistBinding
+    open val playlistViewModel: NewPlaylistViewModel by viewModel()
     private var playlistName: String = ""
     private var playlistDescription: String = ""
     private var playlistCoverUri: Uri? = null

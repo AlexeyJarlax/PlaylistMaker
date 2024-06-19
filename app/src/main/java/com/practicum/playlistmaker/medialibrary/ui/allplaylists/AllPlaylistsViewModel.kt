@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.medialibrary.ui.playlist
+package com.practicum.playlistmaker.medialibrary.ui.allplaylists
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,18 +8,18 @@ import kotlinx.coroutines.launch
 
 import com.practicum.playlistmaker.medialibrary.domain.others.PlaylistsInteractor
 
-class PlaylistViewModel(private val playlistsInteractor: PlaylistsInteractor) : ViewModel() {
+class AllPlaylistsViewModel(private val playlistsInteractor: PlaylistsInteractor) : ViewModel() {
 
-    private val stateLiveData = MutableLiveData<PlaylistState>()
-    fun observeState(): LiveData<PlaylistState> = stateLiveData
+    private val stateLiveData = MutableLiveData<AllPlaylistsState>()
+    fun observeState(): LiveData<AllPlaylistsState> = stateLiveData
 
     init {
         viewModelScope.launch {
             playlistsInteractor.getAllPlaylists().collect { result ->
                 if (result.isEmpty()) {
-                    stateLiveData.postValue(PlaylistState.Empty)
+                    stateLiveData.postValue(AllPlaylistsState.Empty(result))
                 } else {
-                    stateLiveData.postValue(PlaylistState.Content(result))
+                    stateLiveData.postValue(AllPlaylistsState.Content(result))
                 }
             }
         }

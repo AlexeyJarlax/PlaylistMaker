@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.medialibrary.ui.playlist
+package com.practicum.playlistmaker.medialibrary.ui.allplaylists
 
 import android.widget.ImageView
 import android.widget.TextView
@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.databinding.UtilPlaylistViewInMediatekaBinding
 import com.practicum.playlistmaker.medialibrary.domain.model.Playlist
 import com.practicum.playlistmaker.utils.ArtworkUrlLoader
-import com.practicum.playlistmaker.utils.changeRussianWords
+import com.practicum.playlistmaker.utils.changeRussianWordsAsTracks
 
-class PlaylistViewHolder(binding: UtilPlaylistViewInMediatekaBinding) :
+class AllPlaylistViewHolder(binding: UtilPlaylistViewInMediatekaBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     private val image: ImageView = binding.placeHolderPLVinM
@@ -19,7 +19,7 @@ class PlaylistViewHolder(binding: UtilPlaylistViewInMediatekaBinding) :
 
     fun bind(model: Playlist) {
         name.text = model.playlistName
-        val trackCount = "${model.tracksCount} ${changeRussianWords(model.tracksCount)}"
+        val trackCount = "${model.tracksCount} ${changeRussianWordsAsTracks(model.tracksCount)}"
         tracksCount.text = trackCount
         artworkUrlLoader.loadImage(model.urlImage, image)
     }

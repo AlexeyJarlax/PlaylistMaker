@@ -9,7 +9,7 @@ import com.practicum.playlistmaker.databinding.UtilItemTrackBinding
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.utils.setDebouncedClickListener
 
-class TrackAdapter(private val clickListener: TrackClickListener) :
+class FavoritesTrackAdapter(private val clickListener: TrackClickListener) :
     RecyclerView.Adapter<TrackViewHolder>() {
 
     var tracks = ArrayList<Track>()

@@ -57,9 +57,19 @@
     <string name="addToPlaylist">add to Playlist</string>
     <string name="addToPlaylistSuccess">"added to Playlist "</string>
     <string name="addToPlaylistDefeat">allready in PlayList</string>
-    <string name="finishCreatingPlaylist">Stop creating Playlist?</string>
-    <string name="unsavedDataWillBeLost">ou no!</string>
-    <string name="create">create</string>
-    <string name="cancel">cancel</string>
-    <string name="end">end</string>
+    <string name="finishCreatingPlaylist">Finish creating playlist?</string>
+    <string name="unsavedDataWillBeLost">All unsaved data will be lost</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+    <string name="end">Finish</string>
+    <string name="save">Save</string>
+    <string name="share_playlist">Share</string>
+    <string name="edit_info">Edit info</string>
+    <string name="deletePlaylist">Delete playlist</string>
+    <string name="delete_track">Delete track</string>
+    <string name="deletePlaylist2">Do you want to delete the playlist?</string>
+    <string name="delete_track2">Are you sure you want to delete the track from the playlist?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="havent_created_any_track">Havent created any track</string>
 </resources>

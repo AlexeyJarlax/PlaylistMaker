@@ -27,12 +27,12 @@ class FavoritesFragment : Fragment() {
     private lateinit var favoritesRecyclerView: RecyclerView
     private lateinit var onTrackClickDebounce: (Track) -> Unit
 
-    private val trackClickListener = object : TrackAdapter.TrackClickListener {
+    private val trackClickListener = object : FavoritesTrackAdapter.TrackClickListener {
         override fun onTrackClick(track: Track) {
             if (isClickAllowed) {
                 isClickAllowed = false
                 findNavController().navigate(
-                    R.id.action_libraryFragment_to_trackFragment,
+                    R.id.action_libraryFragment_to_playerFragment,
                     PlayerFragment.createArgs(track)
                 )
                 aboutViewModel.addTrackToHistory(track)
@@ -40,7 +40,7 @@ class FavoritesFragment : Fragment() {
             }
         }
     }
-    private val trackAdapter = TrackAdapter(trackClickListener)
+    private val favoritesTrackAdapter = FavoritesTrackAdapter(trackClickListener)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +53,7 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         favoritesRecyclerView = binding.favoritesRecyclerView
-        binding.favoritesRecyclerView.adapter = trackAdapter
+        binding.favoritesRecyclerView.adapter = favoritesTrackAdapter
 
         val debounceExtension = DebounceExtension(ONE_SECOND) {
             isClickAllowed = true
@@ -69,11 +69,11 @@ class FavoritesFragment : Fragment() {
     private fun setupObserver() {
         aboutViewModel.stateLiveData.observe(viewLifecycleOwner) { stateLiveData ->
             when (stateLiveData) {
-                is FavoriteState.Ready-> showContent(stateLiveData)
-                FavoriteState.Error -> {
+                is FavoritesState.Ready-> showContent(stateLiveData)
+                FavoritesState.Error -> {
                     showEmpty()
                 }
-                FavoriteState.Loading -> {}
+                FavoritesState.Loading -> {}
                 else -> {}
             }
         }
@@ -81,14 +81,14 @@ class FavoritesFragment : Fragment() {
 
     private fun showEmpty() {
         ifMedialibraryErrorShowPlug(requireContext(), FAVORITES_EMPTY)
-        trackAdapter.tracks.clear()
-        trackAdapter.notifyDataSetChanged()
+        favoritesTrackAdapter.tracks.clear()
+        favoritesTrackAdapter.notifyDataSetChanged()
     }
 
-    private fun showContent(stateLiveData: FavoriteState.Ready) {
-        trackAdapter.tracks.clear()
-        trackAdapter.tracks.addAll(stateLiveData.favoritesList)
-        trackAdapter.notifyDataSetChanged()
+    private fun showContent(stateLiveData: FavoritesState.Ready) {
+        favoritesTrackAdapter.tracks.clear()
+        favoritesTrackAdapter.tracks.addAll(stateLiveData.favoritesList)
+        favoritesTrackAdapter.notifyDataSetChanged()
     }
 
     companion object {

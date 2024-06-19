@@ -51,7 +51,6 @@
     <string name="havent_created_any_playlists">Вы не создали ни одного плейлиста</string>
     <string name="new_play_list">Новый плейлист</string>
     <string name="dialog_title">title</string>
-
     <string name="name">Название*</string>
     <string name="description">Описание</string>
     <string name="addToPlaylist">Добавить в плейлист</string>
@@ -62,4 +61,14 @@
     <string name="create">Создать</string>
     <string name="cancel">Отменить</string>
     <string name="end">Завершить</string>
+    <string name="save">Сохранить</string>
+    <string name="share_playlist">Поделиться</string>
+    <string name="edit_info">Редактировать информацию</string>
+    <string name="deletePlaylist">Удалить плейлист</string>
+    <string name="delete_track">Удалить трек</string>
+    <string name="deletePlaylist2">Хотите удалить плейлист?</string>
+    <string name="delete_track2">Вы уверены, что хотите удалить трек из плейлиста?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="havent_created_any_track">Вы не добавили ни одного трека</string>
 </resources>
