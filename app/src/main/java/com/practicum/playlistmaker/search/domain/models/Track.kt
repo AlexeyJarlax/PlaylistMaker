@@ -35,8 +35,5 @@ data class Track(
         get() = releaseDate?.substringBefore('-')
     val trackTime: String
         get() = msToSs(trackTimeMillis)
-    override fun toString(): String {
-        return "$artistName - $trackName (${msToSs(trackTimeMillis)})\n"
-    }
 }
 

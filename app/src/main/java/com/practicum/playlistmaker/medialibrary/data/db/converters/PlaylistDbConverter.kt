@@ -32,7 +32,7 @@ class PlaylistDbConverter(private val gson: Gson) {
             playlistEntity.id,
             playlistEntity.playlistName,
             playlistEntity.description,
-            if (playlistEntity.urlImage=="null") null else playlistEntity.urlImage.toUri(), //чек
+            if (playlistEntity.urlImage=="null") null else playlistEntity.urlImage.toUri(),
             trackIds ?: ArrayList(),
             playlistEntity.tracksCount
         )

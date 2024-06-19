@@ -13,6 +13,7 @@ import com.practicum.playlistmaker.settings.domain.SettingsInteractor
 import com.practicum.playlistmaker.utils.changeRussianWordsAsTracks
 import com.practicum.playlistmaker.utils.changeRussianWordsAsMinutes
 import com.practicum.playlistmaker.utils.msToMm
+import com.practicum.playlistmaker.utils.msToSs
 
 class OpenPlaylistViewModel(
     private val playlistId: Int?,
@@ -87,9 +88,7 @@ class OpenPlaylistViewModel(
                 duration += it.trackTimeMillis?.toInt() ?: 0
             }
         }
-        return msToMm(duration.toString()) + " " + changeRussianWordsAsMinutes(
-            duration
-        )
+        return msToMm(duration.toString()) + " " + changeRussianWordsAsMinutes(duration)
     }
 
     fun deleteTrackFromPlaylist(trackId: Int) {
@@ -113,14 +112,13 @@ class OpenPlaylistViewModel(
             if (playlistId != null) {
                 val list: StringBuilder = StringBuilder()
                 listTrack.mapIndexed { index: Int, track: Track ->
-                    list.append("${(index + 1)}. $track")
+                    list.append("${index + 1}. ${track.artistName} - ${track.trackName} (${msToSs(track.trackTimeMillis)})\n")
                 }
-                val messages = "${playlist?.playlistName}\n" + "${playlist?.description}\n" +
-                        "${playlist?.tracksCount}\n" + list
-
-                settingsInteractor.sharePlaylist(
-                    messages
-                )
+                val messages = "${playlist?.playlistName}\n" +
+                        "${playlist?.description}\n" +
+                        "[${playlist?.tracksCount}] ${changeRussianWordsAsTracks(playlist?.tracksCount ?: 0)}\n" +
+                        list
+                settingsInteractor.sharePlaylist(messages)
             }
         }
     }

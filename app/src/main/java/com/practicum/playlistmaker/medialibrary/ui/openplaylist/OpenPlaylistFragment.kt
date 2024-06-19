@@ -24,6 +24,7 @@ import com.practicum.playlistmaker.utils.AppPreferencesKeys
 import com.practicum.playlistmaker.utils.AppPreferencesKeys.PLAYLIST_KEY
 import com.practicum.playlistmaker.utils.ArtworkUrlLoader
 import com.practicum.playlistmaker.utils.DebounceExtension
+import com.practicum.playlistmaker.utils.showSnackbar
 
 class OpenPlaylistFragment : Fragment() {
 
@@ -151,23 +152,23 @@ class OpenPlaylistFragment : Fragment() {
         } else {
             binding.playlistDetails.visibility = View.GONE
         }
-        artworkUrlLoader.loadImage(playlist.imageUrl, binding.coverPlaylist)
+        artworkUrlLoader.loadImage(playlist.imageUrl, binding.playlistCover)
 
         if (!playlist.listTracks.isNullOrEmpty()) {
             trackAdapter.tracks = playlist.listTracks as ArrayList<Track>
             trackAdapter.notifyDataSetChanged()
         }
         binding.playlistDuration.text = playlist.playlistDuration
-        binding.playlistTracksCount.text = playlist.playlistCountTrack
+        binding.tracksCount.text = playlist.playlistCountTrack
         if (trackAdapter.tracks.isEmpty()) {
             binding.placeholderMessage.visibility = View.VISIBLE
         } else {
             binding.placeholderMessage.visibility = View.GONE
         }
-        artworkUrlLoader.loadImage(playlist.imageUrl, binding.playlistCover)
-        binding.playlistCover.clipToOutline = true
-        binding.playlistName.text = playlist.playlistName
-        binding.trackCount.text = playlist.playlistCountTrack
+        artworkUrlLoader.loadImage(playlist.imageUrl, binding.playlistCover2)
+        binding.playlistCover2.clipToOutline = true
+        binding.playlistName2.text = playlist.playlistName
+        binding.trackCount2.text = playlist.playlistCountTrack
     }
 
     private fun showDialogForDeleteTrack(track: Track) {
@@ -201,11 +202,7 @@ class OpenPlaylistFragment : Fragment() {
 
     private fun sharePlaylist() {
         if (trackAdapter.tracks.isEmpty()) {
-            Toast.makeText(
-                requireActivity(),
-                requireActivity().getString(R.string.havent_created_any_track),
-                Toast.LENGTH_SHORT
-            ).show()
+            showSnackbar(resources.getString(R.string.havent_created_any_track))
         } else {
             viewModel.sharePlaylist()
         }

@@ -14,8 +14,8 @@ android {
         applicationId = "com.practicum.playlistmaker"
         minSdk = 29
         targetSdk = 34
-        versionCode = 22
-        versionName = "2.2"
+        versionCode = 23
+        versionName = "2.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -95,10 +95,11 @@ dependencies {
     implementation("io.insert-koin:koin-android:3.3.0")
 
     // Расширения Kotlin для работы с жизненным циклом компонентов.
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.2")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.2")
 
     // Расширения Kotlin для фрагментов
-    implementation("androidx.fragment:fragment-ktx:1.7.1")
+    implementation("androidx.fragment:fragment-ktx:1.8.0")
 
     // Компонент ViewPager2 для реализации горизонтальных и вертикальных листалок.
     implementation("androidx.viewpager2:viewpager2:1.1.0")
@@ -106,7 +107,7 @@ dependencies {
     // Jetpack Navigation Component
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
-    implementation("androidx.fragment:fragment-ktx:1.7.1")
+    implementation("androidx.fragment:fragment-ktx:1.8.0")
 
     // корутин
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
@@ -117,10 +118,9 @@ dependencies {
     // библиотека Room
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
-//    kapt("androidx.room:room-compiler:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
 
+    // поддержка легаси для ярлычков (надо или нет я хз)
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.2")
 }
 

@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.utils
 
+import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -21,12 +22,16 @@ internal fun changeRussianWordsAsTracks(countTrack: Int): String {
     }
 }
 
-fun changeRussianWordsAsMinutes(countMinute: Int): String {
-    val num = countMinute % 100
+internal fun changeRussianWordsAsMinutes(countMinuteMillis: Int): String {
+    Log.d("=== LOG ===", "=== changeRussianWordsAsMinutes ${countMinuteMillis}")
+    val countMinute = countMinuteMillis / 60000
+    val lastDigit = countMinute % 10
+    val lastTwoDigits = countMinute % 100
+
     return when {
-        num in 11..19 -> "минут"
-        num % 10 == 1 -> "минута"
-        num % 10 in 2..4 -> "минуты"
+        lastTwoDigits in 11..19 -> "минут"
+        lastDigit == 1 -> "минута"
+        lastDigit in 2..4 -> "минуты"
         else -> "минут"
     }
 }
