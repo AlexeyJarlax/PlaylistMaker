@@ -16,6 +16,7 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
     private var oldSearchText: String = ""
     private val historyTrackList = ArrayList<Track>()
     private var searchTrackListForRecovery = listOf<Track>()
+    private var showingHistory: Boolean = false
 
     init {
         showHistoryFromViewModel()
@@ -24,6 +25,7 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
     fun showHistoryFromViewModel() {
         val searchHistory = tracksInteractor.loadFromHistory()
         _screenState.value = SearchScreenState.ShowHistory(searchHistory)
+        showingHistory = true
         Log.d(
             "=== LOG ===",
             "===  class SearchViewModel => loadAndSetSearchHistory => fun searchRequest(${searchHistory})"
@@ -43,6 +45,7 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
                 if (response.resultCode == 200) {
                     _screenState.postValue(SearchScreenState.SearchAPI(response.results))
                     searchTrackListForRecovery = response.results
+                    showingHistory = false
                 } else _screenState.postValue(SearchScreenState.Error)
             }
         }
@@ -55,9 +58,13 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
         )
         if (!rebootingFromError) {
             _screenState.postValue(SearchScreenState.SearchAPI(searchTrackListForRecovery))
+            showingHistory = false
         } else _screenState.postValue(SearchScreenState.Error)
     }
 
+    fun isShowingHistory(): Boolean {
+        return showingHistory
+    }
 
     fun killHistory() {
         tracksInteractor.killHistory()

@@ -329,11 +329,10 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-//        startLoadingIndicator()
-//        CoroutineScope(Dispatchers.Main).launch {
-//            delay(HALF_SECOND_DELAY)
-//            stopLoadingIndicator()
-//        }
-        viewModel.showOldSearchFromAPI(false)
+        if (viewModel.isShowingHistory()) {
+            showTracksFromHistory(historyTrackList)
+        } else if (trackListFromAPI.isNotEmpty()) {
+            viewModel.showOldSearchFromAPI(false)
+        }
     }
 }
