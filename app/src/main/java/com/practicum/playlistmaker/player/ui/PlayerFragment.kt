@@ -18,7 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlayBinding
 import com.practicum.playlistmaker.search.domain.models.Track
-import com.practicum.playlistmaker.utils.ArtworkUrlLoader
+import com.practicum.playlistmaker.utils.GlideUrlLoader
 import com.practicum.playlistmaker.player.domain.PlayerState
 import com.practicum.playlistmaker.utils.AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS
 import com.practicum.playlistmaker.utils.DebounceExtension
@@ -76,7 +76,7 @@ class PlayerFragment : Fragment() {
             contentCountry.text = track.country
         }
         binding.trackTime.text = getString(R.string.zero_time)
-        ArtworkUrlLoader().loadImage(
+        GlideUrlLoader(R.drawable.ic_placeholder).loadImage(
             track.artworkUrl100?.replace("100x100bb.jpg", "512x512bb.jpg"),
             binding.trackCover
         )

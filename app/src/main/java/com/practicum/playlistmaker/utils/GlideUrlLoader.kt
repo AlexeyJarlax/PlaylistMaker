@@ -3,11 +3,10 @@ package com.practicum.playlistmaker.utils
 import android.net.Uri
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
-import com.practicum.playlistmaker.R
-
-internal class ArtworkUrlLoader {
+internal class GlideUrlLoader(private val placeholderResourceId: Int) {
 
     fun loadImage(imageUrl: String?, imageView: ImageView) {
         val uri = imageUrl?.let { Uri.parse(it) }
@@ -15,9 +14,13 @@ internal class ArtworkUrlLoader {
     }
 
     fun loadImage(imageUrl: Uri?, imageView: ImageView) {
-        Glide.with(imageView).load(imageUrl).placeholder(R.drawable.ic_placeholder)
+        Glide.with(imageView)
+            .load(imageUrl)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .placeholder(placeholderResourceId)
+            .fallback(placeholderResourceId)
             .transform(RoundedCorners(AppPreferencesKeys.ALBUM_ROUNDED_CORNERS))
-            .error(R.drawable.ic_placeholder)
+            .error(placeholderResourceId)
             .centerCrop()
             .into(imageView)
     }

@@ -209,7 +209,7 @@
             android:layout_marginBottom="@dimen/dp4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_playlist_placeholder" />
+            tools:src="@drawable/ic_placeholder" />
 
         <TextView
             android:id="@+id/playlistName2"

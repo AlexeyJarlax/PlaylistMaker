@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.UtilItemTrackBinding
 import com.practicum.playlistmaker.search.domain.models.Track
-import com.practicum.playlistmaker.utils.ArtworkUrlLoader
+import com.practicum.playlistmaker.utils.GlideUrlLoader
 
 class TrackViewHolder(private val binding: UtilItemTrackBinding) :
     RecyclerView.ViewHolder(binding.root) {
@@ -16,6 +16,6 @@ class TrackViewHolder(private val binding: UtilItemTrackBinding) :
         binding.trackNameTextView.text = track.trackName
         binding.artistNameTextView.text = track.artistName
         binding.trackDurationTextView.text = track.trackTime
-        track.artworkUrl100.let {ArtworkUrlLoader().loadImage(it, artworkImageView)}
+        track.artworkUrl100.let {GlideUrlLoader(R.drawable.ic_placeholder).loadImage(it, artworkImageView)}
     }
 }

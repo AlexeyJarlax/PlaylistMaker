@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -22,7 +21,7 @@ import com.practicum.playlistmaker.player.ui.PlayerFragment
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.utils.AppPreferencesKeys
 import com.practicum.playlistmaker.utils.AppPreferencesKeys.PLAYLIST_KEY
-import com.practicum.playlistmaker.utils.ArtworkUrlLoader
+import com.practicum.playlistmaker.utils.GlideUrlLoader
 import com.practicum.playlistmaker.utils.DebounceExtension
 import com.practicum.playlistmaker.utils.showSnackbar
 
@@ -39,7 +38,6 @@ class OpenPlaylistFragment : Fragment() {
     private lateinit var onTrackClickDebounce: (Track) -> Unit
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     private lateinit var bottomSheetBehaviorMenu: BottomSheetBehavior<ConstraintLayout>
-    private val artworkUrlLoader = ArtworkUrlLoader()
 
     private val trackClickListener = object : OpenPlaylistTrackAdapter.TrackClickListener {
         override fun onTrackClick(track: Track) {
@@ -152,7 +150,7 @@ class OpenPlaylistFragment : Fragment() {
         } else {
             binding.playlistDetails.visibility = View.GONE
         }
-        artworkUrlLoader.loadImage(playlist.imageUrl, binding.playlistCover)
+        GlideUrlLoader(R.drawable.ic_playlist_placeholder).loadImage(playlist.imageUrl, binding.playlistCover)
 
         if (!playlist.listTracks.isNullOrEmpty()) {
             trackAdapter.tracks = playlist.listTracks as ArrayList<Track>
@@ -165,7 +163,7 @@ class OpenPlaylistFragment : Fragment() {
         } else {
             binding.placeholderMessage.visibility = View.GONE
         }
-        artworkUrlLoader.loadImage(playlist.imageUrl, binding.playlistCover2)
+        GlideUrlLoader(R.drawable.ic_placeholder).loadImage(playlist.imageUrl, binding.playlistCover2)
         binding.playlistCover2.clipToOutline = true
         binding.playlistName2.text = playlist.playlistName
         binding.trackCount2.text = playlist.playlistCountTrack
