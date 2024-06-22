@@ -308,4 +308,9 @@
         <item name="android:layout_gravity">center</item>
         <item name="android:textFontWeight">@integer/width_500</item>
     </style>
+
+    <style name="CustomSwitch" parent="SecondaryButtonsAndText">
+        <item name="thumbTint">@color/yp_text_gray_and_yp_blue</item>
+        <item name="trackTint">@color/yp_light_gray_and_yp_text_gray</item>
+    </style>
 </resources>
