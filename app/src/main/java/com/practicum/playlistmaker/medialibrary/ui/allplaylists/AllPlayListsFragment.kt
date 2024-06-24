@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.medialibrary.ui.allplaylists
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +13,9 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentAllPlaylistsBinding
 import com.practicum.playlistmaker.medialibrary.domain.model.Playlist
 import com.practicum.playlistmaker.medialibrary.ui.openplaylist.OpenPlaylistFragment
+import com.practicum.playlistmaker.utils.AppPreferencesKeys.HIDE
 import com.practicum.playlistmaker.utils.AppPreferencesKeys.PLAYLISTS_EMPTY
-import com.practicum.playlistmaker.utils.ErrorUtils.ifMedialibraryErrorShowPlug
+import com.practicum.playlistmaker.utils.ErrorUtils.inMedialibraryShowPlug
 
 class AllPlayListsFragment : Fragment() {
     private val allPlaylistsViewModel: AllPlaylistsViewModel by viewModel()
@@ -42,11 +44,14 @@ class AllPlayListsFragment : Fragment() {
         allPlaylistsViewModel.observeState().observe(viewLifecycleOwner) {
             when (it) {
                 is AllPlaylistsState.Content -> {
+                    inMedialibraryShowPlug(requireContext(), HIDE)
                     showContent(it.playList)
+                    Log.d("=== LOG ===", "=== class AllPlayListsFragment > onViewCreated > .Content")
                 }
                 is AllPlaylistsState.Empty -> {
-                    ifMedialibraryErrorShowPlug(requireContext(), PLAYLISTS_EMPTY)
                     showContent(it.playList)
+                    inMedialibraryShowPlug(requireContext(), PLAYLISTS_EMPTY)
+                    Log.d("=== LOG ===", "=== class AllPlayListsFragment > onViewCreated > .Empty")
                 }
             }
 

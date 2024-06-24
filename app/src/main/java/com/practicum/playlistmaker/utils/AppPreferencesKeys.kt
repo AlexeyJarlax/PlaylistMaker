@@ -24,6 +24,7 @@ internal object AppPreferencesKeys { // глобальные объекты
     const val FAVORITES_EMPTY = "favorites_empty"
     const val PLAYLISTS_EMPTY = "playlists_empty"
     const val LOADING = "loading"
+    const val HIDE = "hide"
 }
 
 

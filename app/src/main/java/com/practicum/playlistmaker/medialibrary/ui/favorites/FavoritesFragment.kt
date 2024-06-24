@@ -17,7 +17,7 @@ import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.utils.AppPreferencesKeys.FAVORITES_EMPTY
 import com.practicum.playlistmaker.utils.AppPreferencesKeys.ONE_SECOND
 import com.practicum.playlistmaker.utils.DebounceExtension
-import com.practicum.playlistmaker.utils.ErrorUtils.ifMedialibraryErrorShowPlug
+import com.practicum.playlistmaker.utils.ErrorUtils.inMedialibraryShowPlug
 
 class FavoritesFragment : Fragment() {
 
@@ -80,7 +80,7 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun showEmpty() {
-        ifMedialibraryErrorShowPlug(requireContext(), FAVORITES_EMPTY)
+        inMedialibraryShowPlug(requireContext(), FAVORITES_EMPTY)
         favoritesTrackAdapter.tracks.clear()
         favoritesTrackAdapter.notifyDataSetChanged()
     }

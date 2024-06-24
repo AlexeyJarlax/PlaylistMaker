@@ -6,6 +6,7 @@ package com.practicum.playlistmaker.utils
 //FAVORITES_EMPTY = ваша медиатека пуста
 //PLAYLISTS_EMPTY = вы не создали ни одного плейлиста
 //LOADING = загружаем
+//HIDE = прячем заглушку
 
 import android.content.Context
 import android.view.View
@@ -58,7 +59,7 @@ object ErrorUtils {
         }
     }
 
-    fun Fragment.ifMedialibraryErrorShowPlug(
+    fun Fragment.inMedialibraryShowPlug(
         context: Context,
         problemTipo: String
     ) {
@@ -83,6 +84,10 @@ object ErrorUtils {
             AppPreferencesKeys.LOADING -> {
                 errorTextWeb?.text = ""
                 retryButton?.visibility = View.GONE
+            }
+
+            AppPreferencesKeys.HIDE -> {
+                utilErrorBox?.visibility = View.GONE
             }
 
             else -> {
