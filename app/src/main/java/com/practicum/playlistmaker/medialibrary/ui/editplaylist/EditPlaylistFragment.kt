@@ -82,7 +82,7 @@ class EditPlaylistFragment : NewPlaylistFragment() {
         binding.inputName.setText(editPlaylistState.playlistName)
 
         if (editPlaylistState.imageUrl != null){
-            GlideUrlLoader(R.drawable.pl_add_photo).loadImage(editPlaylistState.imageUrl, binding.addPicture)
+            GlideUrlLoader(R.drawable.pl_plus_photo).loadImage(editPlaylistState.imageUrl, binding.addPicture)
             binding.addPicture.clipToOutline = true
         }
     }
