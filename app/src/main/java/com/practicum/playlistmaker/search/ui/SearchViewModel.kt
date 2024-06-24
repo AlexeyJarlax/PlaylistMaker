@@ -15,28 +15,56 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
     val screenState: LiveData<SearchScreenState> = _screenState
     private var oldSearchText: String = ""
     private val historyTrackList = ArrayList<Track>()
+    private var searchTrackListForRecovery = listOf<Track>()
+    private var showingHistory: Boolean = false
 
-
-    init {showHistoryFromViewModel()}
+    init {
+        showHistoryFromViewModel()
+    }
 
     fun showHistoryFromViewModel() {
         val searchHistory = tracksInteractor.loadFromHistory()
         _screenState.value = SearchScreenState.ShowHistory(searchHistory)
-        Log.d("=== LOG ===", "===  class SearchViewModel => loadAndSetSearchHistory => fun searchRequest(${searchHistory})")
+        showingHistory = true
+        Log.d(
+            "=== LOG ===",
+            "===  class SearchViewModel => loadAndSetSearchHistory => fun searchRequest(${searchHistory})"
+        )
     }
 
     fun searchRequestFromViewModel(searchText: String, rebootingFromError: Boolean) {
-        Log.d("=== LOG ===", "===  class SearchViewModel => fun searchRequestFromViewModel (${searchText})")
+        Log.d(
+            "=== LOG ===",
+            "===  class SearchViewModel => fun searchRequestFromViewModel (${searchText})"
+        )
         if (!rebootingFromError && oldSearchText == searchText) return
         oldSearchText = searchText
         _screenState.value = SearchScreenState.Loading
         viewModelScope.launch {
             tracksInteractor.searchTracks(searchText).collect { response ->
-            if (response.resultCode == 200) {
-                _screenState.postValue(SearchScreenState.SearchAPI(response.results))
-            } else _screenState.postValue(SearchScreenState.Error)
+                if (response.resultCode == 200) {
+                    _screenState.postValue(SearchScreenState.SearchAPI(response.results))
+                    searchTrackListForRecovery = response.results
+                    showingHistory = false
+                } else _screenState.postValue(SearchScreenState.Error)
+            }
         }
-    }}
+    }
+
+    fun showOldSearchFromAPI(rebootingFromError: Boolean) {
+        Log.d(
+            "=== LOG ===",
+            "===  class SearchViewModel => fun showOldSearchFromAPI (${searchTrackListForRecovery})"
+        )
+        if (!rebootingFromError) {
+            _screenState.postValue(SearchScreenState.SearchAPI(searchTrackListForRecovery))
+            showingHistory = false
+        } else _screenState.postValue(SearchScreenState.Error)
+    }
+
+    fun isShowingHistory(): Boolean {
+        return showingHistory
+    }
 
     fun killHistory() {
         tracksInteractor.killHistory()
@@ -59,7 +87,7 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
         }
     }
 
-     override fun onCleared() {
+    override fun onCleared() {
         super.onCleared()
     }
 

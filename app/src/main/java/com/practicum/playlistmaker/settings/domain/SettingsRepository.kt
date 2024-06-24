@@ -7,4 +7,5 @@ interface SettingsRepository {
     fun buttonToHelp()
     fun buttonToSeeUserAgreement()
     fun applyTheme()
+    fun sharePlaylist(message: String)
 }

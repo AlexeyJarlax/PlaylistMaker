@@ -25,10 +25,19 @@ class PlaylistsRepositoryImpl(
         }
     }
 
-    override suspend fun updatePlaylist(track: Track, playlist: Playlist) {
+    override suspend fun addTrackInPlaylist(track: Track) {
+        playlistDb.trackPlaylistDao().insertTrack(converter.trackToTrackPlaylistEntity(track))
+    }
+
+    override suspend fun getPlaylistById(playlistId: Int): Playlist {
+        return converter.playlistEntityToPlaylist(
+            playlistDb.playlistDao().getPlaylistById(playlistId)
+        )
+    }
+
+    override suspend fun updatePlaylistAndAddTrack(track: Track, playlist: Playlist) {
         track.trackId?.let { playlist.tracksIds.add(it) }
         playlist.tracksCount += 1
-
         playlistDb.playlistDao()
             .updatePlaylist(
                 converter.playlistToPlaylistEntity(playlist)
@@ -36,7 +45,48 @@ class PlaylistsRepositoryImpl(
         addTrackInPlaylist(track)
     }
 
-    override suspend fun addTrackInPlaylist(track: Track) {
-        playlistDb.trackPlaylistDao().insertTrack(converter.trackToTrackPlaylistEntity(track))
+    override suspend fun updatePlaylistAndDeleteTrack(trackId: Int, playlist: Playlist) {
+        playlist.tracksIds.remove(trackId)
+        playlist.tracksCount = playlist.tracksIds.size
+        playlistDb.playlistDao().updatePlaylist(
+            converter.playlistToPlaylistEntity(playlist)
+        )
+        val list = mutableListOf<Int>()
+        playlistDb.playlistDao().getAllTracksOfPlaylists()
+            .map {
+                list.addAll(converter.idsStringToList(it))
+            }
+        if (!list.contains(trackId)) {
+            playlistDb.trackPlaylistDao()
+                .deleteTrackFromPlaylistById(trackId)
+        }
+    }
+
+    override suspend fun updatePlaylist(playlist: Playlist) {
+        playlistDb.playlistDao().updatePlaylist(converter.playlistToPlaylistEntity(playlist))
+    }
+
+    override suspend fun deletePlaylist(playlistId: Int) {
+        playlistDb.playlistDao().deletePlaylist(playlistId)
+        deleteUnusedTracks()
+    }
+
+    override suspend fun getTrackById(trackId: Int): Track {
+        return converter.trackPlaylistEntityToTrack(
+            playlistDb.trackPlaylistDao().getTrackById(trackId)
+        )
+    }
+
+    private suspend fun deleteUnusedTracks() {
+        val listAllTracksInPlaylists: MutableList<Int> = mutableListOf()
+        playlistDb.playlistDao().getAllTracksOfPlaylists().map { res ->
+            listAllTracksInPlaylists.addAll(converter.idsStringToList(res))
+        }
+        val listTrack = playlistDb.trackPlaylistDao().getAllIdsTrack()
+        listTrack.map {
+            if (!listAllTracksInPlaylists.contains(it)) {
+                playlistDb.trackPlaylistDao().deleteTrackFromPlaylistById(it)
+            }
+        }
     }
 }

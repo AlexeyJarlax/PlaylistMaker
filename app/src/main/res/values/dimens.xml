@@ -30,7 +30,9 @@
     <dimen name="maxEms">50</dimen>
     <dimen name="dp108">108dp</dimen>
     <dimen name="dp300">300dp</dimen>
+    <dimen name="dp20">20dp</dimen>
 
     <integer name="width_500">500</integer>
     <integer name="width_400">400</integer>
+    <integer name="width_700">700</integer>
 </resources>

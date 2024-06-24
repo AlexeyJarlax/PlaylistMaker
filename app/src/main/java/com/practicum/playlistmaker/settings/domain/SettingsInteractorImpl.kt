@@ -27,4 +27,8 @@ class SettingsInteractorImpl(private val settingsRepository: SettingsRepository)
     override fun applyTheme() {
         settingsRepository.applyTheme()
     }
+
+    override fun sharePlaylist(message: String) {
+        settingsRepository.sharePlaylist(message)
+    }
 }

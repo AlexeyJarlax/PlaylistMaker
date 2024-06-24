@@ -25,6 +25,7 @@
     <color name="yp_text_gray_and_yp_white">@color/yp_white</color>
     <!-- цвет тумблера свитч, цвет поисковой строки и текста в ней -->
     <color name="yp_text_gray_and_yp_blue">@color/yp_blue</color>
+    <color name="yp_light_gray_and_yp_text_gray">@color/yp_text_gray</color>
     <!-- цвет строк в проигрывателе-->
     <color name="yp_text_gray_and_yp_text_gray">@color/yp_text_gray</color>
     <color name="yp_light_gray_and_yp_blue_light">@color/yp_blue_light</color>

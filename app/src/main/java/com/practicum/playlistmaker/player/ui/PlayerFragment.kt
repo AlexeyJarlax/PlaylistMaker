@@ -18,15 +18,15 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlayBinding
 import com.practicum.playlistmaker.search.domain.models.Track
-import com.practicum.playlistmaker.utils.ArtworkUrlLoader
+import com.practicum.playlistmaker.utils.GlideUrlLoader
 import com.practicum.playlistmaker.player.domain.PlayerState
-import com.practicum.playlistmaker.utils.AppPreferencesKeys
 import com.practicum.playlistmaker.utils.AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS
 import com.practicum.playlistmaker.utils.DebounceExtension
 import com.practicum.playlistmaker.utils.setDebouncedClickListener
 import com.practicum.playlistmaker.utils.stopLoadingIndicator
 import com.practicum.playlistmaker.medialibrary.domain.model.Playlist
-import com.practicum.playlistmaker.medialibrary.ui.playlist.PlaylistState
+import com.practicum.playlistmaker.medialibrary.ui.allplaylists.AllPlaylistsState
+import com.practicum.playlistmaker.utils.AppPreferencesKeys.ONE_SECOND
 import com.practicum.playlistmaker.utils.showSnackbar
 
 class PlayerFragment : Fragment() {
@@ -48,7 +48,7 @@ class PlayerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val trackFromArguments = arguments?.getSerializable(AppPreferencesKeys.AN_INSTANCE_OF_THE_TRACK_CLASS) as? Track
+        val trackFromArguments = arguments?.getSerializable(AN_INSTANCE_OF_THE_TRACK_CLASS) as? Track
 
         if (trackFromArguments != null) {
             track = trackFromArguments
@@ -76,7 +76,7 @@ class PlayerFragment : Fragment() {
             contentCountry.text = track.country
         }
         binding.trackTime.text = getString(R.string.zero_time)
-        ArtworkUrlLoader().loadImage(
+        GlideUrlLoader(R.drawable.ic_placeholder).loadImage(
             track.artworkUrl100?.replace("100x100bb.jpg", "512x512bb.jpg"),
             binding.trackCover
         )
@@ -90,7 +90,7 @@ class PlayerFragment : Fragment() {
         setupLikeButton()
         setupAddToPlaylistButton()
         if (isAdded) {
-            val indicatorDelay = DebounceExtension(AppPreferencesKeys.ONE_SECOND) {
+            val indicatorDelay = DebounceExtension(ONE_SECOND) {
                 stopLoadingIndicator()
             }
             indicatorDelay.debounce()
@@ -211,12 +211,12 @@ class PlayerFragment : Fragment() {
 
         binding.PlaylistsRecycler.adapter = adapter
         binding.buttonNewPlayList.setDebouncedClickListener {
-            findNavController().navigate(R.id.action_trackFragment_to_newPlaylistFragment)
+            findNavController().navigate(R.id.action_playerFragment_to_newPlaylistFragment)
         }
 
         viewModel.statePlaylist.observe(viewLifecycleOwner) {
             when (it) {
-                is PlaylistState.Content -> {
+                is AllPlaylistsState.Content -> {
                     showContent(it.playList)
                 }
                 else -> {}

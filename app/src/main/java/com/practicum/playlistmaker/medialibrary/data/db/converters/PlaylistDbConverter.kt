@@ -32,7 +32,7 @@ class PlaylistDbConverter(private val gson: Gson) {
             playlistEntity.id,
             playlistEntity.playlistName,
             playlistEntity.description,
-            playlistEntity.urlImage.toUri(),
+            if (playlistEntity.urlImage=="null") null else playlistEntity.urlImage.toUri(),
             trackIds ?: ArrayList(),
             playlistEntity.tracksCount
         )
@@ -50,6 +50,27 @@ class PlaylistDbConverter(private val gson: Gson) {
             track.collectionName ?: "",
             track.country ?: "",
             track.previewUrl ?: ""
+        )
+    }
+
+    fun idsStringToList(string: String): List<Int>{
+        val type = object : TypeToken<ArrayList<Int>>() {}.type
+        val trackIds = gson.fromJson<ArrayList<Int>>(string, type)
+        return trackIds
+    }
+
+    fun trackPlaylistEntityToTrack(trackAndPlaylistEntity: TrackAndPlaylistEntity): Track {
+        return Track(
+            trackAndPlaylistEntity.trackId,
+            trackAndPlaylistEntity.trackName,
+            trackAndPlaylistEntity.artistName,
+            trackAndPlaylistEntity.trackTimeMillis,
+            trackAndPlaylistEntity.artworkUrl100,
+            trackAndPlaylistEntity.releaseDate,
+            trackAndPlaylistEntity.primaryGenreName,
+            trackAndPlaylistEntity.collectionName,
+            trackAndPlaylistEntity.country,
+            trackAndPlaylistEntity.previewUrl
         )
     }
 }
