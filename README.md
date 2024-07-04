@@ -6,3 +6,5 @@
 **Stack**: Kotlin, MVVM, Koin, SingleActivity(+Fragments), ViewPager2, Jetpack Navigation Component, Корутины, БД Room.
 
 ![alt text](https://github.com/AlexeyJarlax/PlaylistMaker/raw/master/app/src/main/res/drawable/preview.jpg)
+
+04.07.2024 Работа над приложением окончена, приложение функционирует в соответствии с требованиями ТЗ.
