@@ -15,7 +15,7 @@
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switch_dark_mode"
-        style="@style/SecondaryButtonsAndText"
+        style="@style/CustomSwitch"
         android:layout_height="wrap_content"
         android:checked="false"
         android:gravity="center_vertical"

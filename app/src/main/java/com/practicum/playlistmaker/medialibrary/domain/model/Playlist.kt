@@ -6,7 +6,7 @@ data class Playlist(
     val id: Int,
     var playlistName: String,
     var description: String,
-    var urlImage: Uri?,
+    var urlImage: Uri? = null,
     var tracksIds: MutableList<Int>,
     var tracksCount: Int
 )

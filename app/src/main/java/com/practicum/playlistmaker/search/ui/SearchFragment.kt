@@ -224,6 +224,22 @@ class SearchFragment : Fragment() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    private fun showOldSearchFromAPI(resultsList: List<Track>) {
+        if (resultsList.isNotEmpty()) {
+            Log.d(
+                "=== LOG ===",
+                "===  class SearchActivity => fun showSearchResults( ${resultsList} )"
+            )
+            trackListFromAPI.clear()
+            trackListFromAPI.addAll(resultsList)
+            adapterForAPITracks.notifyDataSetChanged()
+            unitedRecyclerView.adapter = adapterForAPITracks
+        } else {
+            viewModel.setNoResultsState()
+        }
+    }
+
     private fun hideKeyboard() {
         val imm =
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -313,10 +329,10 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        startLoadingIndicator()
-        CoroutineScope(Dispatchers.Main).launch {
-            delay(HALF_SECOND_DELAY)
-            stopLoadingIndicator()
+        if (viewModel.isShowingHistory()) {
+            showTracksFromHistory(historyTrackList)
+        } else if (trackListFromAPI.isNotEmpty()) {
+            viewModel.showOldSearchFromAPI(false)
         }
     }
 }

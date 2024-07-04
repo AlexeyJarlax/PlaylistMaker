@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.medialibrary.domain.others.FavoritesTracksInteractor
 import com.practicum.playlistmaker.medialibrary.domain.model.Playlist
 import com.practicum.playlistmaker.medialibrary.domain.others.PlaylistsInteractor
-import com.practicum.playlistmaker.medialibrary.ui.playlist.PlaylistState
+import com.practicum.playlistmaker.medialibrary.ui.allplaylists.AllPlaylistsState
 import com.practicum.playlistmaker.player.domain.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.PlayerState
 import com.practicum.playlistmaker.search.domain.models.Track
@@ -30,8 +30,8 @@ class PlayerViewModel(
     private val _isFavoriteTrack = MutableLiveData(false)
     val isFavoriteTrack: LiveData<Boolean> = _isFavoriteTrack
 
-    private val _statePlaylist = MutableLiveData<PlaylistState>()
-    val statePlaylist: LiveData<PlaylistState> = _statePlaylist
+    private val _statePlaylist = MutableLiveData<AllPlaylistsState>()
+    val statePlaylist: LiveData<AllPlaylistsState> = _statePlaylist
 
     private val _stateAddTrack = MutableLiveData<Boolean?>(null)
     val stateAddTrack: LiveData<Boolean?> = _stateAddTrack
@@ -51,9 +51,9 @@ class PlayerViewModel(
         viewModelScope.launch {
             playlistsInteractor.getAllPlaylists().collect { result ->
                 if (result.isEmpty()) {
-                    _statePlaylist.postValue(PlaylistState.Empty)
+                    _statePlaylist.postValue(AllPlaylistsState.Empty(result))
                 } else {
-                    _statePlaylist.postValue(PlaylistState.Content(result))
+                    _statePlaylist.postValue(AllPlaylistsState.Content(result))
                 }
             }
         }
@@ -125,7 +125,7 @@ class PlayerViewModel(
     fun addTrackToPlaylist(track: Track, playlist: Playlist) {
         if (!playlist.tracksIds.contains(track.trackId)) {
             viewModelScope.launch {
-                playlistsInteractor.updatePlaylist(track, playlist)
+                playlistsInteractor.updatePlaylistAndAddTrack(track, playlist)
                 _stateAddTrack.postValue(true)
             }
         } else {
