@@ -22,10 +22,15 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
+        }
+        debug {
+            isMinifyEnabled = false
+            applicationIdSuffix = ".debug"
+
         }
     }
     compileOptions {
@@ -86,8 +91,8 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
 
     // Библиотека для написания и запуска тестов на Android.
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 
 // ПРОДВИНУТЫЕ
 
@@ -95,11 +100,11 @@ dependencies {
     implementation("io.insert-koin:koin-android:3.3.0")
 
     // Расширения Kotlin для работы с жизненным циклом компонентов.
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.2")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.3")
 
     // Расширения Kotlin для фрагментов
-    implementation("androidx.fragment:fragment-ktx:1.8.0")
+    implementation("androidx.fragment:fragment-ktx:1.8.1")
 
     // Компонент ViewPager2 для реализации горизонтальных и вертикальных листалок.
     implementation("androidx.viewpager2:viewpager2:1.1.0")
@@ -107,7 +112,7 @@ dependencies {
     // Jetpack Navigation Component
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
-    implementation("androidx.fragment:fragment-ktx:1.8.0")
+    implementation("androidx.fragment:fragment-ktx:1.8.1")
 
     // корутин
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
