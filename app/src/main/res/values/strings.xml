@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Playlist Maker</string>
+    <string name="app_name">Melody Quest: Discover, Play, and Playlist</string>
     <string name="playlist_maker">Playlist Maker</string>
     <string name="button_search">Поиск</string>
     <string name="button_back">Назад</string>
@@ -12,12 +12,12 @@
     <string name="share_app_text">https://play.google.com/store/apps/details?id=</string>
     <string name="app_id">ru.yandex.practicum.flutter_practicum</string>
     <string name="share_app_title">Поделиться приложением</string>
-    <string name="support_email">al3ksei.pav@yandex.ru</string>
-    <string name="support_email_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
-    <string name="support_email_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
-    <string name="user_agreement_url">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="support_email">a9633238@gmail.com</string>
+    <string name="support_email_subject">Сообщение разработчику этого приложения</string>
+    <string name="support_email_text">Ты! Да, ты! Ты супер красавчик!</string>
+    <string name="user_agreement_url">https://raw.githubusercontent.com/AlexeyJarlax/Privacy-Policy-1.8.txt/main/Privacy-Policy-1.8.txt</string>
     <string name="heading_search_history_list_view">История запросов поисковой строки:</string>
-    <string name="todo">это приложение не пригодно для инвалидов</string>
+    <string name="todo">TODO</string>
     <string name="there_wil_be_media_library">в этом окне будет медиатека</string>
     <string name="placeholder_track_name">Название песни</string>
     <string name="placeholder_artist_name">Имя исполнителя</string>
@@ -71,4 +71,12 @@
     <string name="yes">Да</string>
     <string name="no">Нет</string>
     <string name="havent_created_any_track">Вы не добавили ни одного трека</string>
+    <string name="about_this_app">Melody Quest\n\nПриложение использует музыкальную базу itunes.apple.com. Пользователь
+    получает список песен по запросу, может добавить в избранное, создать плей-лист и добавить / удалить
+    из него трек, прослушать тестовый фрагмент. Плейлисты, обложки и настройки приложения сохраняются
+    на устройстве пользователя по стредствам БД Room.\nStack: Kotlin, MVVM, Koin, SingleActivity(+Fragments),
+    ViewPager2, Jetpack Navigation Component, Корутины, БД Room.</string>
+    <string name="about_this_app2">ВНИМАНИЕ:\n\nЭто приложение является учебным творческим проектом.
+        Приложение опубликовано для демонстрации возможностей стека, разработчика и учебного курса ЯндексПрактикума,
+        на котором оно делалось. Приложение не является готовым продуктом и не подлежит коммерческому использованию.</string>
 </resources>

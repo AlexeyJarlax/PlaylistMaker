@@ -72,4 +72,13 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="havent_created_any_track">Havent created any track</string>
+    <string name="about_this_app">Melody Quest\n\nThe application uses the music database from itunes.apple.com.
+        Users can retrieve a list of songs based on a query, add songs to favorites, create playlists, add or
+        remove tracks from playlists, and listen to a preview clip. Playlists, album covers, and application
+        settings are stored on the user\'s device using Room database.\nStack: Kotlin, MVVM, Koin, SingleActivity
+        (+Fragments), ViewPager2, Jetpack Navigation Component, Coroutines, Room database.</string>
+    <string name="about_this_app2">Attention:\n\nThis application is an educational creative project.
+        The application is published to demonstrate the capabilities of the stack, the developer, and
+        the Yandex Practice training course where it was made. The application is not a finished product
+        and is not subject to commercial use.</string>
 </resources>
