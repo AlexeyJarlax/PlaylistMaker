@@ -12,10 +12,11 @@ android {
 
     defaultConfig {
         applicationId = "com.pavlov.melody_quest_discover_play_and_playlist"
+        resourceConfigurations += setOf("ru", "en")
         minSdk = 29
         targetSdk = 34
-        versionCode = 23
-        versionName = "2.3"
+        versionCode = 26
+        versionName = "2.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
